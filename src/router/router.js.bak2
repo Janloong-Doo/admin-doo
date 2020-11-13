@@ -1,0 +1,23 @@
+// import Vue from "vue";
+import { createRouter, createWebHashHistory } from "vue-router";
+import Business from "../views/Business";
+import HelloWorld from "../components/HelloWorld";
+
+// Vue.use(Router);
+
+const router= createRouter({
+  mode: createWebHashHistory(),// hash模式：createWebHashHistory，history模式：createWebHistory
+  // mode: "",
+  // base: process.env.BASE_URL,
+  routes: [
+    {
+      path: "/",
+      // name: "business",
+      // redirect: "/business/department"
+      // redirect: "/business/department"
+      // name: "homePage",
+      component: HelloWorld,
+    }
+  ],
+});
+export default router;
