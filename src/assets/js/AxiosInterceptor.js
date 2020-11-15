@@ -1,7 +1,9 @@
-import axios from 'axios'
+// import mVue from '../../main'
 
-import {Message} from 'element-ui'
-import mVue from '../../main'
+// import {AxiosInstance} from 'axios'
+import axios from 'axios'
+import {message} from 'ant-design-vue'
+
 
 axios.interceptors.request.use(config => {
   if (config.method === 'POST' || config.method === 'post') {
@@ -18,7 +20,7 @@ axios.interceptors.request.use(config => {
   config.withCredentials = true;
   return config;
 }, err => {
-  Message.error({message: '请求超时!'});
+  message.error({message: '请求超时!'});
   // return Promise.error(error);
 });
 
@@ -34,18 +36,18 @@ axios.interceptors.response.use(data => {
   return data.data;
 }, err => {
   if (err.response.status === 504 || err.response.status === 404) {
-    Message.error({message: '服务器被吃了⊙﹏⊙∥'});
+    message.error({message: '服务器被吃了⊙﹏⊙∥'});
   } else if (err.response.status === 403) {
-    Message.error({message: '权限不足,请联系管理员!'});
+    message.error({message: '权限不足,请联系管理员!'});
   } else if (err.response.status === 401) {
-    Message.error({message: err.response.data.msg});
-    mVue.$router.push("/spring/login")
+    message.error({message: err.response.data.msg});
+    // mVue.$router.push("/spring/login")
     // return;
   } else {
     if (err.response.data.msg) {
-      Message.error({message: err.response.data.msg});
+      message.error({message: err.response.data.msg});
     } else {
-      Message.error({message: '未知错误!'});
+      message.error({message: '未知错误!'});
     }
   }
-});
+})

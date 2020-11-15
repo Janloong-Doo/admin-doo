@@ -1,6 +1,8 @@
 <template>
   <div class="home">
+      home3
     <HelloWorld :msg="msg" />
+      <router-view></router-view>
   </div>
 </template>
 
@@ -12,7 +14,7 @@ export default {
   },
   data(){
     return {
-      msg:"我是渣渣龙!"
+      msg:"我是渣渣龙3!"
     }
   }
 }

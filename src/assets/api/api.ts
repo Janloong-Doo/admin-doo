@@ -1,5 +1,5 @@
 import request from "../js/dRequest";
-import host from "../api/url";
+import host from "./url";
 
 const baseBusiness = '/hap';
 

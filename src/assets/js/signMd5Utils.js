@@ -1,11 +1,12 @@
-import md5 from 'js-md5'
-import sha256 from 'js-sha256'
+import Md5 from 'js-md5'
+import 'js-sha256'
 
 export default class signMd5Utils {
   /**
    * json参数升序
    * @param jsonObj 发送参数
    */
+
 
   static sortAsc(jsonObj) {
     let arr = new Array();
@@ -32,9 +33,9 @@ export default class signMd5Utils {
     let urlParams = this.parseQueryString(url);
     let jsonObj = this.mergeObject(urlParams, requestParams);
     let requestBody = this.sortAsc(jsonObj);
-    // let message = md5(JSON.stringify(requestBody)).toUpperCase();
+    // let message = Md5(JSON.stringify(requestBody)).toUpperCase();
     // let s = message+"janloong";
-    // return md5(s).toUpperCase();
+    // return Md5(s).toUpperCase();
     console.log("signparam");
     console.log(requestBody);
     let message = sha256(JSON.stringify(requestBody)).toUpperCase();
@@ -93,7 +94,7 @@ export default class signMd5Utils {
   static getNonce(timestamp) {
     let num = Math.random() * (2 << 16);
     let preNonce = timestamp + ':' + num;
-    let md = md5(preNonce);
+    let md = Md5(preNonce);
     console.log(num);
     console.log(preNonce);
     console.log(md);

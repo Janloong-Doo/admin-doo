@@ -22,28 +22,28 @@
                 :body-style="{ paddingBottom: '80px' }"
                 @close="onDrawerClose('normal')"
             >
-                <a-form-model
+                <a-form
                     layout="horizontal"
                     ref="addMenuForm"
                     :model="addParamData"
                     :rules="addParamData.rules">
 
-                    <a-form-model-item label="名称:" prop="name">
+                    <a-form-item label="名称:" name="name">
                         <a-input placeholder="请输入字典名称" v-model="addParamData.name"></a-input>
-                    </a-form-model-item>
-                    <a-form-model-item label="编码:" prop="value">
+                    </a-form-item>
+                    <a-form-item label="编码:" name="value">
                         <a-input placeholder="请输入字典编码" v-model="addParamData.value"></a-input>
-                    </a-form-model-item>
-                    <a-form-model-item label="描述:" prop="description">
+                    </a-form-item>
+                    <a-form-item label="描述:" name="description">
                         <a-input placeholder="请输入字典描述信息" v-model="addParamData.description"></a-input>
-                    </a-form-model-item>
-                    <a-form-model-item label="排序:" prop="sort">
+                    </a-form-item>
+                    <a-form-item label="排序:" name="sort">
                         <a-input placeholder="请输入字典序号" v-model="addParamData.sort"></a-input>
-                    </a-form-model-item>
-                    <a-form-model-item v-if="!addParamData.firstData&&!addParamData.isEditType" label="根子节点选择:" prop="isRootMenu">
+                    </a-form-item>
+                    <a-form-item v-if="!addParamData.firstData&&!addParamData.isEditType" label="根子节点选择:" name="isRootMenu">
                         <!--                        <a-switch checked-children="根" un-checked-children="子" :checked="addMenuData.isRootMenu"/>-->
                         <a-switch checked-children="根" un-checked-children="子" @change="rootMenuCheck"/>
-                    </a-form-model-item>
+                    </a-form-item>
 
 
                     <a-button :style="{ marginRight: '8px' }" @click="onDrawerClose('reset')">
@@ -52,7 +52,7 @@
                     <a-button type="primary" @click="saveMenu('addMenuForm')">
                         确认
                     </a-button>
-                </a-form-model>
+                </a-form>
 
             </a-drawer>
 
@@ -66,6 +66,7 @@
                 :rowSelection="rowSelection"
                 @change="handleTableChange"
                 :scroll="{ x: '110%' }"
+                bordered
             >
                 <template slot="isOpenSlot" slot-scope="text, record, index">
                     <a-switch disabled :checked="text===0"></a-switch>

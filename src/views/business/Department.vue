@@ -1,6 +1,6 @@
 <template>
   <div id="index">
-    <a-form-model
+    <a-form
         :layout="department.layout"
         :model="department.data"
         v-bind="formItemLayout"
@@ -20,18 +20,18 @@
       <!--        </a-radio-group>-->
       <!--      </a-form-model-item>-->
 
-      <a-form-model-item label="新增类型" prop="deptType">
-        <a-radio-group v-model="department.data.deptType" has-feedback>
-          <a-radio-button value="0">
+      <a-form-item label="新增类型" name="deptType">
+        <a-radio-group v-model:value="department.data.deptType" has-feedback>
+          <a-radio-button value="0" >
             同级节点
           </a-radio-button>
-          <a-radio-button value="1">
+          <a-radio-button value="1" >
             子节点
           </a-radio-button>
         </a-radio-group>
-      </a-form-model-item>
+      </a-form-item>
 
-      <a-form-model-item label="组织" prop="rightNodeId">
+      <a-form-item label="组织" name="rightNodeId">
         <a-tree-select
             v-model="department.data.rightNodeId"
             style="width: 30%"
@@ -43,29 +43,29 @@
             has-feedback
         >
         </a-tree-select>
-      </a-form-model-item>
+      </a-form-item>
 
-      <a-form-model-item label="内容" prop="deptName" has-feedback>
-        <a-input v-model="department.data.deptName"
+      <a-form-item label="内容" name="deptName" has-feedback>
+        <a-input v-model:value="department.data.deptName"
                  style="width: 30%"
                  autocomplete="off"
         ></a-input>
-      </a-form-model-item>
-      <a-form-model-item :wrapper-col="{ span: 14, offset: 4}">
+      </a-form-item>
+      <a-form-item :wrapper-col="{ span: 14, offset: 4}">
         <a-space size="middle">
           <a-button type="primary" @click="addDepartment('departmentRef')">新增节点</a-button>
           <a-button type="primary" @click="delDepartment('departmentRef')">删除节点</a-button>
         </a-space>
-      </a-form-model-item>
+      </a-form-item>
 
 
-    </a-form-model>
+    </a-form>
   </div>
 </template>
 
 <script>
-import Api from "../../assets/api/api.js";
-import {Message} from "ant-design-vue";
+import Api from "../../assets/api/api.ts";
+import {message} from "ant-design-vue";
 import DataUtils from "../../assets/js/DataUtils";
 
 export default {
@@ -89,7 +89,7 @@ export default {
       console.log(value)
       if (value === '') {
         console.log("空")
-        Message.error("空asdasd")
+        message.error("空asdasd")
         callback(new Error('请输入名称'));
       } else {
         callback();
@@ -149,6 +149,7 @@ export default {
   },
 
   methods: {
+
     //获取用户组织结构树
     getDepartment() {
       Api.getDepartMentList().then(value => {

@@ -6,14 +6,18 @@
             <a-layout-sider class="menusider" theme="dark" v-model="collapsed" trigger collapsible>
                 <div class="logo"/>
 
-                <a-menu theme="dark" mode="inline" :default-selected-keys="['/department']"  @click="onMenuClick">
-                    <!--    动态菜单          -->
-                    <template v-for="item in menuResult">
-                        <a-menu-item v-if="!item.children" :key="item.id" >
-                            <a-icon type="pie-chart"/>
-                            <span>{{ item.name }}</span>
-                        </a-menu-item>
-                        <SubMenu v-else :key="item.id" :menu-info="item"></SubMenu>
+                <a-menu theme="dark" mode="inline" :default-selected-keys="['/department']" @click="onMenuClick">
+                    <!--    动态菜单 -->
+                    <template v-for="item in menuResult" :key="item.id">
+                        <template v-if="!item.children">
+                            <a-menu-item :key="item.id">
+                                <PieChartOutlined/>
+                                <span>{{ item.name }}</span>
+                            </a-menu-item>
+                        </template>
+                        <template v-else>
+                            <SubMenu :menu-info="item" :key="item.id"></SubMenu>
+                        </template>
                     </template>
 
                 </a-menu>
@@ -43,13 +47,57 @@
     </div>
 </template>
 <script>
-import SubMenu from '../components/SubMenu'
+// import SubMenu2 from '../components/SubMenu2'
 import Api from '../assets/api/api'
 import DataUtils from '../assets/js/DataUtils'
+import {AppstoreOutlined, DesktopOutlined, InboxOutlined, MailOutlined, MenuFoldOutlined, MenuUnfoldOutlined, PieChartOutlined,} from '@ant-design/icons-vue';
+
+const SubMenu = {
+    components: {
+        PieChartOutlined,
+        MailOutlined,
+    },
+    template: `
+        <a-sub-menu :key="menuInfo.id" v-bind="$attrs">
+        <template #title>
+        <span>
+          <MailOutlined/><span>{{ menuInfo.name }}</span>
+        </span>
+        </template>
+        <template v-for="item in menuInfo.children" :key="item.id">
+            <template v-if="!item.children">
+                <a-menu-item :key="item.id">
+                    <PieChartOutlined/>
+                    <span>{{ item.name }}</span>
+                </a-menu-item>
+            </template>
+            <template v-else>
+                <sub-menu :menu-info="item" :key="item.id"/>
+            </template>
+        </template>
+        </a-sub-menu>
+    `,
+    name: 'SubMenu',
+    props: {
+        menuInfo: {
+            type: Object,
+            default: () => ({}),
+        },
+    },
+};
 
 export default {
     name: "Business",
-    components: {SubMenu},
+    components: {
+        SubMenu,
+        MenuFoldOutlined,
+        MenuUnfoldOutlined,
+        PieChartOutlined,
+        MailOutlined,
+        DesktopOutlined,
+        InboxOutlined,
+        AppstoreOutlined,
+    },
     data() {
         return {
             collapsed: false,
@@ -67,8 +115,11 @@ export default {
             Api.getMenuListByUser().then(value => {
                 if (value.code === 0) {
                     this.resutData = value.data;
-                   this.menuResult= DataUtils.initTreeData(this.resutData);
-                    // this.menuList=
+                    console.log(value);
+                    console.log(this.resutData);
+                    // this.menuResult = DataUtils.initTreeData(this.resutData);
+                    this.menuResult = DataUtils.initTreeData(value.data);
+
                 } else {
                     console.log("修改失败")
                     console.log(value)

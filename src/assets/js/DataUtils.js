@@ -1,4 +1,5 @@
 const initTreeData = (datas) => {
+
   let parentArray = [];
   datas.forEach((data, name, searchParams) => {
     if (data.level === 1 || data.level === '1') {
