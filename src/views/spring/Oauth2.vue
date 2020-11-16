@@ -1,14 +1,17 @@
 <template>
     <div id="Oauth2">
         <a-tabs type="card" @change="callback">
-            <template v-for="item in tabResult">
-                <a-tab-pane :key="item.key" :tab="item.tab">
-                   <Login v-if="item.key==1"></Login>
-                   <user v-else-if="item.key==2"></user>
-                   <index v-else-if="item.key==3"></index>
-                   <authenticate v-else-if="item.key==4"></authenticate>
-                </a-tab-pane>
-            </template>
+            <!--            <template v-for="item in tabResult">-->
+            <!--                <a-tab-pane :key="item.key" :tab="item.tab">-->
+            <!--                   <Login v-if="item.key==1"></Login>-->
+            <!--                   <user v-else-if="item.key==2"></user>-->
+            <!--                   <index v-else-if="item.key==3"></index>-->
+            <!--                   <authenticate v-else-if="item.key==4"></authenticate>-->
+            <!--                </a-tab-pane>-->
+            <!--            </template>-->
+            <keep-alive>
+                <component :is="tabComponent"></component>
+            </keep-alive>
         </a-tabs>
         <!--		<div id="nav">-->
         <!--			<router-link to="/spring/login">Login</router-link>-->
@@ -29,7 +32,7 @@ import User from './oauth2/User'
 
 export default {
     name: "Oauth2",
-    components: {Login,User,Index,Authenticate},
+    components: {Login, User, Index, Authenticate},
     data() {
         let returnTabResult = [
             {
@@ -47,14 +50,15 @@ export default {
             }
         ]
         return {
-            tabResult: returnTabResult
+            tabResult: returnTabResult,
+            tabComponent: ''
         }
     },
     methods: {
         callback(key) {
             console.log(key);
+            this.tabComponent = this.tabResult.filter(value => value.key === key).tab;
         },
-
     }
 }
 </script>

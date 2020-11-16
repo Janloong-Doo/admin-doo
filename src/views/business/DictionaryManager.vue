@@ -67,32 +67,35 @@
                 @change="handleTableChange"
                 :scroll="{ x: '110%' }"
                 bordered
+                tableLayout="fixed"
             >
-                <template slot="isOpenSlot" slot-scope="text, record, index">
+                <template #isOpenSlot="{text, record, index}">
                     <a-switch disabled :checked="text===0"></a-switch>
                 </template>
-                <template slot="operation" slot-scope="text, record, index">
+                <template #operation="{text, record, index}">
                     <a-dropdown>
-                        <a-menu slot="overlay" @click="handleSelectMenu($event.key,text,record,index)">
-                            <a-menu-item key="add">
-                                <a-icon type="user"/>
-                                新增
-                            </a-menu-item>
-                            <a-menu-item key="edit">
-                                <a-icon type="user"/>
-                                编辑
-                            </a-menu-item>
-                            <a-menu-item key="del">
-                                <a-icon type="user"/>
-                                删除
-                            </a-menu-item>
-                            <a-menu-item key="open">
-                                <a-icon type="user"/>
-                                {{ record.isOpen === 0 ? '停用' : '启用' }}
-                            </a-menu-item>
-                        </a-menu>
+                        <template #overlay>
+                            <a-menu @click="handleSelectMenu($event.key,text,record,index)">
+                                <a-menu-item key="add">
+                                    新增
+                                    <PlusOutlined />
+                                </a-menu-item>
+                                <a-menu-item key="edit">
+                                    编辑
+                                    <EditOutlined />
+                                </a-menu-item>
+                                <a-menu-item key="del">
+                                    删除
+                                    <CloseOutlined />
+                                </a-menu-item>
+                                <a-menu-item key="open">
+                                    {{ record.isOpen === 0 ? '停用' : '启用' }}
+                                    <EditOutlined />
+                                </a-menu-item>
+                            </a-menu>
+                        </template>
                         <a-button type="primary" style="margin-left: 8px"> 选项
-                            <a-icon type="down"/>
+                            <down-outlined></down-outlined>
                         </a-button>
                     </a-dropdown>
                 </template>
@@ -105,17 +108,20 @@
 <script>
 import Api from '../../assets/api/api'
 import DataUtils from '../../assets/js/DataUtils'
+import {DownOutlined,PlusOutlined,EditOutlined,CloseOutlined} from '@ant-design/icons-vue';
+import { useForm } from '@ant-design-vue/use';
 
 export default {
     name: "DictionaryManager",
+    components: {DownOutlined,PlusOutlined,EditOutlined,CloseOutlined},
     props: [],
     watch: {
         '$route'(to, from) {
             console.log(to);
             console.log(from)
         },
-        'sourceData'(to,from){
-            let b = to.length===0;
+        'sourceData'(to, from) {
+            let b = to.length === 0;
             this.addParamData.firstData = b;
         }
     },
@@ -184,13 +190,14 @@ export default {
                 title: '是否启用',
                 dataIndex: 'isOpen',
                 fixed: 'right',
-                scopedSlots: {customRender: 'isOpenSlot'}
+                slots: {customRender: 'isOpenSlot'}
             },
             {
                 title: '操作',
+                key: 'operation',
                 fixed: 'right',
                 // dataIndex: 'operation',
-                scopedSlots: {customRender: 'operation'},
+                slots: {customRender: 'operation'},
             }
         ];
         let page = 0;

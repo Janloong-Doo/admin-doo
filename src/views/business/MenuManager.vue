@@ -22,30 +22,30 @@
                 :body-style="{ paddingBottom: '80px' }"
                 @close="onDrawerClose('normal')"
             >
-                <a-form-model
+                <a-form
                     layout="horizontal"
                     ref="addMenuForm"
                     :model="addMenuData"
                     :rules="addMenuData.rules">
-                    <a-form-model-item label="名称:" prop="menuName">
+                    <a-form-item label="名称:" name="menuName">
                         <a-input placeholder="请输入菜单名称" v-model="addMenuData.menuName"></a-input>
-                    </a-form-model-item>
-                    <a-form-model-item label="编码:" prop="menuCode">
+                    </a-form-item>
+                    <a-form-item label="编码:" name="menuCode">
                         <a-input placeholder="请输入菜单编码" v-model="addMenuData.menuCode"></a-input>
-                    </a-form-model-item>
-                    <a-form-model-item label="路径:" prop="menuUrl">
+                    </a-form-item>
+                    <a-form-item label="路径:" name="menuUrl">
                         <a-input placeholder="菜单路径: /{:父路径}/{:菜单编码}" v-model="addMenuData.menuUrl"></a-input>
-                    </a-form-model-item>
-                    <a-form-model-item label="描述:" prop="description">
+                    </a-form-item>
+                    <a-form-item label="描述:" name="description">
                         <a-input placeholder="请输入菜单描述信息" v-model="addMenuData.description"></a-input>
-                    </a-form-model-item>
-                    <a-form-model-item label="排序:" prop="sort">
+                    </a-form-item>
+                    <a-form-item label="排序:" name="sort">
                         <a-input placeholder="请输入菜单序号" v-model="addMenuData.sort"></a-input>
-                    </a-form-model-item>
-                    <a-form-model-item v-if="!addMenuData.isEditType" label="根子节点选择:" prop="isRootMenu">
-<!--                        <a-switch checked-children="根" un-checked-children="子" :checked="addMenuData.isRootMenu"/>-->
+                    </a-form-item>
+                    <a-form-item v-if="!addMenuData.isEditType" label="根子节点选择:" name="isRootMenu">
+                        <!--                        <a-switch checked-children="根" un-checked-children="子" :checked="addMenuData.isRootMenu"/>-->
                         <a-switch checked-children="根" un-checked-children="子" @change="rootMenuCheck"/>
-                    </a-form-model-item>
+                    </a-form-item>
 
 
                     <a-button :style="{ marginRight: '8px' }" @click="onDrawerClose('reset')">
@@ -54,7 +54,7 @@
                     <a-button type="primary" @click="saveMenu('addMenuForm')">
                         确认
                     </a-button>
-                </a-form-model>
+                </a-form>
 
             </a-drawer>
 
@@ -69,31 +69,33 @@
                 @change="handleTableChange"
                 :scroll="{ x: '110%' }"
             >
-                <template slot="isOpenSlot" slot-scope="text, record, index">
+                <template #isOpenSlot="{text, record, index}">
                     <a-switch disabled :checked="text===0"></a-switch>
                 </template>
-                <template slot="operation" slot-scope="text, record, index">
+                <template #operation="{text, record, index}">
                     <a-dropdown>
-                        <a-menu slot="overlay" @click="handleSelectMenu($event.key,text,record,index)">
-                            <a-menu-item key="add">
-                                <a-icon type="user"/>
-                                新增
-                            </a-menu-item>
-                            <a-menu-item key="edit">
-                                <a-icon type="user"/>
-                                编辑
-                            </a-menu-item>
-                            <a-menu-item key="del">
-                                <a-icon type="user"/>
-                                删除
-                            </a-menu-item>
-                            <a-menu-item key="open">
-                                <a-icon type="user"/>
-                                {{ record.isOpen === 0 ? '停用' : '启用' }}
-                            </a-menu-item>
-                        </a-menu>
+                        <template #overlay>
+                            <a-menu @click="handleSelectMenu($event.key,text,record,index)">
+                                <a-menu-item key="add">
+                                    新增
+                                    <PlusOutlined/>
+                                </a-menu-item>
+                                <a-menu-item key="edit">
+                                    编辑
+                                    <EditOutlined/>
+                                </a-menu-item>
+                                <a-menu-item key="del">
+                                    删除
+                                    <CloseOutlined/>
+                                </a-menu-item>
+                                <a-menu-item key="open">
+                                    {{ record.isOpen === 0 ? '停用' : '启用' }}
+                                    <EditOutlined/>
+                                </a-menu-item>
+                            </a-menu>
+                        </template>
                         <a-button type="primary" style="margin-left: 8px"> 选项
-                            <a-icon type="down"/>
+                            <down-outlined></down-outlined>
                         </a-button>
                     </a-dropdown>
                 </template>
@@ -106,10 +108,12 @@
 <script>
 import Api from '../../assets/api/api'
 import DataUtils from '../../assets/js/DataUtils'
+import {DownOutlined,PlusOutlined,EditOutlined,CloseOutlined} from '@ant-design/icons-vue';
 
 export default {
     name: "MenuManager",
     props: [],
+    components: {DownOutlined, PlusOutlined, EditOutlined, CloseOutlined},
     watch: {
         '$route'(to, from) {
             console.log(to);
@@ -151,7 +155,7 @@ export default {
                 dataIndex: 'level',
                 align: 'center',
                 sorter: true,
-            },{
+            }, {
                 title: '排序',
                 dataIndex: 'sort',
                 align: 'center',
@@ -173,13 +177,14 @@ export default {
                 title: '是否启用',
                 dataIndex: 'isOpen',
                 fixed: 'right',
-                scopedSlots: {customRender: 'isOpenSlot'}
+                slots: {customRender: 'isOpenSlot'}
             },
             {
                 title: '操作',
                 fixed: 'right',
+                key: 'operation',
                 // dataIndex: 'operation',
-                scopedSlots: {customRender: 'operation'},
+                slots: {customRender: 'operation'},
             }
         ];
         let page = 0;
@@ -514,8 +519,8 @@ export default {
             this.addMenuData.description = '';
             this.addMenuData.sort = 0;
         },
-        rootMenuCheck(check){
-            this.addMenuData.isRootMenu=check;
+        rootMenuCheck(check) {
+            this.addMenuData.isRootMenu = check;
             console.log(this.addMenuData.isRootMenu);
         }
 
