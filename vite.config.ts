@@ -13,6 +13,6 @@ module.exports = {
         'vue': "vue/dist/vue.esm-bundler.js"
     },
     optimizeDeps: {
-        include: ["@ant-design/icons-vue"],
+        include: ["@ant-design/icons-vue","@ant-design-vue/use"],
     },
 };

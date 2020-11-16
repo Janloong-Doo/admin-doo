@@ -43,6 +43,9 @@ const editResource = (params, config) => request.postJson(host.dip + baseBusines
 const delResource = (params, config) => request.del(host.dip + baseBusiness + '/resource/del/' + params, null, config);
 const changeResourceStatus = (params, config) => request.post(host.dip + baseBusiness + '/resource/changeResourceStatus' ,params,  config);
 
+//==============userManager================
+const getUserManagerList = (params, config) => request.get(host.dip + baseBusiness + '/userManager/listAll', params, config);
+
 
 export default {
   getToken
@@ -71,4 +74,5 @@ export default {
   , editResource
   , delResource
   , changeResourceStatus
+  , getUserManagerList
 }
