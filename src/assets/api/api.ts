@@ -45,6 +45,11 @@ const changeResourceStatus = (params, config) => request.post(host.dip + baseBus
 
 //==============userManager================
 const getUserManagerList = (params, config) => request.get(host.dip + baseBusiness + '/userManager/listAll', params, config);
+const addUserManager = (params, config) => request.postJson(host.dip + baseBusiness + '/userManager/addUser', params, config);
+const editUserManagerList = (params, config) => request.postJson(host.dip + baseBusiness + '/userManager/editUser', params, config);
+const delUserManager = (params, config) => request.del(host.dip + baseBusiness + '/userManager/delUser/' + params, null, config);
+const disableUserManager = (params, config) => request.post(host.dip + baseBusiness + '/userManager/disableUser' ,params,  config);
+const resetUserManagerPassword = (params, config) => request.post(host.dip + baseBusiness + '/userManager/resetPassword' ,params,  config);
 
 
 export default {
@@ -75,4 +80,9 @@ export default {
   , delResource
   , changeResourceStatus
   , getUserManagerList
+  , addUserManager
+  , editUserManagerList
+  , delUserManager
+  , disableUserManager
+  , resetUserManagerPassword
 }

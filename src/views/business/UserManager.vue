@@ -23,8 +23,8 @@
                 @close="onDrawerClose('normal')"
             >
                 <a-form
-                    layout="vertical"
                     ref="addMenuForm"
+                    layout="vertical"
                     :label-col="labelCol" :wrapper-col="wrapperCol"
                 >
                     <!--                    <a-form-->
@@ -36,43 +36,51 @@
                     <!--                >-->
 
                     <a-form-item label="账户:" v-bind="validateInfos['addData.userName']">
-                        <a-input placeholder="请输入用户账户" v-model:value="modelRef.addData.userName"></a-input>
+                        <a-input :disabled="addParamData.isEditType" placeholder="请输入用户账户" v-model:value="modelRef.addData.userName"></a-input>
                     </a-form-item>
-                    <a-form-item label="密码:" v-bind="validateInfos['addData.password']">
-                        <a-input placeholder="请输入用户编码" v-model:value="modelRef.addData.password"></a-input>
+                    <a-form-item v-if="!addParamData.isEditType" label="密码:" v-bind="validateInfos['addData.password']" has-feedback>
+                        <a-input-password placeholder="请输入密码" v-model:value="modelRef.addData.password"></a-input-password>
                     </a-form-item>
-                    <a-form-item label="再次输入密码:" v-bind="validateInfos['addData.passwordRepeat']">
-                        <a-input placeholder="再次输入密码" v-model:value="modelRef.addData.passwordRepeat"></a-input>
+                    <a-form-item v-if="!addParamData.isEditType" label="确认密码:" v-bind="validateInfos['addData.passwordRepeat']" has-feedback>
+                        <a-input-password placeholder="请确认密码" v-model:value="modelRef.addData.passwordRepeat"></a-input-password>
+                    </a-form-item>
+                    <a-form-item label="电话:" v-bind="validateInfos['addData.tel']">
+                        <a-input placeholder="请输入电话" v-model:value="modelRef.addData.tel"></a-input>
                     </a-form-item>
                     <a-form-item label="昵称:" v-bind="validateInfos['addData.aliaName']">
                         <a-input placeholder="请输入昵称" v-model:value="modelRef.addData.aliaName"></a-input>
                     </a-form-item>
                     <a-form-item label="姓名:" v-bind="validateInfos['addData.trueName']">
-                        <a-input placeholder="再次输入姓名" v-model:value="modelRef.addData.trueName"></a-input>
+                        <a-input placeholder="请输入姓名" v-model:value="modelRef.addData.trueName"></a-input>
                     </a-form-item>
-                    <a-form-item label="性别:" v-bind="validateInfos['addData.sex']">
+                    <a-form-item label="性别:" v-bind="validateInfos['addData.sex']" requird>
                         <a-radio-group v-model:value="modelRef.addData.sex" button-style="solid">
-                            <a-radio-button value="0">
-                                男
-                            </a-radio-button>
-                            <a-radio-button value="1">
-                                女
-                            </a-radio-button>
+                            <a-radio-button value="0">男</a-radio-button>
+                            <a-radio-button value="1">女</a-radio-button>
                         </a-radio-group>
                     </a-form-item>
 
-                    <a-button :style="{ marginRight: '8px' }" @click="onDrawerClose('reset')">
-                        取消
-                    </a-button>
-                    <a-button type="primary" @click="saveMenu('addMenuForm')">
-                        确认
-                    </a-button>
+                    <a-form-item>
+
+                    </a-form-item>
+
+                    <a-form-item>
+                        <a-button :style="{ marginRight: '8px' }" @click="resetFields">
+                            重置
+                        </a-button>
+                        <a-button :style="{ marginRight: '8px' }" @click="onDrawerClose('reset')">
+                            取消
+                        </a-button>
+                        <a-button type="primary" @click="saveMenu">
+                            确认
+                        </a-button>
+                    </a-form-item>
                 </a-form>
 
             </a-drawer>
 
+
             <!-- 主体列表部分 -->
-            <!--                :columns="columns"-->
             <a-table
                 :columns="columnsDefines"
                 :row-key="record => record.id"
@@ -81,10 +89,30 @@
                 :pagination="pagination"
                 :rowSelection="rowSelection"
                 @change="handleTableChange"
-                :scroll="{ x: '110%' }"
-                bordered
+                :scroll="{ x: '120%' }"
                 tableLayout="fixed"
             >
+                <!--                bordered-->
+                <!--                tableLayout="auto"-->
+                <template #sex="{text, record, index}">
+                    <a-tag :color="text === 0?'blue':'pink'">{{ text === 0 ? '男' : '女' }}</a-tag>
+                </template>
+                <template #organize="{text, record, index}">
+                    <span v-if="(text!=null&&text.name)">{{ text.name }}</span>
+                    <span v-else>
+                    <a-tag color="red">{{ (text != null && text.name) ? text.name : "未分配" }}</a-tag>
+                    </span>
+                </template>
+                <template #roles="{text, record, index}">
+                    <template v-if="(text!=null&&text.size>0)" v-for="item in text">
+                        <a-tag :key="item.id" :color="tagColor[index]">
+                            {{ item.name }}
+                        </a-tag>
+                    </template>
+                    <span v-else>
+                    <a-tag color="red">未分配</a-tag>
+                    </span>
+                </template>
                 <template #isOpenSlot="{text, record, index}">
                     <a-switch disabled :checked="text===0"></a-switch>
                 </template>
@@ -108,6 +136,10 @@
                                     {{ record.isOpen === 0 ? '停用' : '启用' }}
                                     <EditOutlined/>
                                 </a-menu-item>
+                                <a-menu-item key="resetPass">
+                                    重置密码
+                                    <RollbackOutlined/>
+                                </a-menu-item>
                             </a-menu>
                         </template>
                         <a-button type="primary" style="margin-left: 8px"> 选项
@@ -123,15 +155,16 @@
 
 <script>
 import Api from '../../assets/api/api'
-import DataUtils from '../../assets/js/DataUtils'
-import {reactive, toRaw} from 'vue';
+import {createVNode, reactive} from 'vue';
 import {useForm} from '@ant-design-vue/use';
-// import {useForm} from 'ant-design-vue';
-import {DownOutlined, PlusOutlined, EditOutlined, CloseOutlined} from '@ant-design/icons-vue';
+import {message, Modal} from 'ant-design-vue';
+import {CloseOutlined, DownOutlined, EditOutlined, ExclamationCircleOutlined, PlusOutlined, RollbackOutlined} from '@ant-design/icons-vue';
 
+
+let messageKey = "UserManagerKey";
 export default {
     name: "UserManager",
-    components: {DownOutlined, PlusOutlined, EditOutlined, CloseOutlined},
+    components: {DownOutlined, PlusOutlined, EditOutlined, CloseOutlined, RollbackOutlined, ExclamationCircleOutlined},
     props: [],
     setup() {
         const modelRef = reactive({
@@ -141,23 +174,24 @@ export default {
                 passwordRepeat: '',
                 aliaName: '',
                 trueName: '',
+                tel: '',
                 sex: "0",
-            }
+            },
         });
         const rulesRef = reactive({
             'addData.userName': [
                 {
                     required: true,
                     message: '请输入账号',
-                    trigger: 'blur'
+                    trigger: ['change', 'blur']
                 },
             ],
             'addData.password': [
                 {
                     required: true,
                     message: '请输入密码',
-                    trigger: 'blur'
-                },
+                    trigger: ['change', 'blur']
+                }
             ],
             'addData.passwordRepeat': [
                 {
@@ -165,19 +199,28 @@ export default {
                     message: '请再次输入密码',
                     trigger: 'blur'
                 },
+                {
+                    validator: async (rule, value) => {
+                        console.log()
+                        if (value !== modelRef.addData.password) {
+                            return Promise.reject("密码不一致");
+                        }
+                        return Promise.resolve();
+                    }
+                },
             ],
         });
-        const {resetFields, validate, validateInfos} = useForm(modelRef, rulesRef);
-        const saveMenu = e => {
-            e.preventDefault();
-            validate()
-                .then(() => {
-                    console.log(toRaw(modelRef));
-                })
-                .catch(err => {
-                    console.log('error', err);
-                });
-        };
+        const {resetFields, validate, validateInfos} = useForm(modelRef, rulesRef, {immediate: true});
+        // const onSubmit = e => {
+        //     e.preventDefault();
+        //     validate()
+        //         .then(() => {
+        //             console.log(toRaw(modelRef));
+        //         })
+        //         .catch(err => {
+        //             console.log('error', err);
+        //         });
+        // };
         const columnsDefines = [
             {
                 title: '账户',
@@ -205,11 +248,28 @@ export default {
                 dataIndex: 'tel',
                 align: 'center',
                 sorter: true,
-            }, {
-                title: '排序',
-                dataIndex: 'sort',
+            },
+            {
+                title: '性别',
+                dataIndex: 'sex',
                 align: 'center',
                 sorter: true,
+                slots: {customRender: 'sex'}
+
+            },
+            {
+                title: '组织',
+                dataIndex: 'organize',
+                align: 'center',
+                sorter: true,
+                slots: {customRender: 'organize'}
+            },
+            {
+                title: '角色',
+                dataIndex: 'roles',
+                align: 'center',
+                sorter: true,
+                slots: {customRender: 'roles'}
             },
             {
                 title: '创建时间',
@@ -237,6 +297,7 @@ export default {
                 slots: {customRender: 'operation'},
             }
         ];
+        const tagColor = ["blue", "pink", "orange", "red", "green", "cyan", "purple"]
         return {
             labelCol: {span: 6},
             wrapperCol: {span: 14},
@@ -246,6 +307,7 @@ export default {
             // onSubmit,
             validate,
             columnsDefines,
+            tagColor,
         };
     },
     watch: {
@@ -257,6 +319,7 @@ export default {
             let b = to.length === 0;
             this.addParamData.firstData = b;
         }
+
     },
     computed: {
         rowSelection() {
@@ -296,26 +359,11 @@ export default {
             addMenuDradwrvisible: false,
             addParamData: {
                 id: '',
-                name: '',
-                value: '',
-                pid: '',
-                level: '',
-                sort: 0,
-                description: '',
-                type: '',
                 //base
                 firstData: false,
                 isEditType: false,
                 isRootMenu: false,
                 isMenuOpen: false,
-                rules: {
-                    name: [
-                        {required: true, message: '请输入用户名称', trigger: 'blur'},
-                    ],
-                    value: [
-                        {required: true, message: '请输入用户编码', trigger: 'blur'},
-                    ]
-                }
             }
         }
     },
@@ -329,31 +377,27 @@ export default {
 
     },
     methods: {
-        saveMenu(formName) {
+        saveMenu() {
             if (this.addParamData.isEditType) {
-                this.editMenu(formName);
+                this.editMenu();
             } else {
-                this.addMenu(formName);
+                this.addMenu();
             }
         },
-        addMenu(formName) {
+        addMenu() {
             this.validate().then(value => {
-                console.log("校验成功")
-                console.log(this.addParamData);
-                let pid = this.addParamData.isRootMenu ? '0' : this.addParamData.pid;
-                let level = this.addParamData.isRootMenu ? '1' : this.addParamData.level;
                 let param = {
-                    "name": this.addParamData.name,
-                    "value": this.addParamData.value,
-                    "description": this.addParamData.description,
-                    "pid": pid,
-                    "level": level,
-                    "sort": this.addParamData.sort
+                    "userName": this.modelRef.addData.userName,
+                    "password": this.modelRef.addData.password,
+                    "aliaName": this.modelRef.addData.aliaName,
+                    "trueName": this.modelRef.addData.trueName,
+                    "sex": this.modelRef.addData.sex,
+                    "tel": this.modelRef.addData.tel,
                 }
-                Api.addDic(param).then(value => {
+                Api.addUserManager(param).then(value => {
                     if (value.code === 0) {
                         console.log("新增成功")
-                        this.$refs.addMenuForm.resetFields();
+                        this.resetFields();
                         this.addMenuDradwrvisible = false;
                         this.getMenuData();
                     } else {
@@ -367,36 +411,34 @@ export default {
             })
         },
 
-        editMenu(formName) {
-            this.$refs[formName].validate(valid => {
-                if (valid) {
-                    console.log(this.addParamData);
-                    // let pid = this.addMenuData.isRootMenu ? '0' : this.addMenuData.pid;
-                    // let level = this.addMenuData.isRootMenu ? '1' : this.addMenuData.level;
-                    let param = {
-                        'id': this.addParamData.id,
-                        "name": this.addParamData.name,
-                        "value": this.addParamData.value,
-                        "description": this.addParamData.description,
-                        "sort": this.addParamData.sort
-                    }
-                    Api.editDic(param).then(value => {
-                        if (value.code === 0) {
-                            console.log("修改成功")
-                            this.$refs.addMenuForm.resetFields();
-                            this.addMenuDradwrvisible = false;
-                            this.getMenuData();
-                            this.initEmptyData();
-                        } else {
-                            console.log("修改失败")
-                            console.log(value)
-                        }
-                    }).catch(reason => {
-                    })
-                } else {
-                    console.log('error submit!!');
-                    return false;
+        editMenu() {
+            this.validate().then(value => {
+                let id = this.addParamData.id;
+                let param = {
+                    "id": id,
+                    "aliaName": this.modelRef.addData.aliaName,
+                    "trueName": this.modelRef.addData.trueName,
+                    "sex": this.modelRef.addData.sex,
+                    "tel": this.modelRef.addData.tel,
                 }
+                Api.editUserManagerList(param).then(value => {
+                    if (value.code === 0) {
+                        console.log("修改成功")
+                        this.resetFields();
+                        this.addMenuDradwrvisible = false;
+                        this.addParamData.isEditType = false
+                        this.getMenuData();
+                    } else {
+                        console.log("修改失败")
+                        console.log(value)
+                    }
+                }).catch(reason => {
+                    console.log('request error');
+                    return false;
+                })
+            }).catch(reason => {
+                console.log('error validate!!');
+                return false;
             })
         },
         addMenuInit(data) {
@@ -409,15 +451,18 @@ export default {
         },
 
         editMenuInit(data) {
+            console.log("1", data)
             this.addParamData.isEditType = true;
             this.onDrawerOpen()
             //初始化数据
             this.addParamData.id = data.id;
-            this.addParamData.name = data.name;
-            this.addParamData.name = data.name;
-            this.addParamData.value = data.value;
-            this.addParamData.description = data.description;
-            this.addParamData.sort = data.sort;
+            this.modelRef.addData.userName = data.userName;
+            this.modelRef.addData.password = 'data.userName';
+            this.modelRef.addData.passwordRepeat = 'data.userName';
+            this.modelRef.addData.aliaName = data.aliaName;
+            this.modelRef.addData.trueName = data.trueName;
+            this.modelRef.addData.tel = data.tel;
+            this.modelRef.addData.sex = data.sex + "";
         },
 
         delMenu(data) {
@@ -520,19 +565,13 @@ export default {
         },
         changeMenuStatus(data) {
             let that = this;
-            let selectedRows = data;
-            if (!selectedRows) {
-                console.log("请选择一条数据")
-                return false;
-            }
-            let content = "确认修改用户'" + selectedRows.name + "'的状态吗？";
-            console.log(content);
-
+            console.log("禁用数据", data)
+            let content = "确认修改用户'" + data.userName + "'的状态吗？";
             this.$confirm({
                 title: '修改用户',
                 content: content,
                 onOk() {
-                    return Api.changeDicStatus({'id': selectedRows.id}).then(value => {
+                    return Api.disableUserManager({'id': data.id}).then(value => {
                         if (value.code === 0) {
                             console.log(value.msg)
                             that.getMenuData();
@@ -562,6 +601,9 @@ export default {
                 case 'open':
                     this.changeMenuStatus(text);
                     break;
+                case 'resetPass':
+                    this.resetPass(text);
+                    break;
                 default :
                     return false;
             }
@@ -575,11 +617,31 @@ export default {
             this.addParamData.description = '';
             this.addParamData.sort = 0;
         },
-        rootMenuCheck(check) {
-            this.addParamData.isRootMenu = check;
-            console.log(this.addParamData.isRootMenu);
-        }
+        resetPass(data) {
+            Modal.confirm({
+                title: '重置密码',
+                icon: createVNode(ExclamationCircleOutlined),
+                content: "是否重置用户'" + data.userName + "'的密码?",
+                okText: "确认",
+                cancelText: "取消",
+                onOk() {
+                    message.loading({content: "重置中"}, messageKey)
+                    return Api.resetUserManagerPassword({'id': data.id}).then(value => {
+                        if (value.code === 0) {
+                            message.success({content: value.msg, messageKey})
+                        } else {
+                            message.error({content: value.msg, messageKey})
+                        }
+                    }).catch(reason => {
+                        console.log('请求异常');
+                        console.log(reason);
+                    });
+                },
 
+                onCancel() {
+                },
+            });
+        }
     }
 
 }
