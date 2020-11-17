@@ -38,10 +38,10 @@
                     <a-form-item label="账户:" v-bind="validateInfos['addData.userName']">
                         <a-input :disabled="addParamData.isEditType" placeholder="请输入用户账户" v-model:value="modelRef.addData.userName"></a-input>
                     </a-form-item>
-                    <a-form-item v-if="!addParamData.isEditType" label="密码:" v-bind="validateInfos['addData.password']" has-feedback>
+                    <a-form-item v-if="!addParamData.isEditType" label="密码:" v-bind="validateInfos['addData.password']">
                         <a-input-password placeholder="请输入密码" v-model:value="modelRef.addData.password"></a-input-password>
                     </a-form-item>
-                    <a-form-item v-if="!addParamData.isEditType" label="确认密码:" v-bind="validateInfos['addData.passwordRepeat']" has-feedback>
+                    <a-form-item v-if="!addParamData.isEditType" label="确认密码:" v-bind="validateInfos['addData.passwordRepeat']">
                         <a-input-password placeholder="请确认密码" v-model:value="modelRef.addData.passwordRepeat"></a-input-password>
                     </a-form-item>
                     <a-form-item label="电话:" v-bind="validateInfos['addData.tel']">
@@ -60,9 +60,34 @@
                         </a-radio-group>
                     </a-form-item>
 
-                    <a-form-item>
-
+                    <a-form-item label="组织:" v-bind="validateInfos['addData.organize']">
+                        <a-tree-select
+                            v-model:value="modelRef.addData.organize.id"
+                            style="width: 100%"
+                            :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+                            :tree-data="departmentData"
+                            placeholder="请选择组织"
+                            :replaceFields="replaceFields"
+                            allow-clear
+                        >
+                            <template #title="{ key, value }">
+                                <span style="color: #08c">001{{ key }} </span>
+                            </template>
+                        </a-tree-select>
                     </a-form-item>
+                    <a-form-item label="角色" v-bind="validateInfos['addData.roles']">
+                        <a-tree-select
+                            v-model:value="modelRef.addData.roles"
+                            style="width: 100%"
+                            :tree-data="roleData"
+                            tree-checkable
+                            :replaceFields="replaceFieldsRole"
+                            allow-clear
+                            :show-checked-strategy="SHOW_PARENT"
+                            search-placeholder="请选择角色"
+                        />
+                    </a-form-item>
+
 
                     <a-form-item>
                         <a-button :style="{ marginRight: '8px' }" @click="resetFields">
@@ -98,15 +123,17 @@
                     <a-tag :color="text === 0?'blue':'pink'">{{ text === 0 ? '男' : '女' }}</a-tag>
                 </template>
                 <template #organize="{text, record, index}">
-                    <span v-if="(text!=null&&text.name)">{{ text.name }}</span>
+                    <span v-if="(text!=null&&text.organizeName)">{{ text.organizeName }}</span>
                     <span v-else>
-                    <a-tag color="red">{{ (text != null && text.name) ? text.name : "未分配" }}</a-tag>
+                    <a-tag color="red">未分配</a-tag>
                     </span>
                 </template>
                 <template #roles="{text, record, index}">
-                    <template v-if="(text!=null&&text.size>0)" v-for="item in text">
-                        <a-tag :key="item.id" :color="tagColor[index]">
-                            {{ item.name }}
+                    <template v-if="(text!=null&&text.length>0)" v-for="(item,index) in text">
+                        <!--                        <a-tag :key="item.id" :color="tagColor[index%tagColor.length]">-->
+                        <!--                        <a-tag :key="item.id" :color="randomColor">-->
+                        <a-tag :key="item.id" :color="this.tagColor[Math.floor((Math.random() * this.tagColor.length) + 1) % this.tagColor.length]">
+                            {{ item.roleName }}
                         </a-tag>
                     </template>
                     <span v-else>
@@ -157,9 +184,9 @@
 import Api from '../../assets/api/api'
 import {createVNode, reactive} from 'vue';
 import {useForm} from '@ant-design-vue/use';
-import {message, Modal} from 'ant-design-vue';
+import {message, Modal, TreeSelect} from 'ant-design-vue';
 import {CloseOutlined, DownOutlined, EditOutlined, ExclamationCircleOutlined, PlusOutlined, RollbackOutlined} from '@ant-design/icons-vue';
-
+import DataUtils from "../../assets/js/DataUtils";
 
 let messageKey = "UserManagerKey";
 export default {
@@ -167,6 +194,20 @@ export default {
     components: {DownOutlined, PlusOutlined, EditOutlined, CloseOutlined, RollbackOutlined, ExclamationCircleOutlined},
     props: [],
     setup() {
+        const departmentData = [];
+        const roleData = [];
+        const replaceFields = {
+            title: "organizeName",
+            key: "id",
+            children: "children",
+            value: "id"
+        };
+        const replaceFieldsRole = {
+            title: "roleName",
+            key: "id",
+            children: "children",
+            value: "id"
+        };
         const modelRef = reactive({
             addData: {
                 userName: '',
@@ -176,6 +217,10 @@ export default {
                 trueName: '',
                 tel: '',
                 sex: "0",
+                organize: {
+                    id: ''
+                },
+                roles: []
             },
         });
         const rulesRef = reactive({
@@ -211,16 +256,6 @@ export default {
             ],
         });
         const {resetFields, validate, validateInfos} = useForm(modelRef, rulesRef, {immediate: true});
-        // const onSubmit = e => {
-        //     e.preventDefault();
-        //     validate()
-        //         .then(() => {
-        //             console.log(toRaw(modelRef));
-        //         })
-        //         .catch(err => {
-        //             console.log('error', err);
-        //         });
-        // };
         const columnsDefines = [
             {
                 title: '账户',
@@ -298,6 +333,7 @@ export default {
             }
         ];
         const tagColor = ["blue", "pink", "orange", "red", "green", "cyan", "purple"]
+
         return {
             labelCol: {span: 6},
             wrapperCol: {span: 14},
@@ -308,6 +344,10 @@ export default {
             validate,
             columnsDefines,
             tagColor,
+            departmentData,
+            replaceFields,
+            replaceFieldsRole,
+            roleData,
         };
     },
     watch: {
@@ -333,7 +373,7 @@ export default {
             //     // type:'checkbox'
             // }
             return null;
-        }
+        },
     },
     data() {
         let page = 0;
@@ -345,6 +385,7 @@ export default {
             "showSizeChanger": true
         };
         return {
+            SHOW_PARENT: TreeSelect.SHOW_PARENT,
             page: page,
             size: size,
             sortName: '',
@@ -357,6 +398,7 @@ export default {
             sourceData: [],
             data: [],
             addMenuDradwrvisible: false,
+
             addParamData: {
                 id: '',
                 //base
@@ -370,7 +412,8 @@ export default {
 
     created() {
         this.getMenuData();
-
+        this.getDepartment();
+        this.getRoleData();
     },
 
     mounted() {
@@ -386,6 +429,10 @@ export default {
         },
         addMenu() {
             this.validate().then(value => {
+                let roles = [];
+                this.modelRef.addData.roles.forEach(value1 => {
+                    roles.push({"id": value1})
+                });
                 let param = {
                     "userName": this.modelRef.addData.userName,
                     "password": this.modelRef.addData.password,
@@ -393,6 +440,8 @@ export default {
                     "trueName": this.modelRef.addData.trueName,
                     "sex": this.modelRef.addData.sex,
                     "tel": this.modelRef.addData.tel,
+                    "organize": {"id": this.modelRef.addData.organize.id},
+                    "roles": roles
                 }
                 Api.addUserManager(param).then(value => {
                     if (value.code === 0) {
@@ -414,12 +463,20 @@ export default {
         editMenu() {
             this.validate().then(value => {
                 let id = this.addParamData.id;
+                let roles = [];
+                this.modelRef.addData.roles.forEach(value1 => {
+                    roles.push({"id": value1})
+                });
                 let param = {
                     "id": id,
                     "aliaName": this.modelRef.addData.aliaName,
                     "trueName": this.modelRef.addData.trueName,
                     "sex": this.modelRef.addData.sex,
                     "tel": this.modelRef.addData.tel,
+                    "organize": {
+                        "id": this.modelRef.addData.organize.id,
+                    },
+                    "roles": roles
                 }
                 Api.editUserManagerList(param).then(value => {
                     if (value.code === 0) {
@@ -463,6 +520,13 @@ export default {
             this.modelRef.addData.trueName = data.trueName;
             this.modelRef.addData.tel = data.tel;
             this.modelRef.addData.sex = data.sex + "";
+            this.modelRef.addData.organize.id = data.organize === null ? "" : data.organize.id;
+            if (data.roles.length > 0) {
+                data.roles.forEach(value => {
+                    this.modelRef.addData.roles.push(value.id)
+                })
+            }
+            console.log("角色初始化", this.modelRef.addData.roles)
         },
 
         delMenu(data) {
@@ -641,7 +705,33 @@ export default {
                 onCancel() {
                 },
             });
-        }
+        },
+        getDepartment() {
+            Api.getDepartMentList().then(value => {
+                this.resultData = value.data;
+                if (value.code === 0) {
+                    // 数据组装
+                    this.departmentData = DataUtils.initTreeData(value.data);
+                }
+            })
+        },
+        getRoleData() {
+            this.loading = true;
+            let params = {
+                "page": 0,
+                "size": 100,
+                "sortName": "sort",
+                "orderType": "asc",
+            }
+            Api.getRoleList(params).then(value => {
+                if (value.code === 0) {
+                    this.roleData = value.data.content;
+                } else {
+                }
+            }).catch(reason => {
+
+            });
+        },
     }
 
 }
