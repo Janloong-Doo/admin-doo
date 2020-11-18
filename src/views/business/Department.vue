@@ -75,8 +75,8 @@
                     </span>
                 </template>
                 <template #roles="{text, record, index}">
-                    <template v-if="(text!=null&&text.length>0)" v-for="(item,index) in text">
-                        <a-tag :key="item.id" :color="this.tagColor[Math.floor((Math.random() * this.tagColor.length) + 1) % this.tagColor.length]">
+                    <template  v-if="(text!=null&&text.length>0)" v-for="(item,index) in text" :key="item.id">
+                        <a-tag  :color="this.tagColor[Math.floor((Math.random() * this.tagColor.length) + 1) % this.tagColor.length]">
                             {{ item.roleName }}
                         </a-tag>
                     </template>

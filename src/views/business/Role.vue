@@ -41,6 +41,16 @@
                 </a-form>
             </a-drawer>
 
+            <!--菜单资源抽屉-->
+<!--            <a-drawer-->
+<!--                :title="分配菜单资源"-->
+<!--                :width="720"-->
+<!--                :visible="addRoleDradwrvisible"-->
+<!--                :body-style="{ paddingBottom: '80px' }"-->
+<!--                @close="onDrawerClose('normal')"-->
+<!--            >-->
+
+<!--            </a-drawer>-->
             <!-- 主体列表部分 -->
             <a-table
                 :columns="columnsDefines"
@@ -72,6 +82,10 @@
                                 </a-menu-item>
                                 <a-menu-item key="open">
                                     {{ record.isOpen === 0 ? '停用' : '启用' }}
+                                    <EditOutlined/>
+                                </a-menu-item>
+                                <a-menu-item key="menuResource">
+                                    菜单资源
                                     <EditOutlined/>
                                 </a-menu-item>
                             </a-menu>
@@ -324,7 +338,7 @@ export default {
 
             });
         },
-        changeRoleStatus(data){
+        changeRoleStatus(data) {
             let that = this;
             let content = "确认修改角色'" + this.modelRef.roleName + "'的状态吗？";
             this.$confirm({
@@ -386,6 +400,9 @@ export default {
                     break;
                 case 'open':
                     this.changeRoleStatus(text);
+                    break;
+                case 'menuResource':
+
                     break;
                 default :
                     message.error("无效操作")
