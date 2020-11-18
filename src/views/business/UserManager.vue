@@ -129,10 +129,9 @@
                     </span>
                 </template>
                 <template #roles="{text, record, index}">
-                    <template v-if="(text!=null&&text.length>0)" v-for="(item,index) in text">
-                        <!--                        <a-tag :key="item.id" :color="tagColor[index%tagColor.length]">-->
+                    <template v-if="(text!=null&&text.length>0)" v-for="(item,index) in text" :key="item.id">
                         <!--                        <a-tag :key="item.id" :color="randomColor">-->
-                        <a-tag :key="item.id" :color="this.tagColor[Math.floor((Math.random() * this.tagColor.length) + 1) % this.tagColor.length]">
+                        <a-tag :color="this.tagColor[Math.floor((Math.random() * this.tagColor.length) + 1) % this.tagColor.length]">
                             {{ item.roleName }}
                         </a-tag>
                     </template>
@@ -288,7 +287,6 @@ export default {
                 title: '性别',
                 dataIndex: 'sex',
                 align: 'center',
-                sorter: true,
                 slots: {customRender: 'sex'}
 
             },
@@ -296,14 +294,12 @@ export default {
                 title: '组织',
                 dataIndex: 'organize',
                 align: 'center',
-                sorter: true,
                 slots: {customRender: 'organize'}
             },
             {
                 title: '角色',
                 dataIndex: 'roles',
                 align: 'center',
-                sorter: true,
                 slots: {customRender: 'roles'}
             },
             {
@@ -508,7 +504,6 @@ export default {
         },
 
         editMenuInit(data) {
-            console.log("1", data)
             this.addParamData.isEditType = true;
             this.onDrawerOpen()
             //初始化数据
@@ -526,7 +521,6 @@ export default {
                     this.modelRef.addData.roles.push(value.id)
                 })
             }
-            console.log("角色初始化", this.modelRef.addData.roles)
         },
 
         delMenu(data) {
@@ -711,7 +705,7 @@ export default {
                 this.resultData = value.data;
                 if (value.code === 0) {
                     // 数据组装
-                    this.departmentData = DataUtils.initTreeData(value.data);
+                    this.departmentData = DataUtils.initTreeData(value.data.content);
                 }
             })
         },

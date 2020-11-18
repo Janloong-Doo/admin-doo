@@ -14,11 +14,15 @@ const getResourceInfo = (params, config) => request.get(host.dip + '/user', para
 const addDepartMent = (params, config) => request.postJson(host.dip + baseBusiness + '/organize/add', params, config);
 const getDepartMentList = (params, config) => request.get(host.dip + baseBusiness + '/organize/list', params, config);
 const delDepartMent = (params, config) => request.del(host.dip + baseBusiness + '/organize/' + params, null, config);
+const editOrg = (params, config) => request.postJson(host.dip + baseBusiness + '/organize/editOrg', params, config);
+const changeOrgStatus = (params, config) => request.post(host.dip + baseBusiness + '/organize/changeOrgStatus' ,params,  config);
 
 //==============Role================
 const addRole = (params, config) => request.postJson(host.dip + baseBusiness + '/role', params, config);
 const getRoleList = (params, config) => request.get(host.dip + baseBusiness + '/role/list', params, config);
 const delRole = (params, config) => request.del(host.dip + baseBusiness + '/role/' + params, null, config);
+const editRole = (params, config) => request.postJson(host.dip + baseBusiness + '/role/editRole', params, config);
+const changeRoleStatus = (params, config) => request.post(host.dip + baseBusiness + '/role/changeRoleStatus' ,params,  config);
 
 //==============menu================
 const getMenuList = (params, config) => request.get(host.dip + baseBusiness + '/menu/list', params, config);
@@ -59,9 +63,13 @@ export default {
   , addDepartMent
   , getDepartMentList
   , delDepartMent
+  , editOrg
+  , changeOrgStatus
   , getRoleList
   , addRole
   , delRole
+  , editRole
+  , changeRoleStatus
   , getMenuList
   , getMenuListByUser
   , addMenu

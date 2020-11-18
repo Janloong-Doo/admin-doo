@@ -78,19 +78,19 @@
                             <a-menu @click="handleSelectMenu($event.key,text,record,index)">
                                 <a-menu-item key="add">
                                     新增
-                                    <PlusOutlined />
+                                    <PlusOutlined/>
                                 </a-menu-item>
                                 <a-menu-item key="edit">
                                     编辑
-                                    <EditOutlined />
+                                    <EditOutlined/>
                                 </a-menu-item>
                                 <a-menu-item key="del">
                                     删除
-                                    <CloseOutlined />
+                                    <CloseOutlined/>
                                 </a-menu-item>
                                 <a-menu-item key="open">
                                     {{ record.isOpen === 0 ? '停用' : '启用' }}
-                                    <EditOutlined />
+                                    <EditOutlined/>
                                 </a-menu-item>
                             </a-menu>
                         </template>
@@ -108,12 +108,11 @@
 <script>
 import Api from '../../assets/api/api'
 import DataUtils from '../../assets/js/DataUtils'
-import {DownOutlined,PlusOutlined,EditOutlined,CloseOutlined} from '@ant-design/icons-vue';
-import { useForm } from '@ant-design-vue/use';
+import {CloseOutlined, DownOutlined, EditOutlined, PlusOutlined} from '@ant-design/icons-vue';
 
 export default {
     name: "DictionaryManager",
-    components: {DownOutlined,PlusOutlined,EditOutlined,CloseOutlined},
+    components: {DownOutlined, PlusOutlined, EditOutlined, CloseOutlined},
     props: [],
     watch: {
         '$route'(to, from) {
@@ -137,7 +136,8 @@ export default {
             //     // type:'checkbox'
             // }
             return null;
-        }
+        },
+
     },
     data() {
         let col = [
@@ -209,7 +209,7 @@ export default {
             "showSizeChanger": true
         };
         return {
-            baseMould: '字典',
+            firstData: false,
             page: page,
             size: size,
             sortName: 'sort',
