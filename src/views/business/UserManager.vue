@@ -130,8 +130,9 @@
                 </template>
                 <template #roles="{text, record, index}">
                     <template v-if="(text!=null&&text.length>0)" v-for="(item,index) in text" :key="item.id">
-                        <!--                        <a-tag :key="item.id" :color="randomColor">-->
-                        <a-tag :color="this.tagColor[Math.floor((Math.random() * this.tagColor.length) + 1) % this.tagColor.length]">
+                        <a-tag :color="randomColor(index)">
+<!--                        <a-tag :color="randomColor">-->
+                            <!--                        <a-tag :color="this.tagColor[Math.floor((Math.random() * this.tagColor.length) + 1) % this.tagColor.length]">-->
                             {{ item.roleName }}
                         </a-tag>
                     </template>
@@ -726,6 +727,9 @@ export default {
 
             });
         },
+        randomColor(index) {
+            return this.tagColor[Math.floor((Math.random() * this.tagColor.length) + 1) % this.tagColor.length];
+        }
     }
 
 }

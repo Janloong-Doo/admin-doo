@@ -1,5 +1,14 @@
 <template>
     <div id="index">
+        <a-tree
+            checkable
+            v-model:checkedKeys="checkedKeys"
+            :replaceFields="replaceMenuTreeFields"
+            :expanded-keys="expandedKeys"
+            :auto-expand-parent="autoExpandParent"
+            :selected-keys="selectedKeys"
+            :tree-data="menuTreeData"
+        />
         <a-space direction="vertical" size="middle">
             <a-row type="flex" justify="space-between" align="middle" :gutter="1">
                 <a-col :span="1">
@@ -14,6 +23,7 @@
             <a-drawer
                 :title="addRoleData.isEditType?'编辑角色':'新增角色'"
                 :width="720"
+                :closable="false"
                 :visible="addRoleDradwrvisible"
                 :body-style="{ paddingBottom: '80px' }"
                 @close="onDrawerClose('normal')"
@@ -32,6 +42,13 @@
                     <a-form-item label="排序:" v-bind="validateInfos.sort">
                         <a-input placeholder="请输入排序信息" v-model:value="modelRef.sort"></a-input>
                     </a-form-item>
+
+
+
+                    <a-button :style="{ marginRight: '8px' }" @click="onMenuDrawerOpen">
+                        分配菜单
+                    </a-button>
+
                     <a-button :style="{ marginRight: '8px' }" @click="onDrawerClose('reset')">
                         取消
                     </a-button>
@@ -39,18 +56,27 @@
                         确认
                     </a-button>
                 </a-form>
+
+                <!--菜单资源抽屉-->
+                <a-drawer
+                    title="分配菜单"
+                    :width="720"
+                    :visible="menuDradwervisible"
+                    :closable="false"
+                    :body-style="{ paddingBottom: '80px' }"
+                    @close="onMenuDrawerClose('normal')"
+                >
+<!--                        checkable-->
+<!--                        auto-expand-parent-->
+<!--                        @expand="onMenuTreeExpand"-->
+<!--                        @select="onMenuTreeSelect"-->
+                </a-drawer>
+
+
+
             </a-drawer>
 
-            <!--菜单资源抽屉-->
-<!--            <a-drawer-->
-<!--                :title="分配菜单资源"-->
-<!--                :width="720"-->
-<!--                :visible="addRoleDradwrvisible"-->
-<!--                :body-style="{ paddingBottom: '80px' }"-->
-<!--                @close="onDrawerClose('normal')"-->
-<!--            >-->
 
-<!--            </a-drawer>-->
             <!-- 主体列表部分 -->
             <a-table
                 :columns="columnsDefines"
@@ -107,6 +133,7 @@ import {CloseOutlined, DownOutlined, EditOutlined, PlusOutlined} from "@ant-desi
 import {message} from 'ant-design-vue';
 import {useForm} from "@ant-design-vue/use";
 import {reactive} from 'vue';
+import DataUtils from "../../assets/js/DataUtils";
 
 
 export default {
@@ -176,6 +203,7 @@ export default {
             ],
         });
         const {resetFields, validate, validateInfos} = useForm(modelRef, rulesRef, {immediate: true});
+
         return {
             columnsDefines,
             modelRef,
@@ -201,7 +229,14 @@ export default {
             "defaultPageSize": size,
             "showSizeChanger": true
         };
+        const replaceMenuTreeFields={
+            title: "name",
+            key: "id",
+            children: "children",
+        }
         return {
+            replaceMenuTreeFields: replaceMenuTreeFields,
+            //基础数据
             id: '',
             page: page,
             size: size,
@@ -209,8 +244,11 @@ export default {
             orderType: 'asc',
             pagination: pagination,
             loading: false,
+            //页面数据
+            //表格数据
             data: [],
             addRoleDradwrvisible: false,
+            menuDradwervisible: false,
             addRoleData: {
                 roleName: '',
                 roleDes: '',
@@ -218,7 +256,18 @@ export default {
             },
             addParamData: {
                 isEditeType: false
-            }
+            },
+            //菜单抽屉数据
+            autoExpandParent: true,
+            menuTreeData: [],
+            expandedKeys: [],
+            selectedKeys: [],
+            checkedKeys: [],
+        }
+    },
+    wathch: {
+        checkedKeys(keys){
+            console.log("checkedKeys",keys)
         }
     },
     computed: {
@@ -227,10 +276,12 @@ export default {
                 return false;
             }
             return true;
-        }
+        },
+
     },
     created() {
         this.getRoleData();
+        this.getMenuData()
     },
 
     mounted() {
@@ -431,7 +482,44 @@ export default {
                 this.addRoleData.isEditType = false;
             }
             this.addRoleDradwrvisible = false;
-        }
+        },
+        onMenuDrawerOpen(){
+            this.menuDradwervisible = true;
+            // this.getMenuData()
+        },
+        onMenuDrawerClose(){
+            this.menuDradwervisible = false;
+        },
+        onMenuTreeSelect(selectedKeys,info) {
+            console.log("selectedKeys",selectedKeys,"info",info)
+        },
+
+        onMenuTreeExpand(expandedKeys) {
+            console.log("expandedKeys",expandedKeys)
+        },
+        getMenuData() {
+            this.loading = true;
+            let params = {
+                "page": 0,
+                "size": 100,
+                "sort": 'sort',
+                "direction ": 'asc',
+            }
+            console.log(params);
+            Api.getMenuList(params).then(value => {
+                if (value.code === 0) {
+                    this.menuTreeData = DataUtils.initTreeData(value.data.content);
+                    console.log('menuTreeData',this.menuTreeData);
+                } else {
+                    console.log("获取失败")
+                    console.log(value)
+                }
+                this.loading = false;
+            }).catch(reason => {
+
+            });
+        },
+
     }
 
 }
