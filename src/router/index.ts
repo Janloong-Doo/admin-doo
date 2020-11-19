@@ -6,13 +6,10 @@ export default createRouter({
         {
             path: "/",
             redirect: "business"
-            // name: "Home",
-            // component: () => import("../views/Home.vue"),
         },
         {
             path: "/business2",
             name: "Home2",
-            // redirect:"/business"
             component: () => import("../views/Home2.vue"),
             children: [
                 {

@@ -66,6 +66,17 @@
             <br>
             <!--			<el-button @:click="randomTest">随机测试</el-button>-->
         </div>
+        <div>
+            <a-tree
+                v-model:checkedKeys="treeData.checkedKeys"
+                checkable
+                :replaceFields="treeData.replaceMenuTreeFields"
+                :tree-data="treeData.menuTreeData"
+            />
+            <!--                :expanded-keys="treeData.expandedKeys"-->
+            <!--                :auto-expand-parent="treeData.autoExpandParent"-->
+            <!--                :selected-keys="treeData.selectedKeys"-->
+        </div>
     </div>
 </template>
 <script>
@@ -73,10 +84,11 @@ import {message} from 'ant-design-vue';
 
 import axiosutils from "../assets/js/AxiosUtil.js";
 // import {parseQueryString,getNonce,getSign} from '../assets/js/signMd5Utils';
-import signMd5Utils  from '../assets/js/signMd5Utils';
+import signMd5Utils from '../assets/js/signMd5Utils';
 
 export default {
     name: "study",
+    components: {},
     data() {
         return {
             name: "我是被渲染的"
@@ -94,9 +106,56 @@ export default {
             }, {
                 lable: "https://",
                 value: "dds"
-            }]
-
-        };
+            }],
+            treeData: {
+                autoExpandParent: true,
+                menuTreeData: [{
+                    title: '0-0',
+                    key: '0-0',
+                    children: [
+                        {
+                            title: '0-0-0',
+                            key: '0-0-0',
+                            children: [
+                                {title: '0-0-0-0', key: '0-0-0-0'},
+                                {title: '0-0-0-1', key: '0-0-0-1'},
+                                {title: '0-0-0-2', key: '0-0-0-2'},
+                            ],
+                        },
+                        {
+                            title: '0-0-1',
+                            key: '0-0-1',
+                            children: [
+                                {title: '0-0-1-0', key: '0-0-1-0'},
+                                {title: '0-0-1-1', key: '0-0-1-1'},
+                                {title: '0-0-1-2', key: '0-0-1-2'},
+                            ],
+                        },
+                        {
+                            title: '0-0-2',
+                            key: '0-0-2',
+                        },
+                    ],
+                },
+                    {
+                        title: '0-1',
+                        key: '0-1',
+                        children: [
+                            {title: '0-1-0-0', key: '0-1-0-0'},
+                            {title: '0-1-0-1', key: '0-1-0-1'},
+                            {title: '0-1-0-2', key: '0-1-0-2'},
+                        ],
+                    },
+                    {
+                        title: '0-2',
+                        key: '0-2',
+                    },
+                ],
+                expandedKeys: [],
+                selectedKeys: [],
+                checkedKeys: [],
+            }
+        }
     },
     props: {
         // name: "我是被渲染的"
@@ -167,8 +226,7 @@ export default {
         }
 
     },
-    components: {
-    }
+
 
 }
 ;

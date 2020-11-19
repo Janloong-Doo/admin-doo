@@ -1,14 +1,6 @@
 <template>
     <div id="index">
-        <a-tree
-            checkable
-            v-model:checkedKeys="checkedKeys"
-            :replaceFields="replaceMenuTreeFields"
-            :expanded-keys="expandedKeys"
-            :auto-expand-parent="autoExpandParent"
-            :selected-keys="selectedKeys"
-            :tree-data="menuTreeData"
-        />
+
         <a-space direction="vertical" size="middle">
             <a-row type="flex" justify="space-between" align="middle" :gutter="1">
                 <a-col :span="1">
@@ -44,7 +36,6 @@
                     </a-form-item>
 
 
-
                     <a-button :style="{ marginRight: '8px' }" @click="onMenuDrawerOpen">
                         分配菜单
                     </a-button>
@@ -66,13 +57,12 @@
                     :body-style="{ paddingBottom: '80px' }"
                     @close="onMenuDrawerClose('normal')"
                 >
-<!--                        checkable-->
-<!--                        auto-expand-parent-->
-<!--                        @expand="onMenuTreeExpand"-->
-<!--                        @select="onMenuTreeSelect"-->
+
                 </a-drawer>
+                <!--自定义穿梭框-->
+                <custom-tree-transfer :tree-datad="menuDrawerData.menuTreeData" :select-data="menuDrawerData.selectData">
 
-
+                </custom-tree-transfer>
 
             </a-drawer>
 
@@ -134,12 +124,12 @@ import {message} from 'ant-design-vue';
 import {useForm} from "@ant-design-vue/use";
 import {reactive} from 'vue';
 import DataUtils from "../../assets/js/DataUtils";
-
+import CustomTreeTransfer from "../../components/CustomTreeTransfer.vue";
 
 export default {
     name: "Role",
     props: [],
-    components: {DownOutlined, PlusOutlined, EditOutlined, CloseOutlined},
+    components: {DownOutlined, PlusOutlined, EditOutlined, CloseOutlined, CustomTreeTransfer},
     setup() {
         const columnsDefines = [{
             title: '角色名称',
@@ -188,6 +178,7 @@ export default {
                 slots: {customRender: 'operation'},
             }
         ];
+        //表单数据相关
         const modelRef = reactive({
             roleName: '',
             roleDes: '',
@@ -204,6 +195,12 @@ export default {
         });
         const {resetFields, validate, validateInfos} = useForm(modelRef, rulesRef, {immediate: true});
 
+        //菜单抽屉数据
+        const menuDrawerData =reactive({
+        //穿梭框数据
+            menuTreeData: [],
+            selectData: []
+        }) ;
         return {
             columnsDefines,
             modelRef,
@@ -211,6 +208,7 @@ export default {
             resetFields,
             validate,
             validateInfos,
+            menuDrawerData,
         }
     },
 
@@ -229,7 +227,7 @@ export default {
             "defaultPageSize": size,
             "showSizeChanger": true
         };
-        const replaceMenuTreeFields={
+        const replaceMenuTreeFields = {
             title: "name",
             key: "id",
             children: "children",
@@ -257,18 +255,11 @@ export default {
             addParamData: {
                 isEditeType: false
             },
-            //菜单抽屉数据
-            autoExpandParent: true,
-            menuTreeData: [],
-            expandedKeys: [],
-            selectedKeys: [],
-            checkedKeys: [],
+
         }
     },
     wathch: {
-        checkedKeys(keys){
-            console.log("checkedKeys",keys)
-        }
+
     },
     computed: {
         firstData() {
@@ -483,19 +474,12 @@ export default {
             }
             this.addRoleDradwrvisible = false;
         },
-        onMenuDrawerOpen(){
+        onMenuDrawerOpen() {
             this.menuDradwervisible = true;
             // this.getMenuData()
         },
-        onMenuDrawerClose(){
+        onMenuDrawerClose() {
             this.menuDradwervisible = false;
-        },
-        onMenuTreeSelect(selectedKeys,info) {
-            console.log("selectedKeys",selectedKeys,"info",info)
-        },
-
-        onMenuTreeExpand(expandedKeys) {
-            console.log("expandedKeys",expandedKeys)
         },
         getMenuData() {
             this.loading = true;
@@ -508,8 +492,8 @@ export default {
             console.log(params);
             Api.getMenuList(params).then(value => {
                 if (value.code === 0) {
-                    this.menuTreeData = DataUtils.initTreeData(value.data.content);
-                    console.log('menuTreeData',this.menuTreeData);
+                    this.menuDrawerData.menuTreeData = DataUtils.initTreeData(value.data.content);
+                    console.log('menuTreeData', this.menuDrawerData.menuTreeData);
                 } else {
                     console.log("获取失败")
                     console.log(value)

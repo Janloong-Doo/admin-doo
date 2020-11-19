@@ -5,6 +5,7 @@ function pathResolve(dir: string) {
 }
 
 module.exports = {
+    base: "/",
     // alias: {
     //     "/@/": pathResolve("src"),
     // },
