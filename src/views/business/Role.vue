@@ -58,11 +58,12 @@
                     @close="onMenuDrawerClose('normal')"
                 >
 
-                </a-drawer>
-                <!--自定义穿梭框-->
-                <custom-tree-transfer :tree-datad="menuDrawerData.menuTreeData" :select-data="menuDrawerData.selectData">
+                    <!--自定义穿梭框-->
+<!--                    <custom-tree-transfer :tree-data-d="menuRefData.menuTreeData" select-data="asddd">-->
+                    <custom-tree-transfer :tree-data-d="menuDrawerData.menuTreeData" select-data="asddd">
 
-                </custom-tree-transfer>
+                    </custom-tree-transfer>
+                </a-drawer>
 
             </a-drawer>
 
@@ -122,7 +123,7 @@ import Api from '../../assets/api/api'
 import {CloseOutlined, DownOutlined, EditOutlined, PlusOutlined} from "@ant-design/icons-vue";
 import {message} from 'ant-design-vue';
 import {useForm} from "@ant-design-vue/use";
-import {reactive} from 'vue';
+import {reactive,toRefs,watchEffect} from 'vue';
 import DataUtils from "../../assets/js/DataUtils";
 import CustomTreeTransfer from "../../components/CustomTreeTransfer.vue";
 
@@ -201,6 +202,12 @@ export default {
             menuTreeData: [],
             selectData: []
         }) ;
+        const menuRefData = toRefs(menuDrawerData)
+        // const useRefStat = toRefs(state)
+        watchEffect(() => {
+            console.log("menuDrawerData.menuTreeData",menuDrawerData.menuTreeData)
+            console.log("menuDrawerData.menuTreeData2",menuRefData)
+        })
         return {
             columnsDefines,
             modelRef,
@@ -209,6 +216,7 @@ export default {
             validate,
             validateInfos,
             menuDrawerData,
+            menuRefData,
         }
     },
 
@@ -216,8 +224,9 @@ export default {
         '$route'(to, from) {
             console.log(to);
             console.log(from)
-        }
+        },
     },
+
     data() {
         let page = 0;
         let size = 10;
@@ -258,9 +267,7 @@ export default {
 
         }
     },
-    wathch: {
 
-    },
     computed: {
         firstData() {
             if (this.data.length > 0) {
@@ -492,8 +499,8 @@ export default {
             console.log(params);
             Api.getMenuList(params).then(value => {
                 if (value.code === 0) {
-                    this.menuDrawerData.menuTreeData = DataUtils.initTreeData(value.data.content);
-                    console.log('menuTreeData', this.menuDrawerData.menuTreeData);
+                    // this.menuDrawerData.menuTreeData = DataUtils.initTreeData(value.data.content);
+                    this.menuDrawerData.menuTreeData = value.data.content;
                 } else {
                     console.log("获取失败")
                     console.log(value)
