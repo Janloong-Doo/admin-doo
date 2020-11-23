@@ -33,6 +33,14 @@
                 />
             </template>
         </a-transfer>
+        <a-space>
+            <a-button :style="{ marginRight: '8px' }" @click="dealData('cancel')">
+                取消
+            </a-button>
+            <a-button type="primary" @click="dealData('add')">
+                确认
+            </a-button>
+        </a-space>
     </div>
 </template>
 
@@ -46,39 +54,26 @@ export default {
         treeDataD: {
             type: Array
         },
-        selectData: {
+        selectId: {
             type: Array
         }
     },
+    emits: {
+        'dealData': {
 
-    setup(props) {
+        }
+
+    },
+    setup(props,context) {
         const sourceRefProp = toRefs(props.treeDataD)
         //左侧原始数据
         let normalData = JSON.parse(JSON.stringify(props.treeDataD));
-        // normalData=props.treeDataD;
-        console.log("normalData2", normalData)
-        let treeDataSource = [];
-        treeDataSource  = DataUtils.initTreeData(normalData);
-        console.log("normalData222", normalData)
-        console.log("treeDataSource", treeDataSource)
+        let treeDataSource = JSON.parse(JSON.stringify(DataUtils.initTreeData(normalData)));
         const replaceFields = {
             children: 'children',
             title: 'name',
             key: 'id'
         }
-        const treeData23 = [
-            {key: '0-0', title: '0-0'},
-            {
-                key: '0-1',
-                title: '0-1',
-                children: [
-                    {key: '0-1-0', title: '0-1-0'},
-                    {key: '0-1-1', title: '0-1-1'},
-                ],
-            },
-            {key: '0-2', title: '0-3'},
-        ];
-        // const transferDataSource = ref([]);
         const sourcedata = reactive({
             //选择的属性
             targetKeys: [],
@@ -88,30 +83,17 @@ export default {
 
         const treeData = computed(() => {
             return handleTreeData(treeDataSource, sourcedata.targetKeys);
-            // return treeDataSource;
         })
-        // function flatten(list = []) {
-        // function flatten(list ) {
-        // function flatten(list: object[]) {
-        //     if (list) {
-        //         list.forEach(item => {
-        //             normalData.push(item);
-        //             flatten(item.children);
-        //         });
-        //     }
-        // }
-        // flatten(JSON.parse(JSON.stringify(props.treeDataD)));
-
 
         function isChecked(selectedKeys, eventKey) {
-            console.log("selectedKeys", selectedKeys, "eventKey", eventKey)
+            // console.log("selectedKeys", selectedKeys, "eventKey", eventKey)
             return selectedKeys.indexOf(eventKey) !== -1;
         }
 
-        // function handleTreeData(data, targetKeys = []) {
         function handleTreeData(data, targetKeys) {
             data.forEach(item => {
-                item['disabled'] = targetKeys.includes(item.key);
+                item['disabled'] = targetKeys.includes(item.id);
+                // console.log("处理单条数据:",item.name,"处理结果:",item.disabled,"item.key",item.key,"targetkeys",targetKeys)
                 if (item.children) {
                     handleTreeData(item.children, targetKeys);
                 }
@@ -121,12 +103,13 @@ export default {
 
         const onChange = (targetKeys) => {
             sourcedata.targetKeys = targetKeys;
-            console.log('Target Keys:', targetKeys, sourcedata.targetKeys,'sourcedata.dataSource',sourcedata.dataSource);
+            console.log('Target Keys:', targetKeys, sourcedata.targetKeys, 'sourcedata.dataSource', sourcedata.dataSource);
         };
         const onChecked = (_, e, checkedKeys, onItemSelect) => {
             const {eventKey} = e.node;
             onItemSelect(eventKey, !isChecked(checkedKeys, eventKey));
         };
+
         // 进来就会执行，每次更新也会立即执行
         watchEffect(() => {
             console.log("props取出的数据", props)
@@ -135,7 +118,14 @@ export default {
             console.log("原始tree数据", treeDataSource)
             console.log("计算属性treeData", treeData)
             console.log("datasource", sourcedata.dataSource)
-        })
+        });
+        const dealData = (type) => {
+            if (type === 'add') {
+                context.emit('dealData', type, sourcedata.targetKeys);
+            } else if (type === 'cancel') {
+                context.emit('dealData', type);
+            }
+        }
         return {
             sourcedata,
             treeData,
@@ -143,6 +133,7 @@ export default {
             onChecked,
             isChecked,
             replaceFields,
+            dealData,
         }
     }
 }

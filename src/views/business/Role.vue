@@ -35,7 +35,10 @@
                         <a-input placeholder="请输入排序信息" v-model:value="modelRef.sort"></a-input>
                     </a-form-item>
 
-
+                    <!--菜单信息-->
+                    <a-form-item label="菜单信息:" v-bind="validateInfos.menuInfoIds">
+                        <color-tag v-model:value="modelRef.menuInfo" :tag-list="menTagList"></color-tag>
+                    </a-form-item>
                     <a-button :style="{ marginRight: '8px' }" @click="onMenuDrawerOpen">
                         分配菜单
                     </a-button>
@@ -59,10 +62,14 @@
                 >
 
                     <!--自定义穿梭框-->
-<!--                    <custom-tree-transfer :tree-data-d="menuRefData.menuTreeData" select-data="asddd">-->
-                    <custom-tree-transfer :tree-data-d="menuDrawerData.menuTreeData" select-data="asddd">
-
+                    <!--                    <custom-tree-transfer :tree-data-d="menuRefData.menuTreeData" select-data="asddd">-->
+                    <custom-tree-transfer
+                        :tree-data-d="menuDrawerData.menuTreeData"
+                        :select-id="menuDrawerData.selectId"
+                        @dealData="selectMenuData"
+                    >
                     </custom-tree-transfer>
+
                 </a-drawer>
 
             </a-drawer>
@@ -123,14 +130,14 @@ import Api from '../../assets/api/api'
 import {CloseOutlined, DownOutlined, EditOutlined, PlusOutlined} from "@ant-design/icons-vue";
 import {message} from 'ant-design-vue';
 import {useForm} from "@ant-design-vue/use";
-import {reactive,toRefs,watchEffect} from 'vue';
-import DataUtils from "../../assets/js/DataUtils";
+import {computed, reactive, toRefs, watchEffect} from 'vue';
 import CustomTreeTransfer from "../../components/CustomTreeTransfer.vue";
+import ColorTag from "../../components/ColorTag.vue";
 
 export default {
     name: "Role",
     props: [],
-    components: {DownOutlined, PlusOutlined, EditOutlined, CloseOutlined, CustomTreeTransfer},
+    components: {ColorTag, DownOutlined, PlusOutlined, EditOutlined, CloseOutlined, CustomTreeTransfer},
     setup() {
         const columnsDefines = [{
             title: '角色名称',
@@ -184,6 +191,7 @@ export default {
             roleName: '',
             roleDes: '',
             sort: 0,
+            menuInfo: [],
         });
         const rulesRef = reactive({
             roleName: [
@@ -197,17 +205,22 @@ export default {
         const {resetFields, validate, validateInfos} = useForm(modelRef, rulesRef, {immediate: true});
 
         //菜单抽屉数据
-        const menuDrawerData =reactive({
-        //穿梭框数据
+        const menuDrawerData = reactive({
+            //穿梭框数据
             menuTreeData: [],
-            selectData: []
-        }) ;
+            selectId: []
+        });
         const menuRefData = toRefs(menuDrawerData)
         // const useRefStat = toRefs(state)
         watchEffect(() => {
-            console.log("menuDrawerData.menuTreeData",menuDrawerData.menuTreeData)
-            console.log("menuDrawerData.menuTreeData2",menuRefData)
+            console.log("menuDrawerData.menuTreeData", menuDrawerData.menuTreeData)
+            console.log("menuDrawerData.selectId", menuDrawerData.selectId)
         })
+        const menTagList = computed(() => {
+            let ts = menuDrawerData.menuTreeData.filter((value) => menuDrawerData.selectId.includes(value.id));
+            modelRef.menuInfo = ts;
+            return ts;
+        });
         return {
             columnsDefines,
             modelRef,
@@ -217,6 +230,7 @@ export default {
             validateInfos,
             menuDrawerData,
             menuRefData,
+            menTagList,
         }
     },
 
@@ -294,10 +308,16 @@ export default {
         },
         addRole() {
             this.validate().then(value => {
+                let menus = [];
+                this.modelRef.menuInfo.forEach(value1 => {
+                    menus.push({"id": value1})
+                })
+                console.log("menus", menus)
                 let param = {
                     "roleName": this.modelRef.roleName,
                     "roleDes": this.modelRef.roleDes,
-                    "sort": this.modelRef.sort
+                    "sort": this.modelRef.sort,
+                    "menus": menus
                 }
                 Api.addRole(param).then(value => {
                     if (value.code === 0) {
@@ -351,7 +371,6 @@ export default {
                         }
                     }).catch(reason => {
                         message.error("请求异常")
-                        console.log(reason);
                     });
                 }
 
@@ -366,9 +385,7 @@ export default {
                 "sort": this.sortName,
                 "direction": this.orderType,
             }
-            console.log(params);
             Api.getRoleList(params).then(value => {
-                console.log(value);
                 this.loading = false;
                 if (value.code === 0) {
                     const pagination = {...this.pagination};
@@ -379,8 +396,7 @@ export default {
                     // this.pagination.total = value.data.totalElements;
                     // this.data = value.data.content;
                 } else {
-                    console.log("获取失败")
-                    console.log(value)
+                    message.error(value.msg)
                 }
                 this.loading = false;
             }).catch(reason => {
@@ -402,8 +418,7 @@ export default {
                             message.error(value.msg)
                         }
                     }).catch(reason => {
-                        console.log('请求异常');
-                        console.log(reason);
+                        message.error('请求异常')
                     });
                 }
 
@@ -443,6 +458,9 @@ export default {
                     this.modelRef.roleName = text.roleName;
                     this.modelRef.roleDes = text.roleDes;
                     this.modelRef.sort = text.sort;
+                    this.modelRef.menuInfo = text.menus;
+                    this.menuDrawerData.selectId = text.menus.map(value => value.id);
+                    console.log("this.menuDrawerData.selectId",this.menuDrawerData.selectId)
                     break;
                 case 'del':
                     this.delRole(text);
@@ -458,14 +476,14 @@ export default {
                     return false;
             }
         },
-        addMenuInit(data) {
-            console.log(data);
-            this.onDrawerOpen('add')
-            this.addParamData.isEditType = false;
-            this.initEmptyData();
-            this.addParamData.pid = data.id;
-            this.addParamData.level = parseInt(data.level) + 1;
-        },
+        // addMenuInit(data) {
+        //     console.log(data);
+        //     this.onDrawerOpen('add')
+        //     this.addParamData.isEditType = false;
+        //     this.initEmptyData();
+        //     this.addParamData.pid = data.id;
+        //     this.addParamData.level = parseInt(data.level) + 1;
+        // },
         onDrawerOpen(type) {
             if (type === 'add') {
                 this.addRoleData.isEditType = false;
@@ -474,9 +492,7 @@ export default {
         },
 
         onDrawerClose(type) {
-            console.log(type);
             if (type === 'reset') {
-                console.log('重置');
                 this.addRoleData.isEditType = false;
             }
             this.addRoleDradwrvisible = false;
@@ -496,21 +512,28 @@ export default {
                 "sort": 'sort',
                 "direction ": 'asc',
             }
-            console.log(params);
             Api.getMenuList(params).then(value => {
                 if (value.code === 0) {
                     // this.menuDrawerData.menuTreeData = DataUtils.initTreeData(value.data.content);
                     this.menuDrawerData.menuTreeData = value.data.content;
                 } else {
-                    console.log("获取失败")
-                    console.log(value)
+                    message.error(value.msg)
                 }
                 this.loading = false;
             }).catch(reason => {
 
             });
         },
-
+        //分配菜单的内容
+        selectMenuData(type, data) {
+            if (type === 'add') {
+                this.menuDrawerData.selectId = data;
+                // this.modelRef.menuInfo = data;
+                this.onMenuDrawerClose();
+            } else if (type === 'cancel') {
+                this.onMenuDrawerClose();
+            }
+        }
     }
 
 }

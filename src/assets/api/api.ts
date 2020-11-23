@@ -18,7 +18,7 @@ const editOrg = (params, config) => request.postJson(host.dip + baseBusiness + '
 const changeOrgStatus = (params, config) => request.post(host.dip + baseBusiness + '/organize/changeOrgStatus' ,params,  config);
 
 //==============Role================
-const addRole = (params, config) => request.postJson(host.dip + baseBusiness + '/role', params, config);
+const addRole = (params, config) => request.postJson(host.dip + baseBusiness + '/role/addRole', params, config);
 const getRoleList = (params, config) => request.get(host.dip + baseBusiness + '/role/list', params, config);
 const delRole = (params, config) => request.del(host.dip + baseBusiness + '/role/' + params, null, config);
 const editRole = (params, config) => request.postJson(host.dip + baseBusiness + '/role/editRole', params, config);
