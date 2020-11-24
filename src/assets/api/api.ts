@@ -42,6 +42,7 @@ const changeDicStatus = (params, config) => request.post(host.dip + baseBusiness
 
 //==============resource================
 const getResourceList = (params, config) => request.get(host.dip + baseBusiness + '/resource/list', params, config);
+const getResourceGroupByType = (params, config) => request.get(host.dip + baseBusiness + '/resource/getResourceGroupByType', params, config);
 const addResource = (params, config) => request.postJson(host.dip + baseBusiness + '/resource/add', params, config);
 const editResource = (params, config) => request.postJson(host.dip + baseBusiness + '/resource/edit', params, config);
 const delResource = (params, config) => request.del(host.dip + baseBusiness + '/resource/del/' + params, null, config);
@@ -83,6 +84,7 @@ export default {
   , delDic
   , changeDicStatus
   , getResourceList
+  , getResourceGroupByType
   , addResource
   , editResource
   , delResource

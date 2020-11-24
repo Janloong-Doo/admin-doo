@@ -26,32 +26,35 @@
                     layout="horizontal"
                     ref="addMenuForm"
                     :model="addParamData"
-                    :rules="addParamData.rules">
+                    :rules="addParamData.rules"
+                    :label-col="labelCol"
+                    :wrapper-col="wrapperCol"
+                >
 
                     <a-form-item label="分类:" name="pid">
-                        <a-select showArrow v-model="addParamData.pid" :size="selectData.size" placeholder="请选择分类"
+                        <a-select showArrow v-model:value="addParamData.pid" :size="selectData.size" placeholder="请选择分类"
                                   @change="selectResourceType">
                             <a-select-option v-for="items in selectData" :key="items.id" :value="items.id">{{ items.name }}</a-select-option>
                         </a-select>
                     </a-form-item>
 
                     <a-form-item label="名称:" name="name">
-                        <a-input placeholder="请输入资源名称" v-model="addParamData.name"></a-input>
+                        <a-input placeholder="请输入资源名称" v-model:value="addParamData.name"></a-input>
                     </a-form-item>
                     <a-form-item label="编码:" name="code">
-                        <a-input placeholder="请输入资源编码" v-model="addParamData.code"></a-input>
+                        <a-input placeholder="请输入资源编码" v-model:value="addParamData.code"></a-input>
                     </a-form-item>
                     <a-form-item label="url:" name="url">
-                        <a-input placeholder="请输入资源url信息" v-model="addParamData.url"></a-input>
+                        <a-input placeholder="请输入资源url信息" v-model:value="addParamData.url"></a-input>
                     </a-form-item>
                     <a-form-item label="描述:" name="description">
-                        <a-input placeholder="请输入资源描述信息" v-model="addParamData.description"></a-input>
+                        <a-input placeholder="请输入资源描述信息" v-model:value="addParamData.description"></a-input>
                     </a-form-item>
                     <a-form-item label="资源值:" name="webValue">
-                        <a-input placeholder="请输入页面资源值" v-model="addParamData.webValue"></a-input>
+                        <a-input placeholder="请输入页面资源值" v-model:value="addParamData.webValue"></a-input>
                     </a-form-item>
                     <a-form-item label="排序:" name="sort">
-                        <a-input placeholder="请输入资源序号" v-model="addParamData.sort"></a-input>
+                        <a-input placeholder="请输入资源序号" v-model:value="addParamData.sort"></a-input>
                     </a-form-item>
 
                     <a-button :style="{ marginRight: '8px' }" @click="onDrawerClose('reset')">
@@ -231,6 +234,8 @@ export default {
             "showSizeChanger": true
         };
         return {
+            labelCol: { span: 4 },
+            wrapperCol: { span: 14 },
             baseMould: '资源',
             page: page,
             size: size,
@@ -264,16 +269,16 @@ export default {
                 isMenuOpen: false,
                 rules: {
                     pid: [
-                        {required: true, message: '请选择资源类型', trigger: 'blur'},
+                        {required: true, message: '请选择资源类型', trigger: ['blur','change']},
                     ],
                     name: [
-                        {required: true, message: '请输入资源名称', trigger: 'blur'},
+                        {required: true, message: '请输入资源名称', trigger: ['blur','change']},
                     ],
                     code: [
-                        {required: true, message: '请输入资源编码', trigger: 'blur'},
+                        {required: true, message: '请输入资源编码', trigger: ['blur','change']},
                     ],
                     url: [
-                        {required: true, message: '请输入资源url', trigger: 'blur'},
+                        {required: true, message: '请输入资源url', trigger: ['blur','change']},
                     ]
                 }
             }
@@ -297,81 +302,77 @@ export default {
             }
         },
         addMenu(formName) {
-            this.$refs[formName].validate(valid => {
-                if (valid) {
-                    let type = this.addParamData.type;
-                    if (this.addParamData.webValue) {
-                        type = 1;
-                    }
-                    console.log(this.addParamData);
-                    let pid = this.addParamData.pid;
-                    let param = {
-                        "name": this.addParamData.name,
-                        "code": this.addParamData.code,
-                        "url": this.addParamData.url,
-                        "description": this.addParamData.description,
-                        "webValue": this.addParamData.webValue,
-                        "type": type,
-                        "pid": pid,
-                        "sort": this.addParamData.sort,
-                        "origion": this.addParamData.origion
-                    }
-                    Api.addResource(param).then(value => {
-                        if (value.code === 0) {
-                            console.log("新增成功")
-                            this.$refs.addMenuForm.resetFields();
-                            this.addMenuDradwrvisible = false;
-                            this.getMenuData();
-                        } else {
-                            console.log("新增失败")
-                            console.log(value)
-                        }
-                    }).catch(reason => {
-                    })
-                } else {
-                    console.log('error submit!!');
-                    return false;
+            this.$refs[formName].validate().then(value => {
+                let type = this.addParamData.type;
+                if (this.addParamData.webValue) {
+                    type = 1;
                 }
-            })
+                console.log(this.addParamData);
+                let pid = this.addParamData.pid;
+                let param = {
+                    "name": this.addParamData.name,
+                    "code": this.addParamData.code,
+                    "url": this.addParamData.url,
+                    "description": this.addParamData.description,
+                    "webValue": this.addParamData.webValue,
+                    "type": type,
+                    "pid": pid,
+                    "sort": this.addParamData.sort,
+                    "origion": this.addParamData.origion
+                }
+                Api.addResource(param).then(value => {
+                    if (value.code === 0) {
+                        console.log("新增成功")
+                        this.$refs.addMenuForm.resetFields();
+                        this.addMenuDradwrvisible = false;
+                        this.getMenuData();
+                    } else {
+                        console.log("新增失败")
+                        console.log(value)
+                    }
+                }).catch(reason => {
+                })
+            }).catch((reason => {
+                console.log('error submit!!');
+                return false;
+            }));
         },
         editMenu(formName) {
-            this.$refs[formName].validate(valid => {
-                if (valid) {
-                    let type = this.addParamData.type;
-                    if (this.addParamData.webValue) {
-                        type = 1;
-                    }
-                    console.log(this.addParamData);
-                    let param = {
-                        'id': this.addParamData.id,
-                        "name": this.addParamData.name,
-                        "code": this.addParamData.code,
-                        "url": this.addParamData.url,
-                        "description": this.addParamData.description,
-                        "webValue": this.addParamData.webValue,
-                        "type": type,
-                        "pid": this.addParamData.pid,
-                        "sort": this.addParamData.sort,
-                        "origion": this.addParamData.origion
-                    }
-                    Api.editResource(param).then(value => {
-                        if (value.code === 0) {
-                            console.log("修改成功")
-                            this.$refs.addMenuForm.resetFields();
-                            this.addMenuDradwrvisible = false;
-                            this.getMenuData();
-                            this.initEmptyData();
-                        } else {
-                            console.log("修改失败")
-                            console.log(value)
-                        }
-                    }).catch(reason => {
-                    })
-                } else {
-                    console.log('error submit!!');
-                    return false;
+            this.$refs[formName].validate().then(value => {
+                let type = this.addParamData.type;
+                if (this.addParamData.webValue) {
+                    type = 1;
                 }
-            })
+                console.log(this.addParamData);
+                let param = {
+                    'id': this.addParamData.id,
+                    "name": this.addParamData.name,
+                    "code": this.addParamData.code,
+                    "url": this.addParamData.url,
+                    "description": this.addParamData.description,
+                    "webValue": this.addParamData.webValue,
+                    "type": type,
+                    "pid": this.addParamData.pid,
+                    "sort": this.addParamData.sort,
+                    "origion": this.addParamData.origion
+                }
+                Api.editResource(param).then(value => {
+                    if (value.code === 0) {
+                        console.log("修改成功")
+                        this.$refs.addMenuForm.resetFields();
+                        this.addMenuDradwrvisible = false;
+                        this.getMenuData();
+                        this.initEmptyData();
+                    } else {
+                        console.log("修改失败")
+                        console.log(value)
+                    }
+                }).catch(reason => {
+                })
+            }).catch((reason => {
+                console.log('error submit!!');
+                return false;
+            }));
         },
         addMenuInit(data) {
             console.log(data);

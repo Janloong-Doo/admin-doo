@@ -21,9 +21,11 @@
                 @close="onDrawerClose('normal')"
             >
                 <a-form
-                    layout="horizontal"
+                    layout="vertical"
                     ref="addRoleForm"
                     :model="addRoleData"
+                    :label-col="labelCol"
+                    :wrapper-col="wrapperCol"
                 >
                     <a-form-item label="名称:" v-bind="validateInfos.roleName">
                         <a-input placeholder="请输入角色名称" v-model:value="modelRef.roleName"></a-input>
@@ -36,11 +38,17 @@
                     </a-form-item>
 
                     <!--菜单信息-->
-                    <a-form-item label="菜单信息:" v-bind="validateInfos.menuInfoIds">
+                    <a-form-item label="菜单信息:" v-bind="validateInfos.menuInfo">
                         <color-tag v-model:value="modelRef.menuInfo" :tag-list="menTagList"></color-tag>
                     </a-form-item>
-                    <a-button :style="{ marginRight: '8px' }" @click="onMenuDrawerOpen">
+                    <a-button :style="{ marginRight: '8px' }" @click="onMenuDrawerOpen('menu')">
                         分配菜单
+                    </a-button>
+                    <a-form-item label="资源信息:" v-bind="validateInfos.resourceInfo">
+                        <color-tag v-model:value="modelRef.resourceInfo" :tag-list="modelRef.resourceInfo"></color-tag>
+                    </a-form-item>
+                    <a-button :style="{ marginRight: '8px' }" @click="onMenuDrawerOpen('resource')">
+                        分配资源
                     </a-button>
 
                     <a-button :style="{ marginRight: '8px' }" @click="onDrawerClose('reset')">
@@ -53,23 +61,25 @@
 
                 <!--菜单资源抽屉-->
                 <a-drawer
-                    title="分配菜单"
+                    :title="isMenuType ? '分配菜单' : '分配资源'"
                     :width="720"
                     :visible="menuDradwervisible"
                     :closable="false"
                     :body-style="{ paddingBottom: '80px' }"
                     @close="onMenuDrawerClose('normal')"
                 >
-
                     <!--自定义穿梭框-->
-                    <!--                    <custom-tree-transfer :tree-data-d="menuRefData.menuTreeData" select-data="asddd">-->
-                    <custom-tree-transfer
-                        :tree-data-d="menuDrawerData.menuTreeData"
-                        :select-id="menuDrawerData.selectId"
-                        @dealData="selectMenuData"
-                    >
-                    </custom-tree-transfer>
-
+                    <template v-if="isMenuType">
+                        <custom-tree-transfer
+                            :tree-data-d="menuDrawerData.menuTreeData"
+                            :select-id="menuDrawerData.selectId"
+                            @dealData="selectMenuData"
+                        >
+                        </custom-tree-transfer>
+                    </template>
+                    <template v-else>
+                        <resource-detail :data="resourceDrawerData" :select-data="modelRef.resourceInfo"></resource-detail>
+                    </template>
                 </a-drawer>
 
             </a-drawer>
@@ -87,6 +97,10 @@
             >
                 <template #isOpenSlot="{text, record, index}">
                     <a-switch disabled :checked="text===0"></a-switch>
+                </template>
+
+                <template #menus="{text, record, index}">
+                    <color-tag :tag-list="text"></color-tag>
                 </template>
                 <template #operation="{text, record, index}">
                     <a-dropdown>
@@ -130,14 +144,15 @@ import Api from '../../assets/api/api'
 import {CloseOutlined, DownOutlined, EditOutlined, PlusOutlined} from "@ant-design/icons-vue";
 import {message} from 'ant-design-vue';
 import {useForm} from "@ant-design-vue/use";
-import {computed, reactive, toRefs, watchEffect} from 'vue';
+import {computed, reactive, ref, toRefs, watchEffect} from 'vue';
 import CustomTreeTransfer from "../../components/CustomTreeTransfer.vue";
 import ColorTag from "../../components/ColorTag.vue";
+import ResourceDetail from "./components/ResourceDetail.vue";
 
 export default {
     name: "Role",
     props: [],
-    components: {ColorTag, DownOutlined, PlusOutlined, EditOutlined, CloseOutlined, CustomTreeTransfer},
+    components: {ResourceDetail, ColorTag, DownOutlined, PlusOutlined, EditOutlined, CloseOutlined, CustomTreeTransfer},
     setup() {
         const columnsDefines = [{
             title: '角色名称',
@@ -152,6 +167,14 @@ export default {
                 align: 'center',
                 ellipsis: true,
                 sorter: true,
+            },
+            {
+                title: '菜单',
+                dataIndex: 'menus',
+                align: 'center',
+                ellipsis: true,
+                sorter: true,
+                slots: {customRender: 'menus'}
             },
             {
                 title: '排序',
@@ -192,6 +215,7 @@ export default {
             roleDes: '',
             sort: 0,
             menuInfo: [],
+            resourceInfo: [],
         });
         const rulesRef = reactive({
             roleName: [
@@ -203,13 +227,15 @@ export default {
             ],
         });
         const {resetFields, validate, validateInfos} = useForm(modelRef, rulesRef, {immediate: true});
-
+        const isMenuType = ref(true);
         //菜单抽屉数据
         const menuDrawerData = reactive({
             //穿梭框数据
             menuTreeData: [],
             selectId: []
         });
+        //分配资源数据
+        let resourceDrawerData = ref();
         const menuRefData = toRefs(menuDrawerData)
         // const useRefStat = toRefs(state)
         watchEffect(() => {
@@ -221,6 +247,19 @@ export default {
             modelRef.menuInfo = ts;
             return ts;
         });
+        const getResourceGroupByType = () => {
+            Api.getResourceGroupByType().then(value => {
+                if (value.code === 0) {
+                    resourceDrawerData = value.data;
+                    console.log(value.msg)
+                } else {
+                    console.log("修改失败")
+                    console.log(value)
+                }
+            }).catch(reason => {
+
+            })
+        }
         return {
             columnsDefines,
             modelRef,
@@ -231,6 +270,9 @@ export default {
             menuDrawerData,
             menuRefData,
             menTagList,
+            isMenuType,
+            getResourceGroupByType,
+            resourceDrawerData,
         }
     },
 
@@ -256,6 +298,8 @@ export default {
             children: "children",
         }
         return {
+            labelCol: {span: 4},
+            wrapperCol: {span: 14},
             replaceMenuTreeFields: replaceMenuTreeFields,
             //基础数据
             id: '',
@@ -310,7 +354,7 @@ export default {
             this.validate().then(value => {
                 let menus = [];
                 this.modelRef.menuInfo.forEach(value1 => {
-                    menus.push({"id": value1})
+                    menus.push({"id": value1.id})
                 })
                 console.log("menus", menus)
                 let param = {
@@ -338,11 +382,17 @@ export default {
         editRole() {
             this.onDrawerOpen()
             this.addRoleData.isEditType = true;
+
+            let menus = [];
+            this.modelRef.menuInfo.forEach(value1 => {
+                menus.push({"id": value1.id})
+            })
             let param = {
                 "id": this.id,
                 "roleName": this.modelRef.roleName,
                 "roleDes": this.modelRef.roleDes,
-                "sort": this.modelRef.sort
+                "sort": this.modelRef.sort,
+                "menus": menus
             }
             Api.editRole(param).then(value => {
                 if (value.code === 0) {
@@ -460,7 +510,7 @@ export default {
                     this.modelRef.sort = text.sort;
                     this.modelRef.menuInfo = text.menus;
                     this.menuDrawerData.selectId = text.menus.map(value => value.id);
-                    console.log("this.menuDrawerData.selectId",this.menuDrawerData.selectId)
+                    console.log("this.menuDrawerData.selectId", this.menuDrawerData.selectId)
                     break;
                 case 'del':
                     this.delRole(text);
@@ -497,8 +547,14 @@ export default {
             }
             this.addRoleDradwrvisible = false;
         },
-        onMenuDrawerOpen() {
+        onMenuDrawerOpen(type) {
             this.menuDradwervisible = true;
+            if (type === 'menu') {
+                this.isMenuType = true;
+            } else if (type === 'resource') {
+                this.isMenuType = false;
+                this.getResourceGroupByType();
+            }
             // this.getMenuData()
         },
         onMenuDrawerClose() {
