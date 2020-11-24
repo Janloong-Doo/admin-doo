@@ -1,18 +1,19 @@
 <template>
-    <a-collapse v-model:activeKey="activeKey">
+    <a-collapse>
         <template v-for="item in data">
             <a-collapse-panel :key="item.id" :header="item.name">
-                <!--                <div :style="{ borderBottom: '1px solid #E9E9E9' }">-->
-                <!--                <a-checkbox-->
-                <!--                    v-model:checked="checkAll"-->
-                <!--                    :indeterminate="indeterminate"-->
-                <!--                    @change="onCheckAllChange"-->
-                <!--                >-->
-                <!--                    Check all-->
-                <!--                </a-checkbox>-->
-                <!--                </div>-->
-                <!--                <br />-->
-                <!--                <a-checkbox-group v-model:value="checkedList" :options="plainOptions" @change="onChange" />-->
+                <div :style="{ borderBottom: '1px solid #E9E9E9' }">
+                    <a-checkbox
+                        v-model:checked="checkAll(item.children)"
+                        :indeterminate="indeterminate(item.children)"
+                        @change="onCheckAllChange"
+                    >
+                       全选
+                    </a-checkbox>
+                </div>
+                <br/>
+<!--                <a-checkbox-group v-model:value="checkedList"  :options="childrenLabel(item.children)" @change="onChange"/>-->
+                <a-checkbox-group  v-model:value="baseData.checkedList" :options="childrenLabel(item.children)"/>
             </a-collapse-panel>
         </template>
     </a-collapse>
@@ -20,7 +21,7 @@
 
 <script>
 
-import {watchEffect} from "vue";
+import {computed,watchEffect,reactive} from "vue";
 
 export default {
     name: "ResourceDetail",
@@ -33,15 +34,46 @@ export default {
         }
     },
     setup(props, context) {
-        const activeKey = (key) => {
-            console.log(key);
+        let selectIds=props.selectData.map(value => value.id)
+        const baseData=reactive({
+            checkedList: selectIds
+        })
+
+        const childrenLabel = (data) => {
+            let dataC = [];
+            data.forEach(d=>{
+                let options = {};
+                options.label = d.name;
+                options.value = d.id;
+                dataC.push(options)
+            })
+            return dataC;
         };
+        const onCheckAllChange=(e)=>{
+            Object.assign(this, {
+                'baseData.checkedList': e.target.checked ? plainOptions : [],
+                indeterminate: false,
+            });
+        }
+
+        const checkAll=computed((item) => {
+            console.log("checkAll-item",item)
+            return false;
+        })
+        const indeterminate=computed((item) => {
+            console.log("indeterminate-item",item)
+            return false;
+        })
         watchEffect(() => {
-            console.log('props.data',props.data)
-            console.log('props.selectData',props.selectData)
+            console.log('props.data', props.data)
+            console.log('props.selectData', props.selectData)
         })
         return {
-            activeKey
+            baseData,
+            childrenLabel,
+            onCheckAllChange,
+            checkAll,
+            indeterminate,
         }
     }
 }

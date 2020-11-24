@@ -78,7 +78,7 @@
                         </custom-tree-transfer>
                     </template>
                     <template v-else>
-                        <resource-detail :data="resourceDrawerData" :select-data="modelRef.resourceInfo"></resource-detail>
+                        <resource-detail :data="menuDrawerData.resourceDrawerData" :select-data="modelRef.resourceInfo"></resource-detail>
                     </template>
                 </a-drawer>
 
@@ -232,15 +232,18 @@ export default {
         const menuDrawerData = reactive({
             //穿梭框数据
             menuTreeData: [],
-            selectId: []
+            selectId: [],
+            //分配资源数据
+            resourceDrawerData:[]
+
         });
-        //分配资源数据
-        let resourceDrawerData = ref();
         const menuRefData = toRefs(menuDrawerData)
         // const useRefStat = toRefs(state)
         watchEffect(() => {
             console.log("menuDrawerData.menuTreeData", menuDrawerData.menuTreeData)
             console.log("menuDrawerData.selectId", menuDrawerData.selectId)
+            console.log("resourceDrawerData", menuDrawerData.resourceDrawerData)
+            console.log("modelRef.resourceInfo", modelRef.resourceInfo)
         })
         const menTagList = computed(() => {
             let ts = menuDrawerData.menuTreeData.filter((value) => menuDrawerData.selectId.includes(value.id));
@@ -250,7 +253,7 @@ export default {
         const getResourceGroupByType = () => {
             Api.getResourceGroupByType().then(value => {
                 if (value.code === 0) {
-                    resourceDrawerData = value.data;
+                    menuDrawerData.resourceDrawerData = value.data;
                     console.log(value.msg)
                 } else {
                     console.log("修改失败")
@@ -272,7 +275,6 @@ export default {
             menTagList,
             isMenuType,
             getResourceGroupByType,
-            resourceDrawerData,
         }
     },
 
