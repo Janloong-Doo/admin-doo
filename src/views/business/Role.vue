@@ -510,9 +510,11 @@ export default {
                     this.modelRef.roleName = text.roleName;
                     this.modelRef.roleDes = text.roleDes;
                     this.modelRef.sort = text.sort;
+                    //选择的菜单数据
                     this.modelRef.menuInfo = text.menus;
                     this.menuDrawerData.selectId = text.menus.map(value => value.id);
-                    console.log("this.menuDrawerData.selectId", this.menuDrawerData.selectId)
+                    //选择的资源数据
+                    this.menuDrawerData.resourceInfo = text.resouces;
                     break;
                 case 'del':
                     this.delRole(text);

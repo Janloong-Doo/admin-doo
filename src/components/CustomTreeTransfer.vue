@@ -60,9 +60,7 @@ export default {
     },
     emits: {
         'dealData': {
-
         }
-
     },
     setup(props,context) {
         const sourceRefProp = toRefs(props.treeDataD)
