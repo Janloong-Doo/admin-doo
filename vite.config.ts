@@ -1,13 +1,12 @@
-import {resolve} from "path";
-
-function pathResolve(dir: string) {
-    return resolve(__dirname, ".", dir);
-}
-
+// import {resolve} from "path";
+//
+// function pathResolve(dir: string) {
+//     return resolve(__dirname, ".", dir);
+// }
 module.exports = {
     base: "/",
     // alias: {
-    //     "/@/": pathResolve("src"),
+    //     "@/": pathResolve("src"),
     // },
     runtimeCompiler: true,
     alias: {
