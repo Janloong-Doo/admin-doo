@@ -1,9 +1,12 @@
 // import request from "../js/dRequest";
 import request from "@/assets/api/axiorequest";
-import host from "@/assets/api/url";
+// require ('@/assets/api/url')
+// import host from "@/assets/api/url";
 // const request = require("@/assets/js/dRequest")
 // const host = require("@/assets/api/url");
-
+const host = {
+    dip: "http://localhost:8901"
+}
 const baseBusiness = '/hap';
 //==============resource================
 

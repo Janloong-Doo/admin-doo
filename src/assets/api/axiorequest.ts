@@ -1,5 +1,11 @@
 import axios, {AxiosRequestConfig} from 'axios'
 import qs from "qs";
+// require ('@/assets/api/url')
+
+// const service = axios.create({
+//     baseURL: process.env.NODE_ENV === 'development' ? url.devUrl : url.proUrl,
+//     timeout: 10000,
+// })
 
 const post = (url: string, param: any, config: AxiosRequestConfig) => {
     param = param == null ? {} : param;
