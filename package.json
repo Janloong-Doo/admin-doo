@@ -21,10 +21,10 @@
     "vue-i18n": "^9.0.0-beta.8",
     "vue-class-component": "^8.0.0-rc.1",
     "vue-router": "^4.0.0-rc.5",
+    "@types/qs": "^6.9.5",
     "vuex": "^4.0.0-rc.2"
   },
   "devDependencies": {
-    "@types/qs": "^6.9.5",
     "@ant-design-vue/use": "0.0.1-alpha.7",
     "@typescript-eslint/eslint-plugin": "^4.8.2",
     "@typescript-eslint/parser": "^4.8.2",

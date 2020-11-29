@@ -50,14 +50,6 @@ const postJson = (url: string, param: any, config: AxiosRequestConfig) => {
 
 const get = (url: string, param: any, config: AxiosRequestConfig) => {
     param = param == null ? {} : param;
-    let config2 = {
-        // headers: {
-        //   'Content-Type': 'application/x-www-form-urlencoded'
-        // },
-        // withCredentials: true
-    };
-    // param = param == null ? {} : qs.stringify(param)
-    param = param == null ? {} : param;
     config = config == null ? {} : config;
     config.params = param;
     return new Promise((resolve, reject) => {
