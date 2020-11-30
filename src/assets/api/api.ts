@@ -1,5 +1,6 @@
 // import request from "../js/dRequest";
-import request from "@/assets/api/axiorequest";
+import request from "./axiorequest";
+// import request from "@/assets/api/axiorequest";
 // require ('@/assets/api/url')
 // import host from "@/assets/api/url";
 // const request = require("@/assets/js/dRequest")

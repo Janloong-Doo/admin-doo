@@ -4,8 +4,9 @@
             <template :key="item.id" v-for="item in data">
                 <a-collapse-panel :header="item.name">
                     <!--                    v-model:value="computedSelectData(baseData.selectDataForCheck)"-->
+                    <!--                        v-model:value="computedSelectData(baseData.selectDataForCheck)"-->
+                    <!--                        :value="computedSelectData(baseData.selectDataForCheck)"-->
                     <a-checkbox-group
-                        v-model:value="computedSelectData2"
                         :options="childrenLabel(item.children)"
                         @change="onChange($event,item.id,item.children)"
                     />
@@ -44,6 +45,8 @@ export default {
     },
     setup: function (props, context) {
         // let selectIds = props.selectData.map(value => value.id)
+        // let selectIds = ["414ab570-a545-4cc9-9ce8-9080a6641fce", "a0167d88-69dd-437a-9727-27f65a3e7266", "b38269ed-8e7d-4c40-8ef1-f5e312936c0b"]
+        let selectIds = [];
         const baseData = reactive({
             // checkedList: selectIds
             // checkedList: ["414ab570-a545-4cc9-9ce8-9080a6641fce", "a0167d88-69dd-437a-9727-27f65a3e7266", "b38269ed-8e7d-4c40-8ef1-f5e312936c0b"]
@@ -66,25 +69,32 @@ export default {
             let checkedData = children.filter(data => checkedId.includes(data.id));
             baseData.selectDataForCheck[pid] = checkedData;
             console.log("勾选的列表数据", checkedData, "所有的勾选数据", baseData.selectDataForCheck)
+            computedSelectData(baseData.selectDataForCheck)
         }
 
-        const computedSelectData = async (selectData) => {
-            // let selectList = [];
-            let selectList = ["414ab570-a545-4cc9-9ce8-9080a6641fce", "a0167d88-69dd-437a-9727-27f65a3e7266", "b38269ed-8e7d-4c40-8ef1-f5e312936c0b"];
-            if (selectData.length > 0) {
-                selectData.forEach((value, key) => {
-                    selectList.push(value.map(v => v.id))
-                });
+        const computedSelectData = (selectData: any) => {
+            // let selectList = selectIds;
+            let selectList: Array = [];
+            let _selectData = JSON.parse(JSON.stringify(selectData));
+            console.log("次进入", selectList, "data", _selectData, "key.length", Object.keys(_selectData))
+            // let selectList = ["414ab570-a545-4cc9-9ce8-9080a6641fce", "a0167d88-69dd-437a-9727-27f65a3e7266", "b38269ed-8e7d-4c40-8ef1-f5e312936c0b"];
+            if (Object.keys(_selectData).length > 0) {
+                for (var [key, value] of Object.entries(_selectData)) {
+                    console.log("key", key, "value", value)
+                    selectList.push(_selectData[key].entries);
+                }
             }
-            console.log("第一次进入", selectList)
+            console.log("第一次进入", selectList, "data", _selectData)
             return selectList;
         }
         const computedSelectData2 = computed(ctx => {
             return computedSelectData(baseData.selectDataForCheck);
         })
+
         //向父组件发射数据
         const dealData = (type) => {
             if (type === 'add') {
+                console.log("发射的数据", baseData.selectDataForCheck);
                 context.emit('dealData', type, baseData.selectDataForCheck);
                 // context.emit('update:modelValue', baseData.selectDataForCheck)
             } else if (type === 'cancel') {
@@ -97,10 +107,12 @@ export default {
             console.log('props.selectData', props.selectData)
         })
         return {
+            baseData,
             childrenLabel,
             computedSelectData,
             onChange,
             computedSelectData2,
+            dealData
         }
     }
 }

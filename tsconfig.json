@@ -6,6 +6,7 @@
     "module": "esnext",
     // 以严格模式解析
     "strict": true,
+//    "strict": false,
     "jsx": "preserve",
     // 如何处理模块
     "moduleResolution": "node",
@@ -15,7 +16,8 @@
     "importHelpers": true,
     // 启用装饰器
     "experimentalDecorators": true,
-    "skipLibCheck": false,
+//    "skipLibCheck": false,
+    "skipLibCheck": true,
     "esModuleInterop": true,
     // 允许从没有设置默认导出的模块中默认导入
     "allowSyntheticDefaultImports": true,

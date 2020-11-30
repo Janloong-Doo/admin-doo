@@ -1,5 +1,6 @@
 import axios, {AxiosRequestConfig} from 'axios'
-import qs from "qs";
+import qs from 'qs';
+
 // require ('@/assets/api/url')
 
 // const service = axios.create({
@@ -19,6 +20,7 @@ const post = (url: string, param: any, config: AxiosRequestConfig) => {
     config = config == null ? {} : config2;
     return new Promise((resolve, reject) => {
         axios.post(url, qs.stringify(param), config)
+        // axios.post(url, param, config)
             .then(res => {
                 resolve(res)
             }).catch(res => {
