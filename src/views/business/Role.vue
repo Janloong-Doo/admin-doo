@@ -78,7 +78,7 @@
                         </custom-tree-transfer>
                     </template>
                     <template v-else>
-                        <resource-detail :data="menuDrawerData.resourceDrawerData" :select-data="modelRef.resourceInfo"></resource-detail>
+                        <resource-detail2 :data="menuDrawerData.resourceDrawerData" :select-data="modelRef.resourceInfo"></resource-detail2>
                     </template>
                 </a-drawer>
 
@@ -148,11 +148,12 @@ import {computed, reactive, ref, toRefs, watchEffect} from 'vue';
 import CustomTreeTransfer from "../../components/CustomTreeTransfer.vue";
 import ColorTag from "../../components/ColorTag.vue";
 import ResourceDetail from "./components/ResourceDetail.vue";
+import ResourceDetail2 from "./components/ResourceDetail2.vue";
 
 export default {
     name: "Role",
     props: [],
-    components: {ResourceDetail, ColorTag, DownOutlined, PlusOutlined, EditOutlined, CloseOutlined, CustomTreeTransfer},
+    components: {ResourceDetail,ResourceDetail2, ColorTag, DownOutlined, PlusOutlined, EditOutlined, CloseOutlined, CustomTreeTransfer},
     setup() {
         const columnsDefines = [{
             title: '角色名称',

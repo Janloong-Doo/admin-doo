@@ -3,18 +3,12 @@
         <a-collapse>
             <template :key="item.id" v-for="item in data">
                 <a-collapse-panel :header="item.name">
-                    <!--                    v-model:value="computedSelectData(baseData.selectDataForCheck)"-->
-                    <!--                        :value="computedSelectData(baseData.selectDataForCheck)"-->
-                    <!--                        :value="selectList"-->
-                    <!--                        v-model:value="selectList"-->
-                    <!--                        :value="computedSelectData2"-->
-                    <a-checkbox-group
-                        :options="childrenLabel(item.children)"
-                        @change="onChange($event,item.id,item.children)"
-                    />
-                    <!--                <a-checkbox-group v-model:value="baseData.checkedList" :options="childrenLabel(item.children)" @change="onChange($event,item.id,item.children)"/>-->
-                    <!--                <a-checkbox-group  v-model:value="baseData.checkedList" :options="childrenLabel(item.children)"/>-->
-                    <!--                <a-checkbox-group :options="childrenLabel(item.children)" @change="onChange($event,item.id,item.children)"/>-->
+                    <template :key="detail.id" v-for="detail in item.children">
+                        <a-checkable-tag v-model:checked="checkAble(detail.id)" @change="onChange($event,item.id,detail)">
+                            <!--                        <a-checkable-tag>-->
+                            {{ detail.name }}
+                        </a-checkable-tag>
+                    </template>
                 </a-collapse-panel>
             </template>
         </a-collapse>
@@ -33,7 +27,7 @@
 import {computed, reactive, watchEffect, ref} from "vue";
 
 export default {
-    name: "ResourceDetail",
+    name: "ResourceDetail2",
     props: {
         data: {
             type: Array
@@ -46,41 +40,30 @@ export default {
         'dealData': {}
     },
     setup: function (props, context) {
-        // let selectIds = props.selectData.map(value => value.id)
-        // let selectIds = ["414ab570-a545-4cc9-9ce8-9080a6641fce", "a0167d88-69dd-437a-9727-27f65a3e7266", "b38269ed-8e7d-4c40-8ef1-f5e312936c0b"]
         let selectIds = [];
         // let selectList:Set = ref({});
         const baseData = reactive({
-            // checkedList: selectIds
-            // checkedList: ["414ab570-a545-4cc9-9ce8-9080a6641fce", "a0167d88-69dd-437a-9727-27f65a3e7266", "b38269ed-8e7d-4c40-8ef1-f5e312936c0b"]
             //内置使用， key:children 形式
             selectDataForCheck: {},
             // selectList: {}
         })
-        let selectList = reactive(new Set(["414ab570-a545-4cc9-9ce8-9080a6641fce"]));
-
-        //展现具体checkbox名称
-        const childrenLabel = (data: any) => {
-            let dataC: Array<object> = [];
-            data.forEach((d: any) => {
-                let options = {};
-                options.label = d.name;
-                options.value = d.id;
-                dataC.push(options)
-            })
-            return dataC;
-        };
+        let selectList:Set = reactive(new Set(["414ab570-a545-4cc9-9ce8-9080a6641fce"]));
 
         //checkboxgroup  change事件
-        const onChange = (checkedId: String[], pid, children: any[]) => {
-            selectList.clear();
-
-            console.log("选择资源", checkedId, pid, children);
+        const onChange = (checkedAble, pid, children: any[]) => {
+            // selectList.clear();
+            console.log("选择资源", checkedAble, pid, children);
             //筛选pid对应的已勾选的列表数据
-            let checkedData = children.filter(data => checkedId.includes(data.id));
-            baseData.selectDataForCheck[pid] = checkedData;
-            console.log("勾选的列表数据", checkedData, "所有的勾选数据", baseData.selectDataForCheck)
-            computedSelectData(baseData.selectDataForCheck)
+            baseData.selectDataForCheck[pid] = children;
+            console.log("勾选的列表数据", selectList, "所有的勾选数据", baseData.selectDataForCheck)
+            // computedSelectData(baseData.selectDataForCheck)
+            if (checkedAble) {
+                console.log("选中",selectList)
+                selectList.add(children.id);
+            } else {
+                console.log("取消")
+                selectList.remove(children.id);
+            }
         }
 
         const computedSelectData = (selectData = []) => {
@@ -106,6 +89,11 @@ export default {
         const computedSelectData2 = computed(() => {
             return computedSelectData(baseData.selectDataForCheck);
         })
+        const checkAble = (id) => {
+            let b = selectList.include(id)
+            console.log("选择框状态:",id, b, selectList)
+            return b;
+        };
 
         //向父组件发射数据
         const dealData = (type) => {
@@ -119,17 +107,16 @@ export default {
         }
 
         watchEffect(() => {
-            console.log('props.data', props.data)
-            console.log('props.selectData', props.selectData)
+            console.log('selectList', selectList)
         })
         return {
             baseData,
-            childrenLabel,
             computedSelectData,
             onChange,
             computedSelectData2,
             dealData,
-            selectList
+            selectList,
+            checkAble
         }
     }
 }
