@@ -78,7 +78,7 @@
                         </custom-tree-transfer>
                     </template>
                     <template v-else>
-                        <resource-detail2 :data="menuDrawerData.resourceDrawerData" :select-data="modelRef.resourceInfo"></resource-detail2>
+                        <resource-detail2 :data="menuDrawerData.resourceDrawerData" :select-data="modelRef.resourceInfo" @dealData="receiveSrouceData"></resource-detail2>
                     </template>
                 </a-drawer>
 
@@ -153,7 +153,7 @@ import ResourceDetail2 from "./components/ResourceDetail2.vue";
 export default {
     name: "Role",
     props: [],
-    components: {ResourceDetail,ResourceDetail2, ColorTag, DownOutlined, PlusOutlined, EditOutlined, CloseOutlined, CustomTreeTransfer},
+    components: {ResourceDetail, ResourceDetail2, ColorTag, DownOutlined, PlusOutlined, EditOutlined, CloseOutlined, CustomTreeTransfer},
     setup() {
         const columnsDefines = [{
             title: '角色名称',
@@ -235,14 +235,14 @@ export default {
             menuTreeData: [],
             selectId: [],
             //分配资源数据
-            resourceDrawerData:[]
+            resourceDrawerData: []
 
         });
         const menuRefData = toRefs(menuDrawerData)
         // const useRefStat = toRefs(state)
         watchEffect(() => {
-            console.log("menuDrawerData.menuTreeData", menuDrawerData.menuTreeData)
-            console.log("menuDrawerData.selectId", menuDrawerData.selectId)
+            // console.log("menuDrawerData.menuTreeData", menuDrawerData.menuTreeData)
+            // console.log("menuDrawerData.selectId", menuDrawerData.selectId)
             console.log("resourceDrawerData", menuDrawerData.resourceDrawerData)
             console.log("modelRef.resourceInfo", modelRef.resourceInfo)
         })
@@ -255,15 +255,14 @@ export default {
             Api.getResourceGroupByType().then(value => {
                 if (value.code === 0) {
                     menuDrawerData.resourceDrawerData = value.data;
-                    console.log(value.msg)
                 } else {
                     console.log("修改失败")
-                    console.log(value)
                 }
             }).catch(reason => {
 
             })
-        }
+        };
+
         return {
             columnsDefines,
             modelRef,
@@ -275,7 +274,7 @@ export default {
             menuRefData,
             menTagList,
             isMenuType,
-            getResourceGroupByType,
+            getResourceGroupByType
         }
     },
 
@@ -359,12 +358,17 @@ export default {
                 this.modelRef.menuInfo.forEach(value1 => {
                     menus.push({"id": value1.id})
                 })
-                console.log("menus", menus)
+                let _resources=[];
+                this.modelRef.resourceInfo.forEach(value1 => {
+                    _resources.push({"id": value1.id})
+                })
+                // console.log("menus", menus)
                 let param = {
                     "roleName": this.modelRef.roleName,
                     "roleDes": this.modelRef.roleDes,
                     "sort": this.modelRef.sort,
-                    "menus": menus
+                    "menus": menus,
+                    "resources": _resources
                 }
                 Api.addRole(param).then(value => {
                     if (value.code === 0) {
@@ -390,12 +394,18 @@ export default {
             this.modelRef.menuInfo.forEach(value1 => {
                 menus.push({"id": value1.id})
             })
+
+            let _resources=[];
+            this.modelRef.resourceInfo.forEach(value1 => {
+                _resources.push({"id": value1.id})
+            })
             let param = {
                 "id": this.id,
                 "roleName": this.modelRef.roleName,
                 "roleDes": this.modelRef.roleDes,
                 "sort": this.modelRef.sort,
-                "menus": menus
+                "menus": menus,
+                "resources": _resources
             }
             Api.editRole(param).then(value => {
                 if (value.code === 0) {
@@ -590,6 +600,16 @@ export default {
             if (type === 'add') {
                 this.menuDrawerData.selectId = data;
                 // this.modelRef.menuInfo = data;
+                this.onMenuDrawerClose();
+            } else if (type === 'cancel') {
+                this.onMenuDrawerClose();
+            }
+        },
+
+        receiveSrouceData(type, data) {
+            console.log("接收rescouce数据：", type, data);
+            if (type === 'add') {
+                this.modelRef.resourceInfo = data;
                 this.onMenuDrawerClose();
             } else if (type === 'cancel') {
                 this.onMenuDrawerClose();
