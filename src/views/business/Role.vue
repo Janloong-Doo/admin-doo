@@ -139,7 +139,7 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
 import Api from '../../assets/api/api'
 import {CloseOutlined, DownOutlined, EditOutlined, PlusOutlined} from "@ant-design/icons-vue";
 import {message} from 'ant-design-vue';
@@ -358,7 +358,7 @@ export default {
                 this.modelRef.menuInfo.forEach(value1 => {
                     menus.push({"id": value1.id})
                 })
-                let _resources=[];
+                let _resources = [];
                 this.modelRef.resourceInfo.forEach(value1 => {
                     _resources.push({"id": value1.id})
                 })
@@ -395,7 +395,7 @@ export default {
                 menus.push({"id": value1.id})
             })
 
-            let _resources=[];
+            let _resources = [];
             this.modelRef.resourceInfo.forEach(value1 => {
                 _resources.push({"id": value1.id})
             })
@@ -525,7 +525,7 @@ export default {
                     this.modelRef.menuInfo = text.menus;
                     this.menuDrawerData.selectId = text.menus.map(value => value.id);
                     //选择的资源数据
-                    this.menuDrawerData.resourceInfo = text.resouces;
+                    this.modelRef.resourceInfo = text.resources;
                     break;
                 case 'del':
                     this.delRole(text);

@@ -5,7 +5,6 @@
                 <a-collapse-panel :header="item.name">
                     <template :key="detail.id" v-for="detail in item.children">
                         <a-checkable-tag :checked="checkAble(detail.id)" @change="onChange($event,item.id,detail)">
-                            <!--                        <a-checkable-tag>-->
                             {{ detail.name }}
                         </a-checkable-tag>
                     </template>
@@ -37,18 +36,20 @@ export default {
         }
     },
     emits: {
-        'dealData': {}
+        'dealData': null
     },
-    setup(props: any, context: any) {
-        let selectIds = [];
-        // let selectList:Set = ref({});
+    setup(props, context) {
+        let _ids: String[] = props.selectData.map(value => value.id);
+        let _selectDataMap=new Map();
+        props.selectData.forEach(value => {
+            _selectDataMap.set(value.id,value)
+        })
+        console.log("ssssss", _ids)
         const baseData = reactive({
             //内置使用， key:children 形式
-            selectDataForCheck: new Map(),
-            // selectList: {}
+            selectDataForCheck: new Map(_selectDataMap.entries()),
         })
-        // let selectList: Set<string> = reactive(new Set(["414ab570-a545-4cc9-9ce8-9080a6641fce"]));
-        let selectList: Set<string> = reactive(new Set([]));
+        let selectList: Set<string> = reactive(new Set(_ids));
 
         //checkboxgroup  change事件
         const onChange = (checkedAble: boolean, pid: string, children: any[]) => {
@@ -119,6 +120,7 @@ export default {
 
         watchEffect(() => {
             console.log('selectList', selectList)
+            console.log('baseData.selectDataForCheck', baseData.selectDataForCheck)
         })
         return {
             baseData,

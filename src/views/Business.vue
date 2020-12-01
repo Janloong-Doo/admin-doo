@@ -6,7 +6,7 @@
             <a-layout-sider class="menusider" theme="dark" v-model="collapsed" trigger collapsible>
                 <div class="logo"/>
 
-                <a-menu theme="dark" mode="inline" :default-selected-keys="['/department']" @click="onMenuClick">
+                <a-menu theme="dark" mode="inline"   :default-selected-keys="['/department']" @click="onMenuClick">
                     <!--    动态菜单 -->
                     <template v-for="item in menuResult" :key="item.id">
                         <template v-if="!item.children">
@@ -107,6 +107,12 @@ export default {
         }
     },
     computed: {},
+    watch: {
+        '$route'(to, from) {
+            console.log("to",to,from)
+        },
+    },
+
     created() {
         this.initMenuList();
     },
