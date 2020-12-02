@@ -1,25 +1,25 @@
 <template>
-    <div>
-        <a-collapse>
-            <template :key="item.id" v-for="item in data">
-                <a-collapse-panel :header="item.name">
-                    <template :key="detail.id" v-for="detail in item.children">
-                        <a-checkable-tag :checked="checkAble(detail.id)" @change="onChange($event,item.id,detail)">
-                            {{ detail.name }}
-                        </a-checkable-tag>
-                    </template>
-                </a-collapse-panel>
-            </template>
-        </a-collapse>
-        <a-space>
-            <a-button :style="{ marginRight: '8px' }" @click="dealData('cancel')">
-                取消
-            </a-button>
-            <a-button type="primary" @click="dealData('add')">
-                确认
-            </a-button>
-        </a-space>
-    </div>
+	<div>
+		<a-collapse>
+			<template :key="item.id" v-for="item in data">
+				<a-collapse-panel :header="item.name">
+					<template :key="detail.id" v-for="detail in item.children">
+						<a-checkable-tag :checked="checkAble(detail.id)" @change="onChange($event,item.id,detail)">
+							{{ detail.name }}
+						</a-checkable-tag>
+					</template>
+				</a-collapse-panel>
+			</template>
+		</a-collapse>
+		<a-space>
+			<a-button :style="{ marginRight: '8px' }" @click="dealData('cancel')">
+				取消
+			</a-button>
+			<a-button type="primary" @click="dealData('add')">
+				确认
+			</a-button>
+		</a-space>
+	</div>
 </template>
 
 <script lang="ts">
@@ -38,11 +38,11 @@ export default {
     emits: {
         'dealData': null
     },
-    setup(props, context) {
+    setup(props: any, context: any) {
         let _ids: String[] = props.selectData.map(value => value.id);
-        let _selectDataMap=new Map();
+        let _selectDataMap = new Map();
         props.selectData.forEach(value => {
-            _selectDataMap.set(value.id,value)
+            _selectDataMap.set(value.id, value)
         })
         console.log("ssssss", _ids)
         const baseData = reactive({
@@ -55,17 +55,18 @@ export default {
         const onChange = (checkedAble: boolean, pid: string, children: any[]) => {
             // selectList.clear();
             console.log("选择资源", checkedAble, pid, children);
-            //筛选pid对应的已勾选的列表数据
-            // baseData.selectDataForCheck[pid] = children;
-            baseData.selectDataForCheck.set(children.id, children);
-            console.log("勾选的列表数据", selectList, "所有的勾选数据", baseData.selectDataForCheck)
-            // computedSelectData(baseData.selectDataForCheck)
             if (checkedAble) {
+                //筛选pid对应的已勾选的列表数据
+                // baseData.selectDataForCheck[pid] = children;
+                baseData.selectDataForCheck.set(children.id, children);
+                console.log("勾选的列表数据", selectList, "所有的勾选数据", baseData.selectDataForCheck)
+                // computedSelectData(baseData.selectDataForCheck)
                 console.log("选中", selectList)
                 selectList.add(children.id);
             } else {
                 console.log("取消")
                 selectList.delete(children.id);
+                baseData.selectDataForCheck.delete(children.id)
             }
         }
 

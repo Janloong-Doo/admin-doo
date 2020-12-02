@@ -387,7 +387,7 @@ export default {
 
 
         editRole() {
-            this.onDrawerOpen()
+            this.onDrawerOpen('edit')
             this.addRoleData.isEditType = true;
 
             let menus = [];

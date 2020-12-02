@@ -5,100 +5,100 @@ export default createRouter({
     routes: [
         {
             path: "/",
-            redirect: "business"
+            redirect: "manager"
         },
         {
-            path: "/business2",
-            name: "Home2",
-            component: () => import("../views/Home2.vue"),
+            // path: "/business",
+            path: "/manager",
+            name: "Manager",
+            // name: "business",
+            component: () => import("../views/BaseView.vue"),
             children: [
                 {
-                    path: "/business2/study",
-                    name: "Home3",
-                    component: () => import("../views/Home3.vue")
-
-                }
-            ]
-        },
-        {
-            path: "/business",
-            name: "business",
-            component: () => import("../views/Business.vue"),
-            children: [
-                //权限管理相关
-                {
-                    name: "department",
-                    path: "/business/department",
+                    name: "Department",
+                    path: "department",
                     component: () =>
                         import(
                             /* webpackChunkName: "about" */ "../views/business/Department.vue"
                             ),
                 },
                 {
-                    name: "role",
-                    path: "/business/role",
+                    name: "Role",
+                    path: "role",
                     component: () =>
                         import(/* webpackChunkName: "about" */ "../views/business/Role.vue"),
                 },
                 {
-                    name: "menuManager",
-                    path: "/business/menuManager",
+                    name: "Menu",
+                    path: "menu",
                     component: () =>
                         import(
                             /* webpackChunkName: "about" */ "../views/business/MenuManager.vue"
                             ),
                 },
                 {
-                    name: "resourceManager",
-                    path: "/business/resourceManager",
+                    name: "Resource",
+                    path: "resource",
                     component: () =>
                         import(
                             /* webpackChunkName: "about" */ "../views/business/ResourceManager.vue"
                             ),
                 },
                 {
-                    name: "dictionary",
-                    path: "/business/dictionary",
+                    name: "Dictionary",
+                    path: "dictionary",
                     component: () =>
-                        import(
-                            /* webpackChunkName: "about" */ "../views/business/DictionaryManager.vue"
-                            ),
+                        import("../views/business/DictionaryManager.vue" ),
                 }, {
-                    name: "userManager",
-                    path: "/business/userManager",
+                    name: "User",
+                    path: "user",
                     component: () =>
-                        import(
-                            /* webpackChunkName: "about" */ "../views/business/UserManager.vue"
-                            ),
+                        import( "../views/business/UserManager.vue" )
                 },
-
-                //spring 相关
+            ],
+        },
+        //spring 相关
+        {
+            path: "/spring",
+            name: "Spring",
+            // redirect: "/spring/oauth2",
+            component: () => import("../views/BaseView.vue"),
+            children: [
                 {
                     name: "Oauth2",
-                    path: "/business/spring/oauth2",
+                    path: "oauth2",
                     // props: true,
                     component: () =>
                         import(/* webpackChunkName: "about" */ "../views/spring/Oauth2.vue"),
                 },
                 {
                     name: "Activiti",
-                    path: "/business/spring/activiti",
+                    path: "activiti",
                     // props: true,
                     component: () =>
                         import(
                             /* webpackChunkName: "about" */ "../views/spring/Activiti.vue"
                             ),
                 },
-
-                //study相关
+            ]
+        },
+        //study相关
+        {
+            path: "/study",
+            name: "Study",
+            props: true,
+            component: () => import("../views/BaseView.vue"),
+            children: [
                 {
-                    path: "/business/study",
-                    name: "study",
-                    props: true,
+                    name: "Base",
+                    path: "base",
+                    // props: true,
                     component: () =>
-                        import("../views/Study.vue"),
+                        import(
+                            /* webpackChunkName: "about" */ "../views/Study.vue"
+                            ),
                 },
-            ],
+            ]
         },
     ]
 })

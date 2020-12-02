@@ -6,10 +6,16 @@
             <a-layout-sider class="menusider" theme="dark" v-model="collapsed" trigger collapsible>
                 <div class="logo"/>
 
-                <a-menu theme="dark" mode="inline"   :default-selected-keys="['/department']" @click="onMenuClick">
+                <!--                        :default-selected-keys="['/business/department']"-->
+                <a-menu theme="dark"
+                        mode="inline"
+                        v-model:selectedKeys="selectKeys"
+                        v-model:openKeys="openKeys"
+                        @click="onMenuClick">
                     <!--    动态菜单 -->
                     <template v-for="item in menuResult" :key="item.id">
                         <template v-if="!item.children">
+                            <!--                            <a-menu-item :key="item.id">-->
                             <a-menu-item :key="item.id">
                                 <PieChartOutlined/>
                                 <span>{{ item.name }}</span>
@@ -87,7 +93,7 @@ const SubMenu = {
 };
 
 export default {
-    name: "Business",
+    name: "BaseView",
     components: {
         SubMenu,
         MenuFoldOutlined,
@@ -98,21 +104,69 @@ export default {
         InboxOutlined,
         AppstoreOutlined,
     },
+    setup() {
+    },
+
     data() {
         return {
             collapsed: false,
             // collapsed: 'collapsed',
             resutData: [],
-            menuResult: []
+            menuResult: [],
+            //菜单选项
+            selectedKeys: [],
+            openKeys: [],
+            //当前路由菜单信息
+            rootPath: "",
+            childPath: ""
         }
     },
-    computed: {},
-    watch: {
-        '$route'(to, from) {
-            console.log("to",to,from)
-        },
-    },
+    computed: {
+        // selectKeys(){
+        //     let filter = this.resutData.filter(value => value.url === this.childPath);
+        //     console.log("dataComputed",this.resutData,filter,this.childPath)
+        //     return filter.id;
+        // },
+        // openKeys(){
+        //     let filter = this.resutData.filter(value => value.url === this.rootPath);
+        //     return  filter.id;
+        // }
 
+    },
+    watch: {
+        // '$route'(to, from) {
+        //     console.log("to",to,from)
+        // },
+        '$route': {
+            handler({path, matched}) {
+                console.log("to", path, matched);
+                let _keyPath = "";
+                let _rootPath = matched[0].path;
+                matched[0].children.length > 1
+                    ? (_keyPath = [path])
+                    : (_keyPath = [path1])
+                this.rootPath = _rootPath;
+                this.childPath = _keyPath
+                console.log("path", this.rootPath, this.childPath)
+                // let filter = this.resutData.filter(value => value.url === _keyPath);
+                // this.openKeys = this.resutData.filter(value => value.url === rootPath).id;
+                // this.selectedKeys = filter.id
+                // console.log("menuSelect", this.openKeys, this.selectedKeys, filter)
+            },
+            immediate: true,
+        },
+        resutData(to, from) {
+            let filter = to.filter(value => value.url == this.childPath);
+            console.log("keys111", this.rootPath, this.childPath, filter, to)
+            this.selectedKeys = filter.id;
+            this.openKeys = to.filter(value => value.url == this.rootPath).id;
+            console.log("keys", this.selectedKeys, this.openKeys)
+        }
+    },
+    beforeMount() {
+    },
+    beforeCreate() {
+    },
     created() {
         this.initMenuList();
     },
@@ -121,7 +175,6 @@ export default {
             Api.getMenuListByUser().then(value => {
                 if (value.code === 0) {
                     this.resutData = value.data;
-                    console.log(value);
                     console.log(this.resutData);
                     // this.menuResult = DataUtils.initTreeData(this.resutData);
                     this.menuResult = DataUtils.initTreeData(value.data);
@@ -136,9 +189,7 @@ export default {
         },
 
         onMenuClick({item, key, keyPath}) {
-            console.log(item);
-            console.log(key);
-            console.log(keyPath);
+            console.log("item", key, keyPath);
             switch (key) {
                 case '/department':
                     this.$router.push({path: "/business/department"});
@@ -153,8 +204,6 @@ export default {
                     let filterElement = this.resutData.filter(value => value.id === key)[0];
                     let code = filterElement.code;
                     let url = filterElement.url;
-                    console.log(code);
-                    console.log(url);
                     this.$router.push({path: url});
                     // this.$router.push({name: code});
                     break;

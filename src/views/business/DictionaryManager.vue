@@ -29,16 +29,16 @@
                     :rules="addParamData.rules">
 
                     <a-form-item label="名称:" name="name">
-                        <a-input placeholder="请输入字典名称" v-model="addParamData.name"></a-input>
+                        <a-input placeholder="请输入字典名称" v-model:value="addParamData.name"></a-input>
                     </a-form-item>
                     <a-form-item label="编码:" name="value">
-                        <a-input placeholder="请输入字典编码" v-model="addParamData.value"></a-input>
+                        <a-input placeholder="请输入字典编码" v-model:value="addParamData.value"></a-input>
                     </a-form-item>
                     <a-form-item label="描述:" name="description">
-                        <a-input placeholder="请输入字典描述信息" v-model="addParamData.description"></a-input>
+                        <a-input placeholder="请输入字典描述信息" v-model:value="addParamData.description"></a-input>
                     </a-form-item>
                     <a-form-item label="排序:" name="sort">
-                        <a-input placeholder="请输入字典序号" v-model="addParamData.sort"></a-input>
+                        <a-input placeholder="请输入字典序号" v-model:value="addParamData.sort"></a-input>
                     </a-form-item>
                     <a-form-item v-if="!addParamData.firstData&&!addParamData.isEditType" label="根子节点选择:" name="isRootMenu">
                         <!--                        <a-switch checked-children="根" un-checked-children="子" :checked="addMenuData.isRootMenu"/>-->
@@ -266,40 +266,37 @@ export default {
             }
         },
         addMenu(formName) {
-            this.$refs[formName].validate(valid => {
-                if (valid) {
-                    console.log(this.addParamData);
-                    let pid = this.addParamData.isRootMenu ? '0' : this.addParamData.pid;
-                    let level = this.addParamData.isRootMenu ? '1' : this.addParamData.level;
-                    let param = {
-                        "name": this.addParamData.name,
-                        "value": this.addParamData.value,
-                        "description": this.addParamData.description,
-                        "pid": pid,
-                        "level": level,
-                        "sort": this.addParamData.sort
-                    }
-                    Api.addDic(param).then(value => {
-                        if (value.code === 0) {
-                            console.log("新增成功")
-                            this.$refs.addMenuForm.resetFields();
-                            this.addMenuDradwrvisible = false;
-                            this.getMenuData();
-                        } else {
-                            console.log("新增失败")
-                            console.log(value)
-                        }
-                    }).catch(reason => {
-                    })
-                } else {
-                    console.log('error submit!!');
-                    return false;
+            this.$refs[formName].validate().then(val => {
+                console.log(this.addParamData);
+                let pid = this.addParamData.isRootMenu ? '0' : this.addParamData.pid;
+                let level = this.addParamData.isRootMenu ? '1' : this.addParamData.level;
+                let param = {
+                    "name": this.addParamData.name,
+                    "value": this.addParamData.value,
+                    "description": this.addParamData.description,
+                    "pid": pid,
+                    "level": level,
+                    "sort": this.addParamData.sort
                 }
+                Api.addDic(param).then(value => {
+                    if (value.code === 0) {
+                        console.log("新增成功")
+                        this.$refs.addMenuForm.resetFields();
+                        this.addMenuDradwrvisible = false;
+                        this.getMenuData();
+                    } else {
+                        console.log("新增失败")
+                        console.log(value)
+                    }
+                }).catch(reason => {
+                })
+            }).catch(reason => {
+                console.log('error submit!!');
+                return false;
             })
         },
         editMenu(formName) {
-            this.$refs[formName].validate(valid => {
-                if (valid) {
+            this.$refs[formName].validate().then(val => {
                     console.log(this.addParamData);
                     // let pid = this.addMenuData.isRootMenu ? '0' : this.addMenuData.pid;
                     // let level = this.addMenuData.isRootMenu ? '1' : this.addMenuData.level;
@@ -323,10 +320,9 @@ export default {
                         }
                     }).catch(reason => {
                     })
-                } else {
+            }).catch(reason => {
                     console.log('error submit!!');
                     return false;
-                }
             })
         },
         addMenuInit(data) {
@@ -348,6 +344,7 @@ export default {
             this.addParamData.value = data.value;
             this.addParamData.description = data.description;
             this.addParamData.sort = data.sort;
+            console.log("editIntiData", this.addParamData)
         },
 
         delMenu(data) {
