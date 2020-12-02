@@ -1,12 +1,12 @@
 <template>
     <div id="Activiti">
         <a-tabs type="card" @change="callback">
-            <template v-for="item in tabResult">
-                <a-tab-pane :key="item.key" :tab="item.tab">
-                   <Login v-if="item.key==1"></Login>
-                   <user v-else-if="item.key==2"></user>
-                   <index v-else-if="item.key==3"></index>
-                   <authenticate v-else-if="item.key==4"></authenticate>
+            <template :key="item.key" v-for="item in tabResult">
+                <a-tab-pane :tab="item.tab">
+                    <Login v-if="item.key==1"></Login>
+                    <user v-else-if="item.key==2"></user>
+                    <index v-else-if="item.key==3"></index>
+                    <authenticate v-else-if="item.key==4"></authenticate>
                 </a-tab-pane>
             </template>
         </a-tabs>

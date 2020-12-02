@@ -2,15 +2,16 @@ import {createStore} from "vuex";
 
 
 export default createStore({
-  state() {
-    return {
-      token: ""
-    }
-  },
-  mutations: {
-    setToken(state, token) {
-      // state.token = token;
+
+    state() {
+        return {
+            token: ""
+        }
     },
-  },
-  actions: {},
+    mutations: {
+        setToken(state, token) {
+            // state.token = token;
+        },
+    },
+    actions: {},
 });

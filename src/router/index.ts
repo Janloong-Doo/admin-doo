@@ -8,6 +8,11 @@ export default createRouter({
             redirect: "manager"
         },
         {
+            path: "/login",
+            name: "Manager",
+            component: () => import("../views/BaseView.vue"),
+        },
+        {
             // path: "/business",
             path: "/manager",
             name: "Manager",
