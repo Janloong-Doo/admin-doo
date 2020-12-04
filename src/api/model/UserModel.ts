@@ -22,3 +22,20 @@ export interface UserBaseInfo {
     email: string;
     lastLogin: string;
 }
+
+
+/**
+ *  Login interface return value
+ */
+export interface LoginResultModel {
+    userId: string | number;
+    token: string;
+}
+
+
+/**
+ * @description: Get user information
+ */
+export interface GetUserInfoByUserIdParams {
+    userId: string | number;
+}

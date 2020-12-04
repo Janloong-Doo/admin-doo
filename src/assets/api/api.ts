@@ -9,8 +9,9 @@ const host = {
     dip: "http://localhost:8901"
 }
 const baseBusiness = '/hap';
-//==============resource================
+//==============base================
 
+//==============resource================
 // export const apiHome = (p, config) => request.post('/home', p, config);
 const getToken = (params: any, config: any) => request.post(host.dip + '/oauth/token', params, config);
 const checkToken = (params: any, config: any) => request.post(host.dip + '/oauth/check_token', params, config);

@@ -1,6 +1,6 @@
 import {createRouter, createWebHistory} from "vue-router";
 
-export default createRouter({
+const router =createRouter({
     history: createWebHistory(),
     routes: [
         {
@@ -107,3 +107,20 @@ export default createRouter({
         },
     ]
 })
+
+// reset router
+export function resetRouter() {
+    const resetWhiteNameList = [
+        'Login',
+        'Root',
+        // 'FullErrorPage'
+    ];
+    router.getRoutes().forEach((route) => {
+        const { name } = route;
+        if (name && !resetWhiteNameList.includes(name as string)) {
+            router.hasRoute(name) && router.removeRoute(name);
+        }
+    });
+}
+
+export default router;
