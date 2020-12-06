@@ -7,6 +7,7 @@ import {cloneDeep} from 'lodash-es';
 import type {CreateAxiosOptions, RequestOptions, Result, UploadFileParams} from '/@/utils/http/types';
 import {errorResult} from '/@/utils/http/const';
 import {ContentTypeEnum} from '/@/enums/httpEnum.ts';
+import qs from "qs";
 
 export * from '/@/utils/http/axiosTransform';
 
@@ -142,13 +143,17 @@ export class VAxios {
 
     /**
      * @description:   请求方法
+     * @param config axios默认的请求参数
+     * @param options 自定义的请求选项
      */
     request<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
+        //axios默认配置
         let conf: AxiosRequestConfig = cloneDeep(config);
+        //axios的数据处理方式
         const transform = this.getTransform();
-
+        //自定义的请求选项
         const {requestOptions} = this.options;
-
+        //合并请求默认的自定义参数和请求时的自定义参数
         const opt: RequestOptions = Object.assign({}, requestOptions, options);
 
         const {beforeRequestHook, requestCatch, transformRequestData} = transform || {};
@@ -174,5 +179,31 @@ export class VAxios {
                     reject(e);
                 });
         });
+    }
+
+    post<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
+        let conf: AxiosRequestConfig = cloneDeep(config);
+        conf.headers = {'Content-Type': ContentTypeEnum.FORM_URLENCODED}
+        conf.paramsSerializer = params => {
+            const s = qs.stringify(params);
+            console.log(params, s);
+            return s;
+        };
+        console.log(conf.paramsSerializer);
+        console.log("headers", conf.headers);
+
+        return this.request(conf, options);
+    }
+
+    postJson<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
+        return this.request(config, options);
+    }
+
+    get<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
+        return this.request(config, options);
+    }
+
+    delete<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
+        return this.request(config, options);
     }
 }

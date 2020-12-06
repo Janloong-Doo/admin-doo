@@ -134,6 +134,7 @@ const viteConfig: UserConfig = {
     },
 
     // Local cross-domain proxy
+    // proxy: createProxy(VITE_PROXY),
     proxy: createProxy(VITE_PROXY),
     plugins: createVitePlugins(viteEnv),
     rollupInputOptions: {

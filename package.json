@@ -1,10 +1,10 @@
 {
-  "name": "admin-vue3",
+  "name": "vue-janloongdoo",
   "version": "0.0.0",
-  "description": "asd",
+  "description": "vue3 vite typescript",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "dev": "cross-env NODE_ENV=development vite ",
     "build": "vite build"
   },
   "dependencies": {
@@ -36,6 +36,7 @@
     "@vue/compiler-sfc": "^3.0.3",
     "@vue/composition-api": "^1.0.0-beta.20",
     "babel-plugin-import": "^1.13.3",
+    "cross-env": "^7.0.3",
     "eslint": "^7.14.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.20.2",

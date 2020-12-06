@@ -14,13 +14,14 @@ enum Api {
  * 登录接口
  */
 export function loginApi(params: UserLoginParams) {
-    return defAxios.request<LoginResultModel>(
+    return defAxios.post<LoginResultModel>(
         {
-            url: ServiceEnum.AUTH + Api.Login,
+            url: Api.Login,
             method: 'POST',
             params,
         },
         {
+            serviceName: ServiceEnum.AUTH,
             errorMessageMode: 'modal',
         }
     );

@@ -9,8 +9,8 @@ const router =createRouter({
         },
         {
             path: "/login",
-            name: "Manager",
-            component: () => import("../views/BaseView.vue"),
+            name: "Login",
+            component: () => import("../views/login/Login.vue"),
         },
         {
             // path: "/business",

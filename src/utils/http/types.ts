@@ -1,6 +1,7 @@
 import type {AxiosRequestConfig} from 'axios';
 import {AxiosTransform} from '/@/utils/http/axiosTransform';
 
+//除axios外的自定义的请求选项
 export interface RequestOptions {
     // 请求参数拼接到url
     joinParamsToUrl?: boolean;
@@ -14,6 +15,8 @@ export interface RequestOptions {
     apiUrl?: string;
     // 错误消息提示类型
     errorMessageMode?: 'none' | 'modal';
+    //模块服务路径
+    serviceName?: string;
 }
 
 export interface CreateAxiosOptions extends AxiosRequestConfig {

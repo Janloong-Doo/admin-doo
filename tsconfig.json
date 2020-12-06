@@ -14,6 +14,7 @@
     "declaration": true,
     // 从 tslib 导入外部帮助库: 比如__extends，__rest等
     "importHelpers": true,
+    "emitHelpers": true,
     // 启用装饰器
     "experimentalDecorators": true,
 //    "skipLibCheck": false,

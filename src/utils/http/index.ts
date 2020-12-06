@@ -94,12 +94,17 @@ const transform: AxiosTransform = {
 
     // 请求之前处理config
     beforeRequestHook: (config: AxiosRequestConfig, options: RequestOptions) => {
-        const {apiUrl, joinPrefix, joinParamsToUrl, formatDate} = options;
+        const {apiUrl, joinPrefix, joinParamsToUrl, formatDate, serviceName} = options;
 
+        if (serviceName && isString(serviceName)) {
+            config.url = `${serviceName}${config.url}`;
+        }
+
+        //是否加入自定义前缀url
         if (joinPrefix) {
             config.url = `${prefix}${config.url}`;
         }
-
+        //是否为自定义的url地址
         if (apiUrl && isString(apiUrl)) {
             config.url = `${apiUrl}${config.url}`;
         }
@@ -178,6 +183,7 @@ const transform: AxiosTransform = {
 };
 
 function createAxios(opt?: Partial<CreateAxiosOptions>) {
+    console.log(opt);
     return new VAxios(
         deepMerge(
             {

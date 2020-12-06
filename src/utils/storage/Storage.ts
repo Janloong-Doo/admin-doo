@@ -1,4 +1,4 @@
-import { DEFAULT_CACHE_TIME } from '/@/settings/cipherSetting';
+import { DEFAULT_CACHE_TIME } from '/@/settings/cipherSetting.ts';
 
 // import { EncryptionParams } from '/@/utils/cipher/aesEncryption';
 export interface CreateStorageParams {
