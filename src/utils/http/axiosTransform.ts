@@ -2,7 +2,7 @@
  * 数据处理类，可以根据项目自行配置
  */
 import type {AxiosRequestConfig, AxiosResponse} from 'axios';
-import type {RequestOptions, Result} from '/@/utils/http/types';
+import type {RequestOptions, ResponseResult} from '/@/utils/http/types';
 
 export abstract class AxiosTransform {
     /**
@@ -14,7 +14,7 @@ export abstract class AxiosTransform {
     /**
      * @description: 请求成功处理
      */
-    transformRequestData?: (res: AxiosResponse<Result>, options: RequestOptions) => any;
+    transformRequestData?: (res: AxiosResponse<ResponseResult>, options: RequestOptions) => any;
 
     /**
      * @description: 请求失败处理

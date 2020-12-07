@@ -2,7 +2,7 @@
 // The axios configuration can be changed according to the project, just change the file, other files can be left unchanged
 
 import type {AxiosRequestConfig, AxiosResponse} from 'axios';
-import type {CreateAxiosOptions, RequestOptions, Result} from '/@/utils/http/types';
+import type {CreateAxiosOptions, RequestOptions, ResponseResult} from '/@/utils/http/types';
 
 import {VAxios} from './Axios';
 import {AxiosTransform} from '/@/utils/http/axiosTransform';
@@ -19,6 +19,7 @@ import {formatRequestDate} from '/@/utils/dateUtil.ts';
 import {deepMerge, setObjToUrlParams} from '/@/utils/index';
 import {errorStore} from '/@/store/modules/error.ts';
 import {errorResult} from '/@/utils/http/const';
+import {getToken} from "/@/utils/auth";
 
 const {globSetting} = useSetting();
 const prefix = globSetting.urlPrefix;
@@ -31,7 +32,7 @@ const transform: AxiosTransform = {
     /**
      * @description: 处理请求数据
      */
-    transformRequestData: (res: AxiosResponse<Result>, options: RequestOptions) => {
+    transformRequestData: (res: AxiosResponse<ResponseResult>, options: RequestOptions) => {
         const {isTransformRequestResult} = options;
         // 不进行任何处理，直接返回
         // 用于页面代码可能需要直接获取code，data，message这些信息时开启
@@ -39,14 +40,14 @@ const transform: AxiosTransform = {
             return res.data;
         }
         // 错误的时候返回
-
+        console.log(res);
         const {data} = res;
         if (!data) {
             // return '[HTTP] Request has no return value';
             return errorResult;
         }
         //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
-        const {code, result, message} = data;
+        const {code, data: result, msg: message} = data;
 
         // 这里逻辑可以根据项目进行修改
         const hasSuccess = data && Reflect.has(data, 'code') && code === ResultEnum.SUCCESS;
@@ -70,7 +71,7 @@ const transform: AxiosTransform = {
         // 接口请求错误，统一提示错误信息
         if (code === ResultEnum.ERROR) {
             if (message) {
-                createMessage.error(data.message);
+                createMessage.error(message);
                 Promise.reject(new Error(message));
             } else {
                 const msg = '操作失败,系统异常!';
@@ -124,6 +125,7 @@ const transform: AxiosTransform = {
             }
         } else {
             if (!isString(config.params)) {
+                console.log("post !string")
                 formatDate && formatRequestDate(config.params);
                 config.data = config.params;
                 config.params = undefined;
@@ -131,9 +133,13 @@ const transform: AxiosTransform = {
                     config.url = setObjToUrlParams(config.url as string, config.data);
                 }
             } else {
+                console.log("post string")
+                //TODO 【疑惑】 未知用途 by Janloong_Doo
+
                 // 兼容restful风格
-                config.url = config.url + config.params;
-                config.params = undefined;
+                // config.url = config.url + config.params;
+                // config.params = undefined;
+                config.data = config.params;
             }
         }
         return config;
@@ -143,14 +149,12 @@ const transform: AxiosTransform = {
      * @description: 请求拦截器处理
      */
     requestInterceptors: (config: AxiosRequestConfig) => {
-        //TODO 【简化】 token请求校验 by Janloong_Doo
-
         // 请求之前处理config
-        //   const token = getToken();
-        //   if (token) {
-        // jwt token
-        // config.headers.Authorization = token;
-        // }
+        const token = getToken();
+        if (token) {
+            // jwt token
+            config.headers.Authorization = token;
+        }
         return config;
     },
 
@@ -183,7 +187,6 @@ const transform: AxiosTransform = {
 };
 
 function createAxios(opt?: Partial<CreateAxiosOptions>) {
-    console.log(opt);
     return new VAxios(
         deepMerge(
             {

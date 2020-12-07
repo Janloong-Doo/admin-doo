@@ -17,7 +17,6 @@ export function loginApi(params: UserLoginParams) {
     return defAxios.post<LoginResultModel>(
         {
             url: Api.Login,
-            method: 'POST',
             params,
         },
         {

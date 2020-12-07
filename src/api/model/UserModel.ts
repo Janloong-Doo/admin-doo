@@ -14,6 +14,7 @@ export interface UserLoginParams {
  * 用户基础信息
  */
 export interface UserBaseInfo {
+    id:string;
     username: string;
     aliaName: string;
     trueName: string;
@@ -28,8 +29,14 @@ export interface UserBaseInfo {
  *  Login interface return value
  */
 export interface LoginResultModel {
-    userId: string | number;
-    token: string;
+    id: string;
+    username: string;
+    tokenType: string;
+    token: string
+    jti: string
+    refreshToken: string
+    authorities: string[]
+    scope: string[]
 }
 
 

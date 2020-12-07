@@ -21,7 +21,7 @@
                 <a-form-item label="密码:" v-bind="validateInfos.password">
                     <a-input-password placeholder="请输入密码" v-model:value="formData.password"></a-input-password>
                 </a-form-item>
-                <a-form-item :wrapper-col="{ span: 7, offset: 3 }">
+                <a-form-item :wrapper-col="{ span: 7, offset: 1 }">
                     <a-checkbox>记住登录</a-checkbox>
                 </a-form-item>
 
@@ -48,8 +48,8 @@ export default {
     name: "Login",
     setup() {
         const baseData = reactive({
-            labelCol: {span: 4},
-            wrapperCol: {span: 20},
+            labelCol: {span: 5},
+            wrapperCol: {span: 18,offset:0},
         });
         const formData = reactive({
             username: '',

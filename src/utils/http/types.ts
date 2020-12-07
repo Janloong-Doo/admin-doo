@@ -32,6 +32,13 @@ export interface Result<T = any> {
     result: T;
 }
 
+export interface ResponseResult<T = any> {
+    code: number;
+    success: boolean;
+    msg: string;
+    data: T;
+}
+
 // multipart/form-data：上传文件
 export interface UploadFileParams {
     // 其他参数

@@ -4,9 +4,9 @@ import {AxiosCanceler} from '/@/utils/http/axiosCancel';
 import {isFunction} from '/@/utils/is.ts';
 import {cloneDeep} from 'lodash-es';
 
-import type {CreateAxiosOptions, RequestOptions, Result, UploadFileParams} from '/@/utils/http/types';
+import type {CreateAxiosOptions, RequestOptions, ResponseResult, UploadFileParams} from '/@/utils/http/types';
 import {errorResult} from '/@/utils/http/const';
-import {ContentTypeEnum} from '/@/enums/httpEnum.ts';
+import {ContentTypeEnum, RequestEnum} from '/@/enums/httpEnum.ts';
 import qs from "qs";
 
 export * from '/@/utils/http/axiosTransform';
@@ -162,8 +162,8 @@ export class VAxios {
         }
         return new Promise((resolve, reject) => {
             this.axiosInstance
-                .request<any, AxiosResponse<Result>>(conf)
-                .then((res: AxiosResponse<Result>) => {
+                .request<any, AxiosResponse<ResponseResult>>(conf)
+                .then((res: AxiosResponse<ResponseResult>) => {
                     if (transformRequestData && isFunction(transformRequestData)) {
                         const ret = transformRequestData(res, opt);
                         ret !== errorResult ? resolve(ret) : reject(new Error('request error!'));
@@ -183,15 +183,15 @@ export class VAxios {
 
     post<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
         let conf: AxiosRequestConfig = cloneDeep(config);
+        conf.method = RequestEnum.POST;
         conf.headers = {'Content-Type': ContentTypeEnum.FORM_URLENCODED}
-        conf.paramsSerializer = params => {
+        conf.params = qs.stringify(conf.params);
+        //参数序列化不生效
+        conf.paramsSerializer = (params) => {
             const s = qs.stringify(params);
             console.log(params, s);
             return s;
         };
-        console.log(conf.paramsSerializer);
-        console.log("headers", conf.headers);
-
         return this.request(conf, options);
     }
 

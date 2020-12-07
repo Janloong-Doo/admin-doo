@@ -20,7 +20,8 @@ const setting: ProjectConfig = {
   // Whether to show the configuration button
   showSettingButton: true,
   // 权限模式
-  permissionMode: PermissionModeEnum.ROLE,
+  // permissionMode: PermissionModeEnum.ROLE,
+  permissionMode: PermissionModeEnum.BACK,
   // 网站灰色模式，用于可能悼念的日期开启
   grayMode: false,
   // 色弱模式
