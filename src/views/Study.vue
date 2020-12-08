@@ -16,7 +16,7 @@
                 <a v-if="seen">美女来了!!!</a>
                 <a v-if="!seen">美女走了...</a>
             </div>
-            <div class="bk2" v-on:click="djx">{{ ddd }}</div>
+<!--            <div class="bk2" v-on:click="djx">{{ ddd }}</div>-->
         </div>
         <div>
             <p>{{ name2 }}</p>
@@ -79,12 +79,12 @@
         </div>
     </div>
 </template>
-<script>
+<script lang="ts">
 import {message} from 'ant-design-vue';
 
-import axiosutils from "../assets/js/AxiosUtil.js";
+import axiosutils from "/@/assets/api/axiorequest.ts";
 // import {parseQueryString,getNonce,getSign} from '../assets/js/signMd5Utils';
-import signMd5Utils from '../assets/js/signMd5Utils';
+import signMd5Utils from '/@/assets/js/signMd5Utils.js';
 
 export default {
     name: "study",
@@ -162,13 +162,13 @@ export default {
         userId: Object
     },
     methods: {
-        djx() {
-            console.log(this.ddd);
-            this.ddd = this.ddd
-                .split("")
-                .reverse()
-                .join("");
-        },
+        // djx() {
+        //     console.log(this.ddd);
+        //     this.ddd = this.ddd
+        //         .split("")
+        //         .reverse()
+        //         .join("");
+        // },
         seenAble() {
             this.seen = !this.seen
         },
@@ -220,10 +220,6 @@ export default {
                 })
             }
         },
-        randomTest() {
-            let router = this.$router;
-            console.log(router)
-        }
 
     },
 

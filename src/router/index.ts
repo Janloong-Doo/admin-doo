@@ -100,7 +100,7 @@ const router =createRouter({
                     // props: true,
                     component: () =>
                         import(
-                            /* webpackChunkName: "about" */ "../views/Study.vue"
+                            /* webpackChunkName: "about" */ "../layout/study/Study.vue"
                             ),
                 },
             ]

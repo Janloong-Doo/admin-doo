@@ -5,8 +5,9 @@ import {ServiceEnum} from "/@/enums/httpEnum"
 
 enum Api {
     Login = '/login',
-    GetUserInfoById = '/getUserInfoById',
+    // GetUserInfoById = '/getUserInfoById',
     GetPermCodeByUserId = '/getPermCodeByUserId',
+    GetUserInfoById = '/user/',
 }
 
 
@@ -31,9 +32,9 @@ export function loginApi(params: UserLoginParams) {
  * @description: getUserInfoById
  */
 export function getUserInfoById(params: GetUserInfoByUserIdParams) {
-    return defAxios.request<UserBaseInfo>({
-        url: Api.GetUserInfoById,
-        method: 'GET',
-        params,
-    });
+    return defAxios.get<UserBaseInfo>({
+        url: Api.GetUserInfoById + params.userId
+    }, {
+        serviceName: ServiceEnum.AUTH
+    })
 }

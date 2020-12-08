@@ -21,6 +21,7 @@ export class VAxios {
     constructor(options: CreateAxiosOptions) {
         this.options = options;
         this.axiosInstance = axios.create(options);
+        console.log("构造器", options)
         this.setupInterceptors();
     }
 
@@ -160,6 +161,7 @@ export class VAxios {
         if (beforeRequestHook && isFunction(beforeRequestHook)) {
             conf = beforeRequestHook(conf, opt);
         }
+        // console.log("请求前config",conf)
         return new Promise((resolve, reject) => {
             this.axiosInstance
                 .request<any, AxiosResponse<ResponseResult>>(conf)
@@ -196,10 +198,13 @@ export class VAxios {
     }
 
     postJson<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
+        config.headers = {'Content-Type': ContentTypeEnum.JSON}
         return this.request(config, options);
     }
 
     get<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
+        config.method = RequestEnum.GET;
+        console.log("config.headers", config.headers);
         return this.request(config, options);
     }
 
