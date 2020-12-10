@@ -2,6 +2,7 @@
 import {GetUserInfoByUserIdParams, LoginResultModel, UserBaseInfo, UserLoginParams} from "/@/api/model/UserModel";
 import {defAxios} from "/@/utils/http/index.ts"
 import {ServiceEnum} from "/@/enums/httpEnum"
+import {ErrorMessageMode} from "/@/utils/http/types";
 
 enum Api {
     Login = '/login',
@@ -14,7 +15,7 @@ enum Api {
 /**
  * 登录接口
  */
-export function loginApi(params: UserLoginParams) {
+export function loginApi(params: UserLoginParams, mode: ErrorMessageMode = 'modal') {
     return defAxios.post<LoginResultModel>(
         {
             url: Api.Login,
@@ -22,7 +23,7 @@ export function loginApi(params: UserLoginParams) {
         },
         {
             serviceName: ServiceEnum.AUTH,
-            errorMessageMode: 'modal',
+            errorMessageMode: mode,
         }
     );
 }

@@ -30,6 +30,9 @@
                     <a-form-item label="名称:" v-bind="validateInfos.roleName">
                         <a-input placeholder="请输入角色名称" v-model:value="modelRef.roleName"></a-input>
                     </a-form-item>
+                    <a-form-item label="值:" v-bind="validateInfos.roleValue">
+                        <a-input placeholder="请输入角色值" v-model:value="modelRef.roleValue"></a-input>
+                    </a-form-item>
                     <a-form-item label="描述:" v-bind="validateInfos.roleDes">
                         <a-input placeholder="请输入描述信息" v-model:value="modelRef.roleDes"></a-input>
                     </a-form-item>
@@ -163,6 +166,12 @@ export default {
             align: 'center'
         },
             {
+                title: '角色值',
+                dataIndex: 'roleValue',
+                sorter: true,
+                align: 'center'
+            },
+            {
                 title: '角色描述',
                 dataIndex: 'roleDes',
                 align: 'center',
@@ -213,6 +222,7 @@ export default {
         //表单数据相关
         const modelRef = reactive({
             roleName: '',
+            roleValue: '',
             roleDes: '',
             sort: 0,
             menuInfo: [],
@@ -365,6 +375,7 @@ export default {
                 // console.log("menus", menus)
                 let param = {
                     "roleName": this.modelRef.roleName,
+                    "roleValue": this.modelRef.roleValue,
                     "roleDes": this.modelRef.roleDes,
                     "sort": this.modelRef.sort,
                     "menus": menus,
@@ -402,6 +413,7 @@ export default {
             let param = {
                 "id": this.id,
                 "roleName": this.modelRef.roleName,
+                "roleValue": this.modelRef.roleValue,
                 "roleDes": this.modelRef.roleDes,
                 "sort": this.modelRef.sort,
                 "menus": menus,
@@ -519,6 +531,7 @@ export default {
                     //初始化数据
                     this.id = text.id;
                     this.modelRef.roleName = text.roleName;
+                    this.modelRef.roleValue = text.roleValue;
                     this.modelRef.roleDes = text.roleDes;
                     this.modelRef.sort = text.sort;
                     //选择的菜单数据

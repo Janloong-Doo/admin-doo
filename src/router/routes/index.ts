@@ -1,41 +1,29 @@
 import type { AppRouteRecordRaw, AppRouteModule } from '/@/router/types';
 
-import { DEFAULT_LAYOUT_COMPONENT, PAGE_NOT_FOUND_ROUTE, REDIRECT_ROUTE } from '../constant';
-import { genRouteModule } from '/@/utils/helper/routeHelper';
+import { PAGE_NOT_FOUND_ROUTE, REDIRECT_ROUTE } from '../constant';
+
 import modules from 'globby!/@/router/routes/modules/**/*.@(ts)';
+
+// import { t } from '/@/hooks/web/useI18n';
 
 const routeModuleList: AppRouteModule[] = [];
 
 Object.keys(modules).forEach((key) => {
-  routeModuleList.push(modules[key]);
+  const mod = Array.isArray(modules[key]) ? [...modules[key]] : [modules[key]];
+  routeModuleList.push(...mod);
 });
 
-export const asyncRoutes = [
-  REDIRECT_ROUTE,
-  PAGE_NOT_FOUND_ROUTE,
-  ...genRouteModule(routeModuleList),
-];
-
-// 主框架根路由
-export const RootRoute: AppRouteRecordRaw = {
-  path: '/',
-  name: 'Root',
-  component: DEFAULT_LAYOUT_COMPONENT,
-  redirect: '/dashboard',
-  meta: {
-    title: 'Root',
-  },
-  children: [],
-};
+export const asyncRoutes = [PAGE_NOT_FOUND_ROUTE, ...routeModuleList];
 
 export const LoginRoute: AppRouteRecordRaw = {
   path: '/login',
   name: 'Login',
-  component: () => import('/@/views/sys/login/Login.vue'),
+  component: () => import('/@/views/login/Login.vue'),
   meta: {
-    title: '登录',
+    // title: t('routes.basic.login'),
+    title: "登录"
   },
 };
 
 // 基础路由 不用权限
-export const basicRoutes = [LoginRoute, RootRoute];
+export const basicRoutes = [LoginRoute, REDIRECT_ROUTE,...routeModuleList];

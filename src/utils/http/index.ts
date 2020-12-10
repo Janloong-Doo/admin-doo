@@ -209,7 +209,7 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
                     // 格式化提交参数时间
                     formatDate: true,
                     // 消息提示类型
-                    errorMessageMode: 'none',
+                    errorMessageMode: 'message',
                     // 接口地址
                     apiUrl: globSetting.apiUrl,
                 },

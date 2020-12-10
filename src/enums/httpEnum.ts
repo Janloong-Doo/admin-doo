@@ -2,7 +2,7 @@
  * 服务模块
  */
 export enum ServiceEnum {
-    AUTH = '/authcenter',
+    AUTH = '/auth',
     HAP = '/hap',
     WEB = '/jl',
 
