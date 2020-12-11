@@ -39,6 +39,10 @@ export interface LoginResultModel {
     scope: string[]
 }
 
+export interface RoleInfo {
+    roleName: string;
+    roleValue: string;
+}
 
 /**
  * @description: Get user information

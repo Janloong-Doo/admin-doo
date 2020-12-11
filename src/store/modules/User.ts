@@ -1,19 +1,29 @@
 import {Action, getModule, Module, Mutation, VuexModule} from "vuex-module-decorators";
 import store from "/@/store";
 import type {GetUserInfoByUserIdParams, UserBaseInfo, UserLoginParams,} from '/@/api/model/userModel';
-import {ROLES_KEY, SCOPE_KEY, TOKEN_KEY, USER_INFO_KEY} from '/@/enums/cacheEnum';
-import {clearLocal, clearSession, getLocal, setLocal} from "/@/utils/helper/persistent";
+import {CacheTypeEnum, ROLES_KEY, SCOPE_KEY, TOKEN_KEY, USER_INFO_KEY} from '/@/enums/cacheEnum';
+import {clearLocal, clearSession, getLocal, getSession, setLocal} from "/@/utils/helper/persistent";
 import {hotModuleUnregisterModule} from "/@/utils/helper/vuexHelper";
 import {appStore} from "/@/store/modules/app";
 import router, {resetRouter} from '/@/router';
 import {PageEnum} from "/@/enums/pageEnum";
 import {loginApi} from "/@/api/User";
 import {useMessage} from "/@/hooks/web/useMessage";
+import {RoleEnum} from "/@/enums/roleEnum";
+import {useProjectSetting} from "/@/hooks/setting";
 
 // app全局类
 const NAME = 'user';
 
 hotModuleUnregisterModule(NAME);
+
+const { permissionCacheType } = useProjectSetting();
+
+
+function getCache<T>(key: string) {
+    const fn = permissionCacheType === CacheTypeEnum.LOCAL ? getLocal : getSession;
+    return fn(key) as T;
+}
 
 @Module({dynamic: true, namespaced: true, store, name: NAME})
 class User extends VuexModule {
@@ -24,7 +34,7 @@ class User extends VuexModule {
     private tokenState = '';
 
     // 角色列表
-    private roleListState: string[] = [];
+    private roleListState: RoleEnum[] = [];
 
     // 操作域列表
     private scopeListState: string[] = [];
@@ -37,6 +47,10 @@ class User extends VuexModule {
 
     get getTokenState(): string {
         return this.tokenState || (getLocal(TOKEN_KEY) as string);
+    }
+
+    get getRoleListState(): RoleEnum[] {
+        return this.roleListState.length > 0 ? this.roleListState : getCache<RoleEnum[]>(ROLES_KEY);
     }
 
     @Mutation
@@ -62,7 +76,7 @@ class User extends VuexModule {
     }
 
     @Mutation
-    commitRoleListState(roleList: string[]): void {
+    commitRoleListState(roleList: RoleEnum[]): void {
         this.roleListState = roleList;
         if (roleList) {
             setLocal(ROLES_KEY, roleList, true);
@@ -98,6 +112,7 @@ class User extends VuexModule {
             // const data = await loginApi(params);
             const data = await loginApi(params);
             const {token, id, username, authorities, scope} = data;
+            const roles=authorities as RoleEnum[]
             // get user info
             // const userInfo = await this.getUserInfoAction({id});
             //处理角色用户信息
@@ -105,7 +120,7 @@ class User extends VuexModule {
             // const roleList = [role.value] as RoleEnum[];
             let userBaseInfo = {id, username} as UserBaseInfo;
             this.commitUserInfoState(userBaseInfo);
-            this.commitRoleListState(authorities);
+            this.commitRoleListState(roles);
             this.commitScopeListState(scope);
             // save token
             this.commitTokenState(token);

@@ -1,75 +1,79 @@
-import type { RouteRecordRaw } from 'vue-router';
-import { RoleEnum } from '/@/enums/roleEnum';
+import type {RouteRecordRaw} from 'vue-router';
+import {RoleEnum} from '/@/enums/roleEnum';
 import Component from '/@/components/types';
+
 export interface RouteMeta {
-  // title
-  title: string;
-  // Whether to ignore permissions
-  ignoreAuth?: boolean;
-  // role info
-  roles?: RoleEnum[];
-  // Whether not to cache
-  ignoreKeepAlive?: boolean;
-  // Is it fixed on tab
-  affix?: boolean;
-  // icon on tab
-  icon?: string;
-  // Jump address
-  frameSrc?: string;
-  // Outer link jump address
-  externalLink?: boolean;
+    // title
+    title: string;
+    // Whether to ignore permissions
+    ignoreAuth?: boolean;
+    // role info
+    roles?: RoleEnum[];
+    // Whether not to cache
+    ignoreKeepAlive?: boolean;
+    // Is it fixed on tab
+    affix?: boolean;
+    // icon on tab
+    icon?: string;
+    // Jump address
+    frameSrc?: string;
+    // Outer link jump address
+    externalLink?: boolean;
 
-  // current page transition
-  transitionName?: string;
+    // current page transition
+    transitionName?: string;
 
-  // Whether the route has been dynamically added
-  hideBreadcrumb?: boolean;
+    // Whether the route has been dynamically added
+    hideBreadcrumb?: boolean;
 
-  // Carrying parameters
-  carryParam?: boolean;
+    // Carrying parameters
+    carryParam?: boolean;
 
-  // Used internally to mark single-level menus
-  single?: boolean;
+    // Used internally to mark single-level menus
+    single?: boolean;
 }
 
 export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, 'meta'> {
-  name: string;
-  meta: RouteMeta;
-  component?: Component;
-  components?: Component;
-  children?: AppRouteRecordRaw[];
-  props?: Record<string, any>;
-  fullPath?: string;
+    name: string;
+    meta: RouteMeta;
+    component?: Component;
+    components?: Component;
+    children?: AppRouteRecordRaw[];
+    props?: Record<string, any>;
+    fullPath?: string;
 }
+
 export interface MenuTag {
-  type?: 'primary' | 'error' | 'warn' | 'success';
-  content?: string;
-  dot?: boolean;
+    type?: 'primary' | 'error' | 'warn' | 'success';
+    content?: string;
+    dot?: boolean;
 }
 
 export interface Menu {
-  name: string;
+    id?: string
 
-  icon?: string;
+    name: string;
 
-  path: string;
+    icon?: string;
 
-  disabled?: boolean;
+    path: string;
 
-  children?: Menu[];
+    disabled?: boolean;
 
-  orderNo?: number;
+    children?: Menu[];
 
-  roles?: RoleEnum[];
+    orderNo?: number;
 
-  meta?: Partial<RouteMeta>;
+    roles?: RoleEnum[];
 
-  tag?: MenuTag;
+    meta?: Partial<RouteMeta>;
+
+    tag?: MenuTag;
 }
 
 export interface MenuModule {
-  orderNo?: number;
-  menu: Menu;
+    orderNo?: number;
+    menu: Menu;
 }
 
 // interface RouteModule {
