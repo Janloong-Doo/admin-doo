@@ -1,6 +1,7 @@
 import {createRouter, createWebHistory, RouteRecordRaw} from "vue-router";
 import {App} from "vue";
 import {basicRoutes} from "/@/router/routes";
+import {createGuard} from '/@/router/guard/index.ts';
 
 let baseView = import("../views/BaseView.vue");
 const _router = [
@@ -130,7 +131,8 @@ export function resetRouter() {
 // config router
 export function setupRouter(app: App<Element>) {
     app.use(router);
-    // createGuard(router);
+    //创建导航卫士
+    createGuard(router);
 }
 
 export default router;

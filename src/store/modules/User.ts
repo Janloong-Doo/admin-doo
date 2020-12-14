@@ -54,9 +54,10 @@ class User extends VuexModule {
     }
 
     @Mutation
-    resetState(): void {
+    commitResetState(): void {
         this.userInfoState = null;
         this.tokenState = '';
+        this.roleListState = [];
     }
 
     @Mutation
@@ -161,7 +162,7 @@ class User extends VuexModule {
 
         // tabStore.commitResetState();
 
-        this.resetState();
+        this.commitResetState();
     }
 
     /**

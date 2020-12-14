@@ -52,6 +52,7 @@ class Permission extends VuexModule {
     }
 
     get getIsDynamicAddedRouteState() {
+        console.log("this.isDynamicAddedRouteState", this.isDynamicAddedRouteState)
         return this.isDynamicAddedRouteState;
     }
 
@@ -90,14 +91,19 @@ class Permission extends VuexModule {
         const roleList = toRaw(userStore.getRoleListState);
 
         const {permissionMode} = appStore.getProjectConfig;
+        console.log("权限模式", permissionMode)
 
         // role permissions
         if (permissionMode === PermissionModeEnum.ROLE) {
+            console.log("角色模式", asyncRoutes)
             routes = filter(asyncRoutes, (route) => {
+                console.log("角色模式2", route);
                 const {meta} = route as AppRouteRecordRaw;
                 const {roles} = meta || {};
+                //TODO 【权限过滤】 放开角色权限 by Janloong_Doo
                 if (!roles) return true;
                 return roleList.some((role) => roles.includes(role));
+                // return true;
             });
             //  如果确定不需要做后台动态权限,请将下面整个判断注释
         } else if (permissionMode === PermissionModeEnum.BACK) {
@@ -117,10 +123,12 @@ class Permission extends VuexModule {
             //  后台路由转菜单结构
             const backMenuList = transformRouteToMenu(routeList);
 
+            //保存菜单信息
             this.commitBackMenuListState(backMenuList);
-
+            //路由信息
             routes = routeList;
         }
+        console.log("初始化的路由信息为:", routes)
         return routes;
     }
 }

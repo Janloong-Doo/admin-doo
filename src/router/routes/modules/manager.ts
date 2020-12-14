@@ -25,6 +25,7 @@ const manager: AppRouteModule = {
                 title: '组织管理',
                 affix: true,
                 icon: 'bx:bx-home',
+                // loadad: true
             },
         },
         {
