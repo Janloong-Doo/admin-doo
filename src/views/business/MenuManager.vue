@@ -28,19 +28,19 @@
                     :model="addMenuData"
                     :rules="addMenuData.rules">
                     <a-form-item label="名称:" name="menuName">
-                        <a-input placeholder="请输入菜单名称" v-model="addMenuData.menuName"></a-input>
+                        <a-input placeholder="请输入菜单名称" v-model:value="addMenuData.menuName"></a-input>
                     </a-form-item>
                     <a-form-item label="编码:" name="menuCode">
-                        <a-input placeholder="请输入菜单编码" v-model="addMenuData.menuCode"></a-input>
+                        <a-input placeholder="请输入菜单编码" v-model:value="addMenuData.menuCode"></a-input>
                     </a-form-item>
                     <a-form-item label="路径:" name="menuUrl">
-                        <a-input placeholder="菜单路径: /{:父路径}/{:菜单编码}" v-model="addMenuData.menuUrl"></a-input>
+                        <a-input placeholder="菜单路径: /{:父路径}/{:菜单编码}" v-model:value="addMenuData.menuUrl"></a-input>
                     </a-form-item>
                     <a-form-item label="描述:" name="description">
-                        <a-input placeholder="请输入菜单描述信息" v-model="addMenuData.description"></a-input>
+                        <a-input placeholder="请输入菜单描述信息" v-model:value="addMenuData.description"></a-input>
                     </a-form-item>
                     <a-form-item label="排序:" name="sort">
-                        <a-input placeholder="请输入菜单序号" v-model="addMenuData.sort"></a-input>
+                        <a-input placeholder="请输入菜单序号" v-model:value="addMenuData.sort"></a-input>
                     </a-form-item>
                     <a-form-item v-if="!addMenuData.isEditType" label="根子节点选择:" name="isRootMenu">
                         <!--                        <a-switch checked-children="根" un-checked-children="子" :checked="addMenuData.isRootMenu"/>-->
@@ -108,7 +108,7 @@
 <script>
 import Api from '../../assets/api/api'
 import DataUtils from '../../assets/js/DataUtils'
-import {DownOutlined,PlusOutlined,EditOutlined,CloseOutlined} from '@ant-design/icons-vue';
+import {DownOutlined, PlusOutlined, EditOutlined, CloseOutlined} from '@ant-design/icons-vue';
 
 export default {
     name: "MenuManager",
@@ -269,75 +269,66 @@ export default {
             }
         },
         addMenu(formName) {
-            this.$refs[formName].validate(valid => {
-                if (valid) {
-                    console.log(this.addMenuData);
-                    let pid = this.addMenuData.isRootMenu ? '0' : this.addMenuData.pid;
-                    let level = this.addMenuData.isRootMenu ? '1' : this.addMenuData.level;
-                    let param = {
-                        "name": this.addMenuData.menuName,
-                        "code": this.addMenuData.menuCode,
-                        "url": this.addMenuData.menuUrl,
-                        "description": this.addMenuData.description,
-                        "iconUrl": this.addMenuData.iconUrl,
-                        "pid": pid,
-                        "level": level,
-                        "origion": this.addMenuData.origion,
-                        "sort": this.addMenuData.sort
-                    }
-                    Api.addMenu(param).then(value => {
-                        if (value.code === 0) {
-                            console.log("新增成功")
-                            this.$refs.addMenuForm.resetFields();
-                            this.addMenuDradwrvisible = false;
-                            this.getMenuData();
-                        } else {
-                            console.log("新增失败")
-                            console.log(value)
-                        }
-                    }).catch(reason => {
-                    })
-                } else {
-                    console.log('error submit!!');
-                    return false;
+            this.$refs[formName].validate().then(value => {
+                console.log(this.addMenuData);
+                let pid = this.addMenuData.isRootMenu ? '0' : this.addMenuData.pid;
+                let level = this.addMenuData.isRootMenu ? '1' : this.addMenuData.level;
+                let param = {
+                    "name": this.addMenuData.menuName,
+                    "code": this.addMenuData.menuCode,
+                    "url": this.addMenuData.menuUrl,
+                    "description": this.addMenuData.description,
+                    "iconUrl": this.addMenuData.iconUrl,
+                    "pid": pid,
+                    "level": level,
+                    "origion": this.addMenuData.origion,
+                    "sort": this.addMenuData.sort
                 }
+                Api.addMenu(param).then(value => {
+                    if (value.code === 0) {
+                        console.log("新增成功")
+                        this.$refs.addMenuForm.resetFields();
+                        this.addMenuDradwrvisible = false;
+                        this.getMenuData();
+                    } else {
+                        console.log("新增失败")
+                        console.log(value)
+                    }
+                }).catch(reason => {
+                })
             })
         },
         editMenu(formName) {
-            this.$refs[formName].validate(valid => {
-                if (valid) {
-                    console.log(this.addMenuData);
-                    // let pid = this.addMenuData.isRootMenu ? '0' : this.addMenuData.pid;
-                    // let level = this.addMenuData.isRootMenu ? '1' : this.addMenuData.level;
-                    let param = {
-                        'id': this.addMenuData.id,
-                        "name": this.addMenuData.menuName,
-                        "code": this.addMenuData.menuCode,
-                        "url": this.addMenuData.menuUrl,
-                        "description": this.addMenuData.description,
-                        "iconUrl": this.addMenuData.iconUrl,
-                        // "pid": pid,
-                        // "level": level,
-                        // "origion": this.addMenuData.origion,
-                        "sort": this.addMenuData.sort
-                    }
-                    Api.editMenu(param).then(value => {
-                        if (value.code === 0) {
-                            console.log("修改成功")
-                            this.$refs.addMenuForm.resetFields();
-                            this.addMenuDradwrvisible = false;
-                            this.getMenuData();
-                            this.initEmptyData();
-                        } else {
-                            console.log("修改失败")
-                            console.log(value)
-                        }
-                    }).catch(reason => {
-                    })
-                } else {
-                    console.log('error submit!!');
-                    return false;
+            this.$refs[formName].validate().then(value => {
+                console.log(this.addMenuData);
+                // let pid = this.addMenuData.isRootMenu ? '0' : this.addMenuData.pid;
+                // let level = this.addMenuData.isRootMenu ? '1' : this.addMenuData.level;
+                let param = {
+                    'id': this.addMenuData.id,
+                    "name": this.addMenuData.menuName,
+                    "code": this.addMenuData.menuCode,
+                    "url": this.addMenuData.menuUrl,
+                    "description": this.addMenuData.description,
+                    "iconUrl": this.addMenuData.iconUrl,
+                    // "pid": pid,
+                    // "level": level,
+                    // "origion": this.addMenuData.origion,
+                    "sort": this.addMenuData.sort
                 }
+                Api.editMenu(param).then(value => {
+                    if (value.code === 0) {
+                        console.log("修改成功")
+                        this.$refs.addMenuForm.resetFields();
+                        this.addMenuDradwrvisible = false;
+                        this.getMenuData();
+                        this.initEmptyData();
+                    } else {
+                        console.log("修改失败")
+                        console.log(value)
+                    }
+                }).catch(reason => {
+                })
+
             })
         },
         addMenuInit(data) {
