@@ -22,7 +22,7 @@
 
 <script lang='ts'>
 import {defineComponent, reactive} from "vue";
-import {useRouter} from "vue-router";
+import {useRouter, useRoute, onBeforeRouteUpdate} from "vue-router";
 import {permissionStore} from "/@/store/modules/permission.ts";
 import {MailOutlined, PieChartOutlined} from '@ant-design/icons-vue';
 import SubMenu from "/@/components/menu/SubMenu.vue"
@@ -36,27 +36,24 @@ export default defineComponent({
         SubMenu,
     },
     setup() {
+        //获取菜单信息
         let backMenuListState = permissionStore.getBackMenuListState;
+        //获取当前路由节点信息
+        let route = useRoute();
+        //当前路由的匹配路由路径项
+        let strings = route.matched.map(value => value.path).concat();
         const menuBase = reactive({
-            selectedKeys: [],
-            openKeys: []
+            selectedKeys: [route.path],
+            openKeys: strings
         });
-
-        console.log("menu组件内list", backMenuListState)
         let router = useRouter();
-        router.beforeEach((to, from) => {
-            console.log("to22222222", to, from)
+        onBeforeRouteUpdate((to, from) => {
+            console.log("to from: ", to, from)
         })
+
         const onMenuClick = ({item, key, keyPath}: any) => {
             console.log("item", key, keyPath, item);
-            // let filterElement = backMenuListState.filter(value => value.path === JSON.stringify(key));
-            // console.log("筛选后的数据", filterElement)
-            // let url = filterElement.path;
-            // this.$router.push({path: url});
             router.push({path: key})
-            // router.push({path: url});
-            // this.$router.push({name: code});
-
         }
         return {
             menuInfo: backMenuListState,

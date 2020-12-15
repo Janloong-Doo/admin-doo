@@ -3,17 +3,24 @@
         <a-layout id="components-layout-demo-custom-trigger">
             <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible>
                 <div class="logo"/>
-            <tree-menu></tree-menu>
+                <tree-menu></tree-menu>
             </a-layout-sider>
 
             <a-layout>
                 <a-layout-header class="layoutheader">
-                    <menu-unfold-outlined
-                        v-if="collapsed"
-                        class="trigger"
-                        @click="() => (collapsed = !collapsed)"
-                    />
-                    <menu-fold-outlined v-else class="trigger" @click="() => (collapsed = !collapsed)"/>
+                    <a-row type="flex" justify="space-between">
+                        <a-col :span="1">
+                            <MenuUnfoldOutlined
+                                v-if="collapsed"
+                                class="trigger"
+                                @click="() => (collapsed = !collapsed)"
+                            />
+                            <MenuFoldOutlined v-else class="trigger" @click="() => (collapsed = !collapsed)"/>
+                        </a-col>
+                        <a-col :span="3">
+                            <user-header></user-header>
+                        </a-col>
+                    </a-row>
                 </a-layout-header>
 
                 <a-layout-content class="layoutcontent"
@@ -29,12 +36,18 @@
         </a-layout>
     </div>
 </template>
-<script>
+<script lang="ts">
 import TreeMenu from "/@/components/menu/TreeMenu.vue"
+import  UserHeader from "/@/components/header/UserHeader.vue"
+import {MenuUnfoldOutlined, MenuFoldOutlined} from '@ant-design/icons-vue';
+
 export default {
     name: "BaseView",
     components: {
-        TreeMenu
+        TreeMenu,
+        MenuFoldOutlined,
+        UserHeader,
+        MenuUnfoldOutlined
     },
     setup() {
     },
@@ -94,8 +107,7 @@ export default {
     },
     created() {
     },
-    methods: {
-    }
+    methods: {}
 
 
 }
@@ -109,6 +121,7 @@ export default {
     //cursor: pointer;
     //transition: color 0.3s;
 }
+
 #components-layout-demo-custom-trigger .trigger {
     font-size: 18px;
     line-height: 64px;
@@ -116,6 +129,7 @@ export default {
     cursor: pointer;
     transition: color 0.3s;
 }
+
 #components-layout-demo-custom-trigger .trigger:hover {
     color: #1890ff;
 }
