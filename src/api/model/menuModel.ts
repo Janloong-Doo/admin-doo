@@ -1,6 +1,9 @@
 import {RouteMeta} from '/@/router/types';
 
 export interface RouteItem {
+    id: string
+    pid: string
+    level: string
     path: string;
     component: any;
     meta: RouteMeta;

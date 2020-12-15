@@ -259,7 +259,7 @@ export default {
         const columnsDefines = [
             {
                 title: '账户',
-                dataIndex: 'userName',
+                dataIndex: 'username',
                 sorter: true,
                 // width: '40%',
                 align: 'center',
@@ -431,7 +431,7 @@ export default {
                     roles.push({"id": value1})
                 });
                 let param = {
-                    "userName": this.modelRef.addData.userName,
+                    "username": this.modelRef.addData.userName,
                     "password": this.modelRef.addData.password,
                     "aliaName": this.modelRef.addData.aliaName,
                     "trueName": this.modelRef.addData.trueName,
@@ -466,7 +466,7 @@ export default {
                 });
                 let param = {
                     "id": id,
-                    "aliaName": this.modelRef.addData.aliaName,
+                    "username": this.modelRef.addData.aliaName,
                     "trueName": this.modelRef.addData.trueName,
                     "sex": this.modelRef.addData.sex,
                     "tel": this.modelRef.addData.tel,
@@ -509,7 +509,7 @@ export default {
             this.onDrawerOpen()
             //初始化数据
             this.addParamData.id = data.id;
-            this.modelRef.addData.userName = data.userName;
+            this.modelRef.addData.userName = data.username;
             this.modelRef.addData.password = 'data.userName';
             this.modelRef.addData.passwordRepeat = 'data.userName';
             this.modelRef.addData.aliaName = data.aliaName;
@@ -680,7 +680,7 @@ export default {
             Modal.confirm({
                 title: '重置密码',
                 icon: createVNode(ExclamationCircleOutlined),
-                content: "是否重置用户'" + data.userName + "'的密码?",
+                content: "是否重置用户'" + data.username + "'的密码?",
                 okText: "确认",
                 cancelText: "取消",
                 onOk() {

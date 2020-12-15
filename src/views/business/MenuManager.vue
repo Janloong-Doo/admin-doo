@@ -124,7 +124,7 @@ export default {
         let col = [
             {
                 title: '名称',
-                dataIndex: 'name',
+                dataIndex: 'title',
                 sorter: true,
                 // width: '40%',
                 align: 'center',
@@ -133,13 +133,13 @@ export default {
             },
             {
                 title: '编码',
-                dataIndex: 'code',
+                dataIndex: 'name',
                 align: 'center',
                 sorter: true,
             },
             {
                 title: '路径',
-                dataIndex: 'url',
+                dataIndex: 'path',
                 align: 'center',
                 sorter: true,
             },
@@ -274,9 +274,9 @@ export default {
                 let pid = this.addMenuData.isRootMenu ? '0' : this.addMenuData.pid;
                 let level = this.addMenuData.isRootMenu ? '1' : this.addMenuData.level;
                 let param = {
-                    "name": this.addMenuData.menuName,
-                    "code": this.addMenuData.menuCode,
-                    "url": this.addMenuData.menuUrl,
+                    "title": this.addMenuData.menuName,
+                    "name": this.addMenuData.menuCode,
+                    "path": this.addMenuData.menuUrl,
                     "description": this.addMenuData.description,
                     "iconUrl": this.addMenuData.iconUrl,
                     "pid": pid,
@@ -305,9 +305,9 @@ export default {
                 // let level = this.addMenuData.isRootMenu ? '1' : this.addMenuData.level;
                 let param = {
                     'id': this.addMenuData.id,
-                    "name": this.addMenuData.menuName,
-                    "code": this.addMenuData.menuCode,
-                    "url": this.addMenuData.menuUrl,
+                    "title": this.addMenuData.menuName,
+                    "name": this.addMenuData.menuCode,
+                    "path": this.addMenuData.menuUrl,
                     "description": this.addMenuData.description,
                     "iconUrl": this.addMenuData.iconUrl,
                     // "pid": pid,

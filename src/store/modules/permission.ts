@@ -43,7 +43,7 @@ class Permission extends VuexModule {
         return this.permCodeListState;
     }
 
-    get getBackMenuListState() {
+    get getBackMenuListState():Menu[] {
         return this.backMenuListState;
     }
 
@@ -52,7 +52,6 @@ class Permission extends VuexModule {
     }
 
     get getIsDynamicAddedRouteState() {
-        console.log("this.isDynamicAddedRouteState", this.isDynamicAddedRouteState)
         return this.isDynamicAddedRouteState;
     }
 
@@ -95,9 +94,7 @@ class Permission extends VuexModule {
 
         // role permissions
         if (permissionMode === PermissionModeEnum.ROLE) {
-            console.log("角色模式", asyncRoutes)
             routes = filter(asyncRoutes, (route) => {
-                console.log("角色模式2", route);
                 const {meta} = route as AppRouteRecordRaw;
                 const {roles} = meta || {};
                 //TODO 【权限过滤】 放开角色权限 by Janloong_Doo
@@ -116,19 +113,19 @@ class Permission extends VuexModule {
             if (!paramId) {
                 throw new Error('paramId is undefined!');
             }
-            //获取用户对应的菜单信息
+            //获取用户对应的路由信息
             let routeList: any[] = await GetMenuListByUser({id: paramId});
             // 动态引入组件
             routeList = transformObjToRoute(routeList);
             //  后台路由转菜单结构
             const backMenuList = transformRouteToMenu(routeList);
-
+            console.log("backMenuList",backMenuList);
             //保存菜单信息
             this.commitBackMenuListState(backMenuList);
             //路由信息
             routes = routeList;
         }
-        console.log("初始化的路由信息为:", routes)
+        console.log("初始化后的路由信息为:", routes)
         return routes;
     }
 }
