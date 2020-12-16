@@ -10,8 +10,7 @@ import { setupI18n } from '/@/setup/i18n';
 
 const app = createApp(App)
 // app.config.productionTip = false;
+setupI18n(app);
 setupRouter(app)
 app.use(Antd);
-setupI18n(app);
-app.use(setupI18n)
 app.mount('#app')

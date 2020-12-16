@@ -7,7 +7,8 @@
     // 以严格模式解析
     "strict": true,
     //    "strict": false,
-    "jsx": "preserve",
+//    "jsx": "preserve",
+    "jsx": "react",
     // 如何处理模块
     "moduleResolution": "node",
     //官网以外
@@ -43,26 +44,27 @@
       "nprogress",
       "qs"
     ],
+    "incremental": true,
     // 指定特殊模块的路径
     "paths": {
       "/@/*": [
         "src/*"
-      ],
-      "/@/views/*": [
-        "src/views/*"
-      ],
-      "/@/components/*": [
-        "src/components/*"
-      ],
-      "/@/assets/*": [
-        "src/assets/*"
-      ],
-      "/@/utils/*": [
-        "src/utils/*"
-      ],
-      "/@/api/*": [
-        "src/api/*"
       ]
+//      "/@/views/*": [
+//        "src/views/*"
+//      ],
+//      "/@/components/*": [
+//        "src/components/*"
+//      ],
+//      "/@/assets/*": [
+//        "src/assets/*"
+//      ],
+//      "/@/utils/*": [
+//        "src/utils/*"
+//      ],
+//      "/@/api/*": [
+//        "src/api/*"
+//      ]
     },
     // 编译过程中需要引入的库文件的列表
     "lib": [

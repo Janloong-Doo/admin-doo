@@ -5,7 +5,7 @@ type ProxyList = ProxyItem[];
 const reg = /^https:\/\//;
 
 /**
- * 前端代理
+ * Generate proxy
  * @param list
  */
 export function createProxy(list: ProxyList = []) {

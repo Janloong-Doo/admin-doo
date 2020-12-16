@@ -1,7 +1,8 @@
 import { getI18n } from '/@/setup/i18n';
 import projectSetting from '/@/settings/projectSetting';
 
-export function useI18n(namespace?: string):any {
+export function useI18n(namespace?: string) {
+
   function getKey(key: string) {
     if (!namespace) {
       return key;
@@ -11,6 +12,7 @@ export function useI18n(namespace?: string):any {
     }
     return `${namespace}.${key}`;
   }
+
   const normalFn = {
     t: (key: string) => {
       return getKey(key);
@@ -25,9 +27,9 @@ export function useI18n(namespace?: string):any {
 
   return {
     ...methods,
-    t: (key: string, ...arg: Parameters<typeof t>) => {
+    t: (key: string, ...arg: any) => {
       if (!key) return '';
-      return t(getKey(key), ...arg);
+      return t(getKey(key), ...(arg as Parameters<typeof t>));
     },
   };
 }

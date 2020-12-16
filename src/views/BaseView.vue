@@ -19,6 +19,7 @@
                         </a-col>
                         <a-col :span="3">
                             <user-header></user-header>
+                            <local-menu></local-menu>
                         </a-col>
                     </a-row>
                 </a-layout-header>
@@ -40,10 +41,12 @@
 import TreeMenu from "/@/components/menu/TreeMenu.vue"
 import  UserHeader from "/@/components/header/UserHeader.vue"
 import {MenuUnfoldOutlined, MenuFoldOutlined} from '@ant-design/icons-vue';
+import LocalMenu from "/@/components/header/LocalMenu.vue";
 
 export default {
     name: "BaseView",
     components: {
+        LocalMenu,
         TreeMenu,
         MenuFoldOutlined,
         UserHeader,

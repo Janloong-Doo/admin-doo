@@ -11,13 +11,14 @@ import {loginApi} from "/@/api/User";
 import {useMessage} from "/@/hooks/web/useMessage";
 import {RoleEnum} from "/@/enums/roleEnum";
 import {useProjectSetting} from "/@/hooks/setting";
-
+import {useI18n} from "/@/hooks/web/useI18n.ts";
+import {getI18n} from '/@/setup/i18n';
 // app全局类
 const NAME = 'user';
 
 hotModuleUnregisterModule(NAME);
 
-const { permissionCacheType } = useProjectSetting();
+const {permissionCacheType} = useProjectSetting();
 
 
 function getCache<T>(key: string) {
@@ -113,7 +114,7 @@ class User extends VuexModule {
             // const data = await loginApi(params);
             const data = await loginApi(params);
             const {token, id, username, authorities, scope} = data;
-            const roles=authorities as RoleEnum[]
+            const roles = authorities as RoleEnum[]
             // get user info
             // const userInfo = await this.getUserInfoAction({id});
             //处理角色用户信息
@@ -166,15 +167,17 @@ class User extends VuexModule {
     }
 
     /**
-     * @description: Confirm before logging out
+     * 退出登录前的确认
      */
     @Action
     async confirmLoginOut() {
         const {createConfirm} = useMessage();
+        const {t} = useI18n();
         createConfirm({
             iconType: 'warning',
-            title: '温馨提醒',
-            content: '是否确认退出系统?',
+            // title: t('local.lang.admin.app.loginOutTip'),
+            title: t('admin.app.loginOutTip'),
+            content: t('admin.app.loginOutMessage'),
             onOk: async () => {
                 await this.loginOut(true);
             },

@@ -3,18 +3,17 @@
         <template #overlay>
             <a-menu @click="handleMenuClick">
                 <a-menu-item key="1">
-                    <UserOutlined/>
-                    个人信息
+                    中文
                 </a-menu-item>
                 <a-menu-item key="2">
-                    <PoweroffOutlined/>
-                    退出
+                    英文
                 </a-menu-item>
             </a-menu>
         </template>
         <span style="margin: 5px ;padding: 20px">
             <a-space>
-            <a-avatar src="/@/assets/img/1.ico" size="midem"/>
+                <span class="iconify" data-icon="gg:loadbar-doc" data-inline="false"></span>
+<!--                <g-icon icon="gg:loadbar-doc"></g-icon>-->
             <span style="size: 30px">JanloongDoo</span>
             </a-space>
         </span>
@@ -22,16 +21,17 @@
 </template>
 
 <script lang="ts">
-import {UserOutlined,PoweroffOutlined} from '@ant-design/icons-vue';
+import {defineComponent} from "vue";
 import {userStore} from "/@/store/modules/User.ts";
+// import GIcon from "/@/components/Icon"
 
-
-export default {
-    name: "UserHeader",
-    components: {
-        PoweroffOutlined,
-        UserOutlined
+export default defineComponent({
+    props: {
+        menuInfo: Array
     },
+    components: {},
+
+
     setup() {
         const handleMenuClick = ({key}) => {
             switch (key) {
@@ -47,8 +47,9 @@ export default {
             handleMenuClick
         }
     }
-}
+})
 </script>
+
 
 <style lang="stylus">
 .dropdownButtion

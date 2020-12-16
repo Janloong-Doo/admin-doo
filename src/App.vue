@@ -1,18 +1,33 @@
 <template>
     <div id="app">
-    <router-view class="c-border" />
+        <!--            v-bind="lockEvent"-->
+        <a-config-provider
+            :locale="antConfigLocale"
+            :transform-cell-text="transformCellText"
+        >
+
+            <router-view class="c-border"/>
+        </a-config-provider>
     </div>
 </template>
 <script lang="ts">
-import { getConfigProvider, initAppConfigStore } from '/@/setup/App';
+import {getConfigProvider, initAppConfigStore} from '/@/setup/App';
+import {useLocale} from "/@/hooks/web/useLocale";
 
 export default {
-  name: 'App',
+    name: 'App',
     components: {},
-  setup(){
-      //初始化全局配置
-      initAppConfigStore();
-  }
+    setup() {
+        //初始化全局配置
+        initAppConfigStore();
+        //ant全局配置
+        const {transformCellText} = getConfigProvider();
+        const {antConfigLocale} = useLocale();
+        return {
+            antConfigLocale,
+            transformCellText
+        }
+    }
 }
 </script>
 <style lang="stylus">

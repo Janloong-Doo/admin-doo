@@ -2,10 +2,14 @@ import type {UserConfig} from 'vite';
 
 import {resolve} from 'path';
 import {createProxy} from './build/vite/proxy';
-import globbyTransform from './build/vite/plugin/context/transform';
+import globbyTransform from './build/vite/plugin/transform/globby';
+import {configManualChunk} from './build/vite/optimizer';
 import dynamicImportTransform from './build/vite/plugin/dynamicImport/index';
-import {isDevFn, loadEnv} from './build/utils';
+// import {isDevFn, loadEnv} from './build/utils';
+import {loadEnv} from './build/utils';
 import {createRollupPlugin, createVitePlugins} from './build/vite/plugin';
+import {Resolver} from "vite/dist/node/resolver.js";
+import {modifyVars} from "./build/config/lessModifyVars";
 
 const pkg = require('./package.json');
 
@@ -16,15 +20,24 @@ const {
     VITE_PUBLIC_PATH,
     VITE_PROXY,
     VITE_DROP_CONSOLE,
+    VITE_DYNAMIC_IMPORT,
     // VITE_USE_CDN,
 } = viteEnv;
+
+const root: string = process.cwd();
+const resolvers: Resolver[] = [];
+const alias: Record<string, string> = {
+    '/@/': pathResolve('src'),
+    'vue': "vue/dist/vue.esm-bundler.js"
+};
 
 function pathResolve(dir: string) {
     return resolve(__dirname, '.', dir);
 }
 
 const viteConfig: UserConfig = {
-
+    root,
+    alias,
     /**
      * Entry. Use this to specify a js entry file in setting cases where an
      * `index.html` does not exist (e.g. serving vite assets from a different host)
@@ -40,7 +53,7 @@ const viteConfig: UserConfig = {
     /**
      * @default 'localhost'
      */
-    hostname: 'localhost',
+    // hostname: 'localhost',
     /**
      * Run to open the browser automatically
      * @default 'false'
@@ -51,7 +64,7 @@ const viteConfig: UserConfig = {
      * Available options are 'terser' or 'esbuild'.
      * @default 'terser'
      */
-    minify: isDevFn() ? 'esbuild' : 'terser',
+    // minify: isDevFn() ? 'esbuild' : 'terser',
     /**
      * Base public path when served in production.
      * @default '/'
@@ -98,13 +111,11 @@ const viteConfig: UserConfig = {
      * When using directory mappings, the key **must start and end with a slash**.
      * ```
      */
-    alias: {
-        '/@/': pathResolve('src'),
-        'vue': "vue/dist/vue.esm-bundler.js"
-    },
+    // alias: alias,
     // terser options
     terserOptions: {
         compress: {
+            keep_infinity: true,
             drop_console: VITE_DROP_CONSOLE,
         },
     },
@@ -116,12 +127,12 @@ const viteConfig: UserConfig = {
         __VUE_I18N_FULL_INSTALL__: false,
         __INTLIFY_PROD_DEVTOOLS__: false,
     },
-    // cssPreprocessOptions: {
-    //     less: {
-    //         modifyVars: modifyVars,
-    //         javascriptEnabled: true,
-    //     },
-    // },
+    cssPreprocessOptions: {
+        stylus: {
+            modifyVars: modifyVars,
+            javascriptEnabled: true,
+        },
+    },
     // The package will be recompiled using rollup, and the new package compiled into the esm module specification will be put into node_modules/.vite_opt_cache
     optimizeDeps: {
         include: [
@@ -142,31 +153,19 @@ const viteConfig: UserConfig = {
         // external: VITE_USE_CDN ? externals : [],
         plugins: createRollupPlugin(),
     },
+    rollupOutputOptions: {
+        compact: true,
+        manualChunks: configManualChunk,
+    },
+    transforms: [
+        globbyTransform({
+            resolvers: resolvers,
+            root: root,
+            alias: alias,
+            includes: [resolve('src/router'), resolve('src/locales')],
+        }),
+        dynamicImportTransform(VITE_DYNAMIC_IMPORT),
+    ]
+    // transforms: [globbyTransform(viteConfig), dynamicImportTransform(viteEnv)],
 }
-export default {
-    ...viteConfig,
-    // transforms: [
-    //     globbyTransform({
-    //         resolvers: viteConfig.resolvers,
-    //         root: viteConfig.root,
-    //         alias: viteConfig.alias,
-    //         includes: [resolve('src/router'), resolve('src/locales')],
-    //     }),
-    //     dynamicImportTransform(viteEnv),
-    // ],
-    transforms: [globbyTransform(viteConfig), dynamicImportTransform(viteEnv)],
-} as UserConfig;
-
-// module.exports = {
-//     base: "/",
-//     // alias: {
-//     //     "@/": pathResolve("src"),
-//     // },
-//     runtimeCompiler: true,
-//     alias: {
-//         'vue': "vue/dist/vue.esm-bundler.js"
-//     },
-//     optimizeDeps: {
-//         include: ["@ant-design/icons-vue","@ant-design-vue/use"],
-//     },
-// };
+export default viteConfig;
