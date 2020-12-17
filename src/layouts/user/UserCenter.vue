@@ -1,12 +1,12 @@
 <template>
     我的中心
     <a-card hoverable style="width:30%">
-            <template #cover>
-                <img alt="JanloongDoo" src="/@/assets/img/1.ico"/>
-            </template>
+        <template #cover>
+            <img alt="JanloongDoo" src="/@/assets/img/1.ico"/>
+        </template>
         <a-card-grid style="width:50%;text-align:center">
             <br/>
-            <a-card-meta :title="userInfoState.username">
+            <a-card-meta :title="userDetailInfo.username">
                 <template #description>
                     <span>blog.janloong.com</span><br/>
                     <span>You have to work very hard to look effortless.</span>
@@ -22,23 +22,26 @@
             Content
         </a-card-grid>
     </a-card>
+
 </template>
 
 <script lang="ts">
 import {userStore} from "/@/store/modules/User.ts"
 import {EditOutlined, EllipsisOutlined, SettingOutlined} from '@ant-design/icons-vue';
+import {getUserDetailInfo} from "/@/api/User";
+import {ref, reactive, defineComponent} from "vue";
 
-export default {
+export default defineComponent({
     name: "UserCenter",
     components: {SettingOutlined, EditOutlined, EllipsisOutlined},
-    setup() {
+    async setup() {
         let userInfoState = userStore.getUserInfoState;
-        console.log("userInfoState", userInfoState);
+        let userDetailInfo = await getUserDetailInfo({userId: userInfoState.id});
         return {
-            userInfoState
+            userDetailInfo
         }
     }
-}
+})
 </script>
 
 <style lang="stylus">

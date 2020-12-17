@@ -29,7 +29,6 @@
 import {defineComponent, ref} from "vue";
 import GIcon from "/@/components/Icon"
 import {useLocale} from '/@/hooks/web/useLocale';
-// import {ref} from "@vue/composition-api";
 
 export default defineComponent({
     props: {

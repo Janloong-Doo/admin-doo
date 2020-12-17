@@ -916,10 +916,10 @@
   resolved "https://registry.npm.taobao.org/@iconify/iconify/download/@iconify/iconify-2.0.0-rc.4.tgz#46098fb544a4eb3af724219e4955c9022801835e"
   integrity sha1-RgmPtUSk6zr3JCGeSVXJAigBg14=
 
-"@iconify/json@^1.1.272":
-  version "1.1.270"
-  resolved "https://registry.npm.taobao.org/@iconify/json/download/@iconify/json-1.1.270.tgz#00b9e6b9a590c733819f336857bcdf84c200005a"
-  integrity sha1-ALnmuaWQxzOBnzNoV7zfhMIAAFo=
+"@iconify/json@^1.1.270":
+  version "1.1.274"
+  resolved "https://registry.npm.taobao.org/@iconify/json/download/@iconify/json-1.1.274.tgz#b5ae793dc3194d5525dda1123a26f70fc472497c"
+  integrity sha1-ta55PcMZTVUl3aESOib3D8RySXw=
 
 "@intlify/core-base@9.0.0-beta.13":
   version "9.0.0-beta.13"

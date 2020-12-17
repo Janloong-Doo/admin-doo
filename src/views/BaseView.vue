@@ -18,15 +18,22 @@
                             <MenuFoldOutlined v-else class="trigger" @click="() => (collapsed = !collapsed)"/>
                         </a-col>
                         <a-col :span="4" offset="19">
-                                <user-header></user-header>
-                                <local-menu></local-menu>
+                            <user-header></user-header>
+                            <local-menu></local-menu>
                         </a-col>
                     </a-row>
                 </a-layout-header>
 
                 <a-layout-content class="layoutcontent"
                 >
-                    <router-view/>
+                    <suspense>
+                        <template #default>
+                            <router-view/>
+                        </template>
+                        <template #fallback>
+                            <h1>Loading</h1>
+                        </template>
+                    </suspense>
                 </a-layout-content>
 
                 <a-layout-footer style="textAlign: center">
