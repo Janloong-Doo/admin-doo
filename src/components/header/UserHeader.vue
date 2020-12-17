@@ -4,18 +4,19 @@
             <a-menu @click="handleMenuClick">
                 <a-menu-item key="1">
                     <UserOutlined/>
-                    个人信息
+                    {{t('admin.app.userInfo')}}
                 </a-menu-item>
                 <a-menu-item key="2">
                     <PoweroffOutlined/>
-                    退出
+                    {{t('admin.app.loginOutButton')}}
                 </a-menu-item>
             </a-menu>
         </template>
         <span style="margin: 5px ;padding: 20px">
+<!--        <span >-->
             <a-space>
             <a-avatar src="/@/assets/img/1.ico" size="midem"/>
-            <span style="size: 30px">JanloongDoo</span>
+            <span style="font-size: medium">JanloongDoo</span>
             </a-space>
         </span>
     </a-dropdown>
@@ -24,7 +25,7 @@
 <script lang="ts">
 import {UserOutlined,PoweroffOutlined} from '@ant-design/icons-vue';
 import {userStore} from "/@/store/modules/User.ts";
-
+import {useI18n} from '/@/hooks/web/useI18n.ts';
 
 export default {
     name: "UserHeader",
@@ -33,6 +34,7 @@ export default {
         UserOutlined
     },
     setup() {
+        const {t}=useI18n();
         const handleMenuClick = ({key}) => {
             switch (key) {
                 case "1":
@@ -44,7 +46,8 @@ export default {
             }
         }
         return {
-            handleMenuClick
+            handleMenuClick,
+            t
         }
     }
 }

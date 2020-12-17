@@ -2,13 +2,14 @@
     <a-sub-menu :key="menuInfo.path" v-bind="$attrs">
         <template #title>
         <span>
-          <MailOutlined/><span>{{ menuInfo.name }}</span>
+           <g-icon :icon="menuInfo.icon" :size="iconSize.value"></g-icon>
+            <span>{{ menuInfo.name }}</span>
         </span>
         </template>
         <template v-for="item in menuInfo.children" :key="item.path">
             <template v-if="!item.children">
                 <a-menu-item :key="item.path">
-                    <PieChartOutlined/>
+                    <g-icon :icon="item.icon" :size="iconSize.value"></g-icon>
                     <span>{{ item.name }}</span>
                 </a-menu-item>
             </template>
@@ -19,16 +20,32 @@
     </a-sub-menu>
 </template>
 <script lang="ts">
-import {defineComponent} from "vue";
+import {defineComponent,ref} from "vue";
 import {MailOutlined, PieChartOutlined} from '@ant-design/icons-vue';
+import GIcon from "/@/components/Icon";
 
 export default defineComponent({
     name: "SubMenu",
     components: {
+        GIcon,
         PieChartOutlined,
         MailOutlined,
     },
-    props: ['menuInfo']
+
+    props: {
+        menuInfo: {
+            type: Object
+        },
+        iconSize: {
+            type: String
+        }
+    },
+    setup(props,context){
+        const iconSize=ref(props.iconSize)
+        return {
+            iconSize
+        }
+    }
 // };
 });
 </script>

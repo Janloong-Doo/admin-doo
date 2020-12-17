@@ -42,7 +42,11 @@
 
                     <!--菜单信息-->
                     <a-form-item label="菜单信息:" v-bind="validateInfos.menuInfo">
-                        <color-tag v-model:value="modelRef.menuInfo" :tag-list="menTagList"></color-tag>
+                        <color-tag v-model:value="modelRef.menuInfo" :tag-list="menTagList">
+                            <template #name="item">
+                                {{item.scope.title}}
+                            </template>
+                        </color-tag>
                     </a-form-item>
                     <a-button :style="{ marginRight: '8px' }" @click="onMenuDrawerOpen('menu')">
                         分配菜单
@@ -103,7 +107,11 @@
                 </template>
 
                 <template #menus="{text, record, index}">
-                    <color-tag :tag-list="text"></color-tag>
+                    <color-tag :tag-list="text">
+                        <template #name="item">
+                            {{item.scope.title}}
+                        </template>
+                    </color-tag>
                 </template>
                 <template #operation="{text, record, index}">
                     <a-dropdown>

@@ -1,4 +1,6 @@
 export default {
+  loginAccount: 'account',
+  loginPassword: 'password',
   loginButton: 'Login',
   autoLogin: 'AutoLogin',
   forgetPassword: 'Forget Password',
@@ -10,4 +12,7 @@ export default {
   // placeholder
   accountPlaceholder: 'Please input Username',
   passwordPlaceholder: 'Please input Password',
+
+//  page
+  loginTitle:"Login"
 };

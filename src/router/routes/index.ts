@@ -20,7 +20,7 @@ export const LoginRoute: AppRouteRecordRaw = {
     name: 'Login',
     component: () => import('/@/views/login/Login.vue'),
     meta: {
-        title: t('routes.basic.login'),
+        title: t('admin.login.loginTitle'),
         // title: "登录"
     },
 };

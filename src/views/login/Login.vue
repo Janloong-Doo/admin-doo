@@ -1,6 +1,7 @@
 <template>
     <div id="index" class="login">
         <div class="login-content">
+            <local-menu class="localmenu"></local-menu>
             <div>
                 <!--                <img :src="logo" class="mr-4"/>-->
                 <a-avatar :src="logo" :size="99"/>
@@ -14,15 +15,16 @@
                 :label-col="baseData.labelCol"
                 :wrapper-col="baseData.wrapperCol"
             >
-                <a-form-item label="用户名:" v-bind="validateInfos.username">
-                    <a-input placeholder="请输入用户名" v-model:value="formData.username"></a-input>
+                <a-form-item :label="t('admin.login.loginAccount')+':'" v-bind="validateInfos.username">
+                    <!--                <a-form-item :label="baseFormName.account" v-bind="validateInfos.username">-->
+                    <a-input :placeholder="t('admin.login.accountPlaceholder')" v-model:value="formData.username"></a-input>
                 </a-form-item>
 
-                <a-form-item label="密码:" v-bind="validateInfos.password">
-                    <a-input-password placeholder="请输入密码" v-model:value="formData.password"></a-input-password>
+                <a-form-item :label="t('admin.login.loginPassword')+':'" v-bind="validateInfos.password">
+                    <a-input-password :placeholder="t('admin.login.passwordPlaceholder')" v-model:value="formData.password"></a-input-password>
                 </a-form-item>
-                <a-form-item :wrapper-col="{ span: 7, offset: 1 }">
-                    <a-checkbox>记住登录</a-checkbox>
+                <a-form-item :wrapper-col="{ span: 8, offset: 1 }">
+                    <a-checkbox>{{t('admin.login.autoLogin')}}</a-checkbox>
                 </a-form-item>
 
                 <a-form-item :wrapper-col="{ span: 24, offset: 1 }">
@@ -31,7 +33,7 @@
                         @click="onSubmit"
                         :loading="formState.loading"
                         block>
-                        登录
+                        {{t('admin.login.loginButton')}}
                     </a-button>
                 </a-form-item>
             </a-form>
@@ -43,14 +45,20 @@
 import {reactive, toRaw} from "vue";
 import {useForm} from "@ant-design-vue/use";
 import {userStore} from '/@/store/modules/User.ts';
+import LocalMenu from "/@/components/header/LocalMenu.vue";
+import {useI18n} from "/@/hooks/web/useI18n.ts";
 
 export default {
     name: "Login",
+    components: {
+        LocalMenu
+    },
     setup() {
         const baseData = reactive({
             labelCol: {span: 5},
-            wrapperCol: {span: 18,offset:0},
+            wrapperCol: {span: 17, offset: 2},
         });
+        let {t} = useI18n();
         const formData = reactive({
             username: '',
             password: ''
@@ -93,6 +101,7 @@ export default {
                 });
         };
         return {
+            t,
             formData,
             baseData,
             validateInfos,
@@ -120,6 +129,13 @@ export default {
     position absolute
     right: 10%
     opacity: 0.8;
-    top 20%
+    top 15%
     text-align center
+
+    .localmenu
+        position relative
+        left 45%
+
+//padding-top 3%
+//transform:translate(0px,-100px)
 </style>

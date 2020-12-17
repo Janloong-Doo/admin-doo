@@ -16,6 +16,17 @@ export interface UserLoginParams {
 export interface UserBaseInfo {
     id:string;
     username: string;
+    sex: number;
+    tel: string;
+    lastLogin: string;
+}
+
+/**
+ * 用户相信信息
+ */
+export interface UserDetailInfo {
+    id:string;
+    username: string;
     aliaName: string;
     trueName: string;
     sex: number;
@@ -23,7 +34,6 @@ export interface UserBaseInfo {
     email: string;
     lastLogin: string;
 }
-
 
 /**
  *  Login interface return value

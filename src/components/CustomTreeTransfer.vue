@@ -5,7 +5,7 @@
             :rowKey="item => item.id"
             :data-source="sourcedata.dataSource"
             :target-keys="sourcedata.targetKeys"
-            :render="item => item.name"
+            :render="item => item.title"
             :titles="['菜单列表','已选择']"
             :show-select-all="false"
             @change="onChange"
@@ -72,7 +72,7 @@ export default {
         let _selectId = JSON.parse(JSON.stringify(props.selectId));
         const replaceFields = {
             children: 'children',
-            title: 'name',
+            title: 'title',
             key: 'id'
         }
 

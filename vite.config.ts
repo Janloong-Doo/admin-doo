@@ -28,7 +28,7 @@ const root: string = process.cwd();
 const resolvers: Resolver[] = [];
 const alias: Record<string, string> = {
     '/@/': pathResolve('src'),
-    'vue': "vue/dist/vue.esm-bundler.js"
+    // 'vue': "vue/dist/vue.esm-bundler.js"
 };
 
 function pathResolve(dir: string) {

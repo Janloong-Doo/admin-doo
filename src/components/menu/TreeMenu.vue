@@ -8,12 +8,11 @@
         <template v-for="item in menuInfo" :key="item.path">
             <template v-if="!item.children">
                 <a-menu-item :key="item.path">
-                    <PieChartOutlined/>
-                    <span>{{ item.name }}</span>
+                    <g-icon :icon="item.icon" :size="iconSize.value"></g-icon><span>{{ item.name }}</span>
                 </a-menu-item>
             </template>
             <template v-else>
-                <SubMenu :menu-info="item" :key="item.path"></SubMenu>
+                <SubMenu :menu-info="item" :key="item.path" icon-size="16"></SubMenu>
             </template>
         </template>
 
@@ -21,21 +20,24 @@
 </template>
 
 <script lang='ts'>
-import {defineComponent, reactive} from "vue";
-import {useRouter, useRoute, onBeforeRouteUpdate} from "vue-router";
+import {defineComponent, reactive, ref} from "vue";
+import {onBeforeRouteUpdate, useRoute, useRouter} from "vue-router";
 import {permissionStore} from "/@/store/modules/permission.ts";
 import {MailOutlined, PieChartOutlined} from '@ant-design/icons-vue';
 import SubMenu from "/@/components/menu/SubMenu.vue"
+import GIcon from "/@/components/Icon";
 
 export default defineComponent({
-    name: "SubMenu2",
+    name: "TreeMenu",
     props: ['menuInfo'],
     components: {
+        GIcon,
         PieChartOutlined,
         MailOutlined,
         SubMenu,
     },
     setup() {
+        const iconSize = ref(16);
         //获取菜单信息
         let backMenuListState = permissionStore.getBackMenuListState;
         //获取当前路由节点信息
@@ -55,10 +57,12 @@ export default defineComponent({
             console.log("item", key, keyPath, item);
             router.push({path: key})
         }
+
         return {
             menuInfo: backMenuListState,
             onMenuClick,
-            menuBase
+            menuBase,
+            iconSize
         }
     }
 });

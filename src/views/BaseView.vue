@@ -8,7 +8,7 @@
 
             <a-layout>
                 <a-layout-header class="layoutheader">
-                    <a-row type="flex" justify="space-between">
+                    <a-row type="flex" justify="start" align="middle">
                         <a-col :span="1">
                             <MenuUnfoldOutlined
                                 v-if="collapsed"
@@ -17,9 +17,9 @@
                             />
                             <MenuFoldOutlined v-else class="trigger" @click="() => (collapsed = !collapsed)"/>
                         </a-col>
-                        <a-col :span="3">
-                            <user-header></user-header>
-                            <local-menu></local-menu>
+                        <a-col :span="4" offset="19">
+                                <user-header></user-header>
+                                <local-menu></local-menu>
                         </a-col>
                     </a-row>
                 </a-layout-header>
@@ -39,8 +39,8 @@
 </template>
 <script lang="ts">
 import TreeMenu from "/@/components/menu/TreeMenu.vue"
-import  UserHeader from "/@/components/header/UserHeader.vue"
-import {MenuUnfoldOutlined, MenuFoldOutlined} from '@ant-design/icons-vue';
+import UserHeader from "/@/components/header/UserHeader.vue"
+import {MenuFoldOutlined, MenuUnfoldOutlined} from '@ant-design/icons-vue';
 import LocalMenu from "/@/components/header/LocalMenu.vue";
 
 export default {

@@ -10,7 +10,7 @@
   "dependencies": {
     "@ant-design/colors": "^5.0.0",
     "@ant-design/icons-vue": "^5.1.7",
-    "@iconify/iconify": "^1.0.7",
+    "@iconify/iconify": "^2.0.0-rc.2",
     "@types/lodash-es": "^4.17.3",
     "@types/qs": "^6.9.5",
     "ant-design-vue": "^2.0.0-rc.2",

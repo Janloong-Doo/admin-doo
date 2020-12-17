@@ -2,7 +2,9 @@
     <div>
         <template v-if="(tagList!=null&&tagList.length>0)" v-for="(item,index) in tagList" :key="item.id">
             <a-tag :color="randomColor">
-                {{ item.name }}
+                <slot name="name" :scope="item">
+                    {{ item.name }}
+                </slot>
             </a-tag>
         </template>
         <template v-else>

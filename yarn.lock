@@ -911,12 +911,12 @@
   resolved "https://registry.npm.taobao.org/@iconify/iconify/download/@iconify/iconify-2.0.0-rc.2.tgz#c4a95ddc06ca9b9496df03604e66fdefb39f4c4b"
   integrity sha1-xKld3AbKm5SW3wNgTmb977OfTEs=
 
-"@iconify/iconify@^1.0.7":
-  version "1.0.7"
-  resolved "https://registry.npm.taobao.org/@iconify/iconify/download/@iconify/iconify-1.0.7.tgz#22e6d384482995738746eeb38b9b76588df41d57"
-  integrity sha1-IubThEgplXOHRu6zi5t2WI30HVc=
+"@iconify/iconify@^2.0.0-rc.2":
+  version "2.0.0-rc.4"
+  resolved "https://registry.npm.taobao.org/@iconify/iconify/download/@iconify/iconify-2.0.0-rc.4.tgz#46098fb544a4eb3af724219e4955c9022801835e"
+  integrity sha1-RgmPtUSk6zr3JCGeSVXJAigBg14=
 
-"@iconify/json@^1.1.270":
+"@iconify/json@^1.1.272":
   version "1.1.270"
   resolved "https://registry.npm.taobao.org/@iconify/json/download/@iconify/json-1.1.270.tgz#00b9e6b9a590c733819f336857bcdf84c200005a"
   integrity sha1-ALnmuaWQxzOBnzNoV7zfhMIAAFo=

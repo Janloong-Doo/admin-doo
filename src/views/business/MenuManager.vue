@@ -39,6 +39,13 @@
                     <a-form-item label="描述:" name="description">
                         <a-input placeholder="请输入菜单描述信息" v-model:value="addMenuData.description"></a-input>
                     </a-form-item>
+                    <a-form-item label="组件:" name="component">
+                        <a-input placeholder="请输入组件信息" v-model:value="addMenuData.component"></a-input>
+                    </a-form-item>
+                    <a-form-item label="图标:" name="iconUrl">
+                        <a-input placeholder="请输入图标信息" v-model:value="addMenuData.iconUrl"></a-input>
+                        <g-icon :icon="addMenuData.iconUrl" :size="25"></g-icon>
+                    </a-form-item>
                     <a-form-item label="排序:" name="sort">
                         <a-input placeholder="请输入菜单序号" v-model:value="addMenuData.sort"></a-input>
                     </a-form-item>
@@ -72,6 +79,11 @@
                 <template #isOpenSlot="{text, record, index}">
                     <a-switch disabled :checked="text===0"></a-switch>
                 </template>
+
+                <template #iconSlot="{text, record, index}">
+                    <g-icon :icon="text" :size="25"></g-icon>
+                </template>
+
                 <template #operation="{text, record, index}">
                     <a-dropdown>
                         <template #overlay>
@@ -109,11 +121,12 @@
 import Api from '../../assets/api/api'
 import DataUtils from '../../assets/js/DataUtils'
 import {DownOutlined, PlusOutlined, EditOutlined, CloseOutlined} from '@ant-design/icons-vue';
+import GIcon from "../../components/Icon";
 
 export default {
     name: "MenuManager",
     props: [],
-    components: {DownOutlined, PlusOutlined, EditOutlined, CloseOutlined},
+    components: {GIcon, DownOutlined, PlusOutlined, EditOutlined, CloseOutlined},
     watch: {
         '$route'(to, from) {
             console.log(to);
@@ -127,7 +140,7 @@ export default {
                 dataIndex: 'title',
                 sorter: true,
                 // width: '40%',
-                align: 'center',
+                // align: 'center',
                 fixed: 'left'
                 // scopedSlots: {customRender: 'name'},
             },
@@ -149,6 +162,21 @@ export default {
                 ellipsis: true,
                 align: 'center',
                 sorter: true,
+            },
+            {
+                title: '组件',
+                dataIndex: 'component',
+                ellipsis: true,
+                align: 'center',
+                sorter: true,
+            },
+            {
+                title: '图标',
+                dataIndex: 'iconUrl',
+                ellipsis: true,
+                align: 'center',
+                sorter: true,
+                slots: {customRender: 'iconSlot'}
             },
             {
                 title: '层级',
@@ -213,6 +241,7 @@ export default {
                 id: '',
                 menuName: '',
                 menuCode: '',
+                component: '',
                 menuUrl: '',
                 pid: '',
                 level: '',
@@ -278,6 +307,7 @@ export default {
                     "name": this.addMenuData.menuCode,
                     "path": this.addMenuData.menuUrl,
                     "description": this.addMenuData.description,
+                    "component": this.addMenuData.component,
                     "iconUrl": this.addMenuData.iconUrl,
                     "pid": pid,
                     "level": level,
@@ -309,6 +339,7 @@ export default {
                     "name": this.addMenuData.menuCode,
                     "path": this.addMenuData.menuUrl,
                     "description": this.addMenuData.description,
+                    "component": this.addMenuData.component,
                     "iconUrl": this.addMenuData.iconUrl,
                     // "pid": pid,
                     // "level": level,
@@ -345,11 +376,12 @@ export default {
             this.onDrawerOpen()
             //初始化数据
             this.addMenuData.id = data.id;
-            this.addMenuData.menuName = data.name;
-            this.addMenuData.menuName = data.name;
-            this.addMenuData.menuCode = data.code;
-            this.addMenuData.menuUrl = data.url;
+            this.addMenuData.menuName = data.title;
+            this.addMenuData.component = data.component;
+            this.addMenuData.menuCode = data.name;
+            this.addMenuData.menuUrl = data.path;
             this.addMenuData.description = data.description;
+            this.addMenuData.iconUrl = data.iconUrl;
             this.addMenuData.sort = data.sort;
         },
 
@@ -506,6 +538,7 @@ export default {
             this.addMenuData.menuCode = '';
             this.addMenuData.menuUrl = '';
             this.addMenuData.menupidUrl = '';
+            this.addMenuData.component = '';
             this.addMenuData.level = '';
             this.addMenuData.description = '';
             this.addMenuData.sort = 0;
