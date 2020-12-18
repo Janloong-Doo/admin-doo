@@ -105,10 +105,10 @@
     </div>
 </template>
 
-<script>
-import Api from '../../assets/api/api'
+<script lang="ts">
 import DataUtils from '../../assets/js/DataUtils'
 import {CloseOutlined, DownOutlined, EditOutlined, PlusOutlined} from '@ant-design/icons-vue';
+import {addDic, changeDicStatus, delDic, editDic, getDicList} from "/@/api/Dictionary";
 
 export default {
     name: "DictionaryManager",
@@ -278,7 +278,7 @@ export default {
                     "level": level,
                     "sort": this.addParamData.sort
                 }
-                Api.addDic(param).then(value => {
+                addDic(param).then(value => {
                     if (value.code === 0) {
                         console.log("新增成功")
                         this.$refs.addMenuForm.resetFields();
@@ -307,7 +307,7 @@ export default {
                         "description": this.addParamData.description,
                         "sort": this.addParamData.sort
                     }
-                    Api.editDic(param).then(value => {
+                    editDic(param).then(value => {
                         if (value.code === 0) {
                             console.log("修改成功")
                             this.$refs.addMenuForm.resetFields();
@@ -361,7 +361,7 @@ export default {
                 title: '删除角色',
                 content: content,
                 onOk() {
-                    return Api.delDic(selectedRows.id).then(value => {
+                    return delDic(selectedRows.id).then(value => {
                         if (value.code === 0) {
                             console.log("删除成功")
                             that.getMenuData();
@@ -387,7 +387,7 @@ export default {
                 "direction ": this.orderType,
             }
             console.log(params);
-            Api.getDicList(params).then(value => {
+            getDicList(params).then(value => {
                 console.log(value);
                 this.loading = false;
                 if (value.code === 0) {
@@ -463,7 +463,7 @@ export default {
                 title: '修改字典',
                 content: content,
                 onOk() {
-                    return Api.changeDicStatus({'id': selectedRows.id}).then(value => {
+                    return changeDicStatus({'id': selectedRows.id}).then(value => {
                         if (value.code === 0) {
                             console.log(value.msg)
                             that.getMenuData();

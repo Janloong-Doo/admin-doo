@@ -30,6 +30,9 @@
                     <a-form-item label="名称:" name="menuName">
                         <a-input placeholder="请输入菜单名称" v-model:value="addMenuData.menuName"></a-input>
                     </a-form-item>
+                    <a-form-item label="英文名称:" name="engTitle">
+                        <a-input placeholder="请输入菜单英文名称" v-model:value="addMenuData.engTitle"></a-input>
+                    </a-form-item>
                     <a-form-item label="编码:" name="menuCode">
                         <a-input placeholder="请输入菜单编码" v-model:value="addMenuData.menuCode"></a-input>
                     </a-form-item>
@@ -67,6 +70,7 @@
 
             <!-- 主体列表部分 -->
             <a-table
+                class="custome-table"
                 :columns="columns"
                 :row-key="record => record.id"
                 :data-source="data"
@@ -117,11 +121,11 @@
     </div>
 </template>
 
-<script>
-import Api from '../../assets/api/api'
+<script lang="ts">
 import DataUtils from '../../assets/js/DataUtils'
-import {DownOutlined, PlusOutlined, EditOutlined, CloseOutlined} from '@ant-design/icons-vue';
+import {CloseOutlined, DownOutlined, EditOutlined, PlusOutlined} from '@ant-design/icons-vue';
 import GIcon from "../../components/Icon";
+import {getMenuList,getMenuListByUser,addMenu,editMenu,delMenu,changeMenuStatus} from "/@/api/menu";
 
 export default {
     name: "MenuManager",
@@ -143,6 +147,12 @@ export default {
                 // align: 'center',
                 fixed: 'left'
                 // scopedSlots: {customRender: 'name'},
+            },
+            {
+                title: '英文名称',
+                dataIndex: 'engTitle',
+                align: 'center',
+                sorter: true,
             },
             {
                 title: '编码',
@@ -240,6 +250,7 @@ export default {
             addMenuData: {
                 id: '',
                 menuName: '',
+                engTitle: '',
                 menuCode: '',
                 component: '',
                 menuUrl: '',
@@ -304,6 +315,7 @@ export default {
                 let level = this.addMenuData.isRootMenu ? '1' : this.addMenuData.level;
                 let param = {
                     "title": this.addMenuData.menuName,
+                    "engTitle": this.addMenuData.engTitle,
                     "name": this.addMenuData.menuCode,
                     "path": this.addMenuData.menuUrl,
                     "description": this.addMenuData.description,
@@ -314,7 +326,7 @@ export default {
                     "origion": this.addMenuData.origion,
                     "sort": this.addMenuData.sort
                 }
-                Api.addMenu(param).then(value => {
+                addMenu(param).then(value => {
                     if (value.code === 0) {
                         console.log("新增成功")
                         this.$refs.addMenuForm.resetFields();
@@ -336,6 +348,7 @@ export default {
                 let param = {
                     'id': this.addMenuData.id,
                     "title": this.addMenuData.menuName,
+                    "engTitle": this.addMenuData.engTitle,
                     "name": this.addMenuData.menuCode,
                     "path": this.addMenuData.menuUrl,
                     "description": this.addMenuData.description,
@@ -346,7 +359,7 @@ export default {
                     // "origion": this.addMenuData.origion,
                     "sort": this.addMenuData.sort
                 }
-                Api.editMenu(param).then(value => {
+                editMenu(param).then(value => {
                     if (value.code === 0) {
                         console.log("修改成功")
                         this.$refs.addMenuForm.resetFields();
@@ -377,6 +390,7 @@ export default {
             //初始化数据
             this.addMenuData.id = data.id;
             this.addMenuData.menuName = data.title;
+            this.addMenuData.engTitle = data.engTitle;
             this.addMenuData.component = data.component;
             this.addMenuData.menuCode = data.name;
             this.addMenuData.menuUrl = data.path;
@@ -399,7 +413,7 @@ export default {
                 title: '删除角色',
                 content: content,
                 onOk() {
-                    return Api.delMenu(selectedRows.id).then(value => {
+                    return delMenu(selectedRows.id).then(value => {
                         if (value.code === 0) {
                             console.log("删除成功")
                             that.getMenuData();
@@ -425,7 +439,7 @@ export default {
                 "direction ": this.orderType,
             }
             console.log(params);
-            Api.getMenuList(params).then(value => {
+            getMenuList(params).then(value => {
                 console.log(value);
                 this.loading = false;
                 if (value.code === 0) {
@@ -498,7 +512,7 @@ export default {
                 title: '修改菜单',
                 content: content,
                 onOk() {
-                    return Api.changeMenuStatus({'id': selectedRows.id}).then(value => {
+                    return changeMenuStatus({'id': selectedRows.id}).then(value => {
                         if (value.code === 0) {
                             console.log(value.msg)
                             that.getMenuData();
@@ -553,6 +567,26 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="stylus">
+.ant-table td {
+    white-space: nowrap;
+}
 
+//.ant-table-body {
+//    &::-webkit-scrollbar {
+//        height: 5px;
+//    }
+//
+//    &::-webkit-scrollbar-thumb {
+//        border-radius: 5px;
+//        -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+//        background: #f1f1f1;
+//    }
+//
+//    &::-webkit-scrollbar-track {
+//        -webkit-box-shadow: 0;
+//        border-radius: 0;
+//        background: #fffff;
+//    }
+//}
 </style>

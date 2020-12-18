@@ -1,4 +1,5 @@
-import axios, {AxiosRequestConfig} from 'axios'
+import axios from 'axios'
+// import {defAxios} from "/@/utils/http"
 import qs from 'qs';
 
 // require ('@/assets/api/url')
@@ -8,19 +9,18 @@ import qs from 'qs';
 //     timeout: 10000,
 // })
 
-const post = (url: string, param: any, config: AxiosRequestConfig) => {
+const post = (url: string, param: any) => {
     param = param == null ? {} : param;
     let contentType = 'application/x-www-form-urlencoded';
-    let config2 = {
+    let config = {
         headers: {
             'Content-Type': contentType
         },
         // withCredentials: true
     };
-    config = config == null ? {} : config2;
     return new Promise((resolve, reject) => {
         axios.post(url, qs.stringify(param), config)
-        // axios.post(url, param, config)
+            // axios.post(url, param, config)
             .then(res => {
                 resolve(res)
             }).catch(res => {
@@ -29,15 +29,14 @@ const post = (url: string, param: any, config: AxiosRequestConfig) => {
     });
 };
 
-const postJson = (url: string, param: any, config: AxiosRequestConfig) => {
+const postJson = (url: string, param: any) => {
         param = param == null ? {} : param;
-        let config2 = {
+        let config = {
             headers: {
                 'Content-Type': 'application/json'
             },
             // withCredentials: true
         };
-        config = config == null ? {} : config2;
         return new Promise((resolve, reject) => {
             axios.post(url, param, config)
                 .then(res => {
@@ -50,12 +49,9 @@ const postJson = (url: string, param: any, config: AxiosRequestConfig) => {
 ;
 
 
-const get = (url: string, param: any, config: AxiosRequestConfig) => {
-    param = param == null ? {} : param;
-    config = config == null ? {} : config;
-    config.params = param;
+const get = (url: string, param: any) => {
     return new Promise((resolve, reject) => {
-        axios.get(url, config)
+        axios.get(url, {params: param})
             .then(res => {
                 resolve(res)
             }).catch(res => {
@@ -65,7 +61,7 @@ const get = (url: string, param: any, config: AxiosRequestConfig) => {
 };
 
 
-const del = (url: string, param: any, config: AxiosRequestConfig) => {
+const del = (url: string, param: any) => {
     param = param == null ? {} : param;
     // let config2 = {
     //   headers: {
@@ -73,9 +69,8 @@ const del = (url: string, param: any, config: AxiosRequestConfig) => {
     //   },
     // withCredentials: true
     // };
-    config = config == null ? {} : config;
     return new Promise((resolve, reject) => {
-        axios.delete(url, config)
+        axios.delete(url)
             .then(res => {
                 resolve(res)
             }).catch(res => {

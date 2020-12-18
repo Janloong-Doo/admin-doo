@@ -29,16 +29,23 @@
 import {userStore} from "/@/store/modules/User.ts"
 import {EditOutlined, EllipsisOutlined, SettingOutlined} from '@ant-design/icons-vue';
 import {getUserDetailInfo} from "/@/api/User";
-import {ref, reactive, defineComponent} from "vue";
+import {defineComponent, onMounted, reactive} from "vue";
+import {UserDetailInfo} from "/@/api/model/UserModel";
+import {deepMerge} from "/@/utils";
 
 export default defineComponent({
     name: "UserCenter",
     components: {SettingOutlined, EditOutlined, EllipsisOutlined},
-    async setup() {
+    // async setup() {
+    setup() {
         let userInfoState = userStore.getUserInfoState;
-        let userDetailInfo = await getUserDetailInfo({userId: userInfoState.id});
+        let userDetailInfo = reactive({} as UserDetailInfo)
+        onMounted(async () => {
+            const userDetailInfo2 = await getUserDetailInfo({userId: userInfoState.id});
+            deepMerge(userDetailInfo, userDetailInfo2);
+        });
         return {
-            userDetailInfo
+            userDetailInfo,
         }
     }
 })

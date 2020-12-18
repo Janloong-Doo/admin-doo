@@ -191,7 +191,6 @@ export class VAxios {
         //参数序列化不生效
         conf.paramsSerializer = (params) => {
             const s = qs.stringify(params);
-            console.log(params, s);
             return s;
         };
         return this.request(conf, options);
@@ -199,16 +198,17 @@ export class VAxios {
 
     postJson<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
         config.headers = {'Content-Type': ContentTypeEnum.JSON}
+        config.method = RequestEnum.POST;
         return this.request(config, options);
     }
 
     get<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
         config.method = RequestEnum.GET;
-        console.log("config.headers", config.headers);
         return this.request(config, options);
     }
 
     delete<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
+        config.method = RequestEnum.DELETE;
         return this.request(config, options);
     }
 }

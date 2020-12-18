@@ -27,12 +27,12 @@
                     :label-col="labelCol" :wrapper-col="wrapperCol"
                 >
                     <a-form-item label="组织名称:" v-bind="validateInfos.organizeName">
-                        <a-input placeholder="请输入组织名称" v-model:value="modelRef.organizeName"></a-input>
+                        <a-input  placeholder="请输入组织名称" v-model:value="modelRef.organizeName"></a-input>
                     </a-form-item>
-                    <a-form-item label="描述:" v-bind="validateInfos.description">
+                    <a-form-item  label="描述:" v-bind="validateInfos.description">
                         <a-input placeholder="请输入描述信息" v-model:value="modelRef.description"></a-input>
                     </a-form-item>
-                    <a-form-item label="排序:" v-bind="validateInfos.sort">
+                    <a-form-item  label="排序:" v-bind="validateInfos.sort">
                         <a-input placeholder="请输入排序信息" v-model:value="modelRef.sort"></a-input>
                     </a-form-item>
                     <a-form-item v-if="!firstData&&!isEditType" label="根子节点选择:" name="isRootMenu">
@@ -75,8 +75,8 @@
                     </span>
                 </template>
                 <template #roles="{text, record, index}">
-                    <template v-if="(text!=null&&text.length>0)" v-for="(item,index) in text" :key="item.id">
-                        <a-tag :color="this.tagColor[Math.floor((Math.random() * this.tagColor.length) + 1) % this.tagColor.length]">
+                    <template  v-if="(text!=null&&text.length>0)" v-for="(item,index) in text" :key="item.id">
+                        <a-tag  :color="this.tagColor[Math.floor((Math.random() * this.tagColor.length) + 1) % this.tagColor.length]">
                             {{ item.roleName }}
                         </a-tag>
                     </template>
@@ -120,14 +120,13 @@
     </div>
 </template>
 
-<script lang="ts">
-// import Api from "../../assets/api/api.ts";
+<script>
+import Api from "../../assets/api/api.ts";
 import {CloseOutlined, DownOutlined, EditOutlined, ExclamationCircleOutlined, PlusOutlined, RollbackOutlined} from '@ant-design/icons-vue';
-import {message, Modal} from 'ant-design-vue';
+import {message, Modal, TreeSelect} from 'ant-design-vue';
 import DataUtils from "../../assets/js/DataUtils";
 import {useForm} from "@ant-design-vue/use";
-import {reactive} from 'vue';
-import {addDepartMent, changeOrgStatus, delDepartMent, editOrg, getDepartMentList} from "/@/api/department.ts";
+import {createVNode, reactive} from 'vue';
 
 export default {
     name: "Department",
@@ -231,7 +230,7 @@ export default {
             orderType: 'asc',
             labelCol: {span: 6},
             wrapperCol: {span: 14},
-            pagination: pagination,
+            pagination : pagination,
             id: '',
             pid: '',
             level: '',
@@ -287,16 +286,16 @@ export default {
         },
         //获取组织组织结构树
         getDepartment() {
-            let param = {
+            let param={
                 "page": this.page,
                 "size": this.size,
                 "sort": this.sortName,
                 "direction ": this.orderType,
             }
-            // Api.getDepartMentList(param).then(value => {
-            getDepartMentList(param).then(value => {
-                console.log("组织结构列表", value)
-                this.data = DataUtils.initTreeData(value.content);
+            Api.getDepartMentList(param).then(value => {
+                if (value.code === 0) {
+                    this.data = DataUtils.initTreeData(value.data.content);
+                }
             })
         },
         addData() {
@@ -310,10 +309,16 @@ export default {
                     "level": level,
                     "sort": this.modelRef.sort
                 }
-                addDepartMent(param).then(value => {
-                    this.addDataDradwrvisible = false;
-                    this.resetFields();
-                    this.getDepartment();
+                Api.addDepartMent(param).then(value => {
+                    console.log(value)
+                    if (value.code === 0) {
+                        message.success(value.msg)
+                        this.addDataDradwrvisible = false;
+                        this.resetFields();
+                        this.getDepartment();
+                    } else {
+                        message.error(value.msg)
+                    }
                 });
                 this.$refs.departmentRef.resetFields();
             }).catch(reason => {
@@ -328,10 +333,14 @@ export default {
                 "sort": this.modelRef.sort,
                 "description": this.modelRef.description,
             }
-            editOrg(param).then(value => {
-                this.onDrawerClose('reset')
-                message.success("成功")
-                this.getDepartment();
+            Api.editOrg(param).then(value => {
+                if (value.code === 0) {
+                    this.onDrawerClose('reset')
+                    message.success(value.msg)
+                    this.getDepartment();
+                } else {
+                    message.error(value.msg)
+                }
             }).catch(reason => {
             })
         },
@@ -342,9 +351,13 @@ export default {
                 title: '删除节点',
                 content: content,
                 onOk() {
-                    return delDepartMent(data.id).then(value => {
-                        message.success("删除成功")
-                        that.getDepartment();
+                    return Api.delDepartMent(data.id).then(value => {
+                        if (value.code === 0) {
+                            message.success(value.msg)
+                            that.getDepartment();
+                        } else {
+                            message.error(value.msg)
+                        }
                     }).catch(reason => {
                         console.log('请求异常');
                         console.log(reason);
@@ -355,16 +368,20 @@ export default {
 
             });
         },
-        changeOrgStatus(data) {
+        changeOrgStatus(data){
             let that = this;
             let content = "确认修改角色'" + data.organizeName + "'的状态吗？";
             this.$confirm({
                 title: '修改角色',
                 content: content,
                 onOk() {
-                    return changeOrgStatus({'id': data.id}).then(value => {
-                        message.success("修改成功")
-                        that.getDepartment();
+                    return Api.changeOrgStatus({'id': data.id}).then(value => {
+                        if (value.code === 0) {
+                            message.success(value.msg)
+                            that.getDepartment();
+                        } else {
+                            message.error(value.msg)
+                        }
                     }).catch(reason => {
                         console.log('请求异常');
                         console.log(reason);

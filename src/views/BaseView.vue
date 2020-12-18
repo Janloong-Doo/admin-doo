@@ -26,14 +26,14 @@
 
                 <a-layout-content class="layoutcontent"
                 >
-                    <suspense>
-                        <template #default>
+<!--                    <suspense>-->
+<!--                        <template #default>-->
                             <router-view/>
-                        </template>
-                        <template #fallback>
-                            <h1>Loading</h1>
-                        </template>
-                    </suspense>
+<!--                        </template>-->
+<!--                        <template #fallback>-->
+<!--                            <h1>Loading</h1>-->
+<!--                        </template>-->
+<!--                    </suspense>-->
                 </a-layout-content>
 
                 <a-layout-footer style="textAlign: center">
@@ -76,50 +76,6 @@ export default {
             childPath: ''
         }
     },
-    computed: {
-        // selectKeys(){
-        //     let filter = this.resutData.filter(value => value.url === this.childPath);
-        //     console.log("dataComputed",this.resutData,filter,this.childPath)
-        //     return filter.id;
-        // },
-        // openKeys(){
-        //     let filter = this.resutData.filter(value => value.url === this.rootPath);
-        //     return  filter.id;
-        // }
-
-    },
-    // watch: {
-    //     // '$route'(to, from) {
-    //     //     console.log("to",to,from)
-    //     // },
-    //     '$route': {
-    //         handler({path, matched}) {
-    //             console.log("to", path, matched);
-    //             let _keyPath = "";
-    //             let _rootPath = matched[0].path;
-    //             _keyPath = matched[0].children.length > 1 ? path : _rootPath
-    //             this.rootPath = _rootPath;
-    //             this.childPath = _keyPath
-    //         },
-    //         immediate: true,
-    //     },
-    //     resutData(to, from) {
-    //         let filter = to.filter(value => value.path === this.childPath);
-    //         console.log("to",to);
-    //         this.selectedKeys.push(filter[0].id);
-    //         let filter1 = to.filter(value => value.path === this.rootPath);
-    //         this.openKeys.push(filter1[0].id);
-    //     }
-    // },
-    beforeMount() {
-    },
-    beforeCreate() {
-    },
-    created() {
-    },
-    methods: {}
-
-
 }
 </script>
 

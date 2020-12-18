@@ -12,7 +12,7 @@ import {userStore} from '/@/store/modules/user';
 import {asyncRoutes} from '/@/router/routes';
 import {filter} from '/@/utils/helper/treeHelper';
 import {toRaw} from 'vue';
-import {GetMenuListByUser} from '/@/api/menu.ts';
+import {GetRouteInfoByUser} from '/@/api/menu.ts';
 
 import {transformObjToRoute} from '/@/router/helper/routeHelper.ts';
 import {transformRouteToMenu} from '/@/router/helper/menuHelper.ts';
@@ -114,7 +114,7 @@ class Permission extends VuexModule {
                 throw new Error('paramId is undefined!');
             }
             //获取用户对应的路由信息
-            let routeList: any[] = await GetMenuListByUser({id: paramId});
+            let routeList: any[] = await GetRouteInfoByUser({id: paramId});
             // 动态引入组件
             routeList = transformObjToRoute(routeList);
             //  后台路由转菜单结构

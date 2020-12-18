@@ -133,10 +133,6 @@
                                     {{ record.isOpen === 0 ? '停用' : '启用' }}
                                     <EditOutlined/>
                                 </a-menu-item>
-                                <a-menu-item key="menuResource">
-                                    菜单资源
-                                    <EditOutlined/>
-                                </a-menu-item>
                             </a-menu>
                         </template>
                         <a-button type="primary" style="margin-left: 8px"> 选项
@@ -151,7 +147,7 @@
 </template>
 
 <script lang="ts">
-import Api from '../../assets/api/api'
+// import Api from '../../assets/api/api'
 import {CloseOutlined, DownOutlined, EditOutlined, PlusOutlined} from "@ant-design/icons-vue";
 import {message} from 'ant-design-vue';
 import {useForm} from "@ant-design-vue/use";
@@ -160,6 +156,8 @@ import CustomTreeTransfer from "../../components/CustomTreeTransfer.vue";
 import ColorTag from "../../components/ColorTag.vue";
 import ResourceDetail from "./components/ResourceDetail.vue";
 import ResourceDetail2 from "./components/ResourceDetail2.vue";
+import {addRole, changeRoleStatus, delRole, editRole, getRoleList} from "/@/api/Role";
+import {getMenuList} from "/@/api/menu";
 
 export default {
     name: "Role",
@@ -389,7 +387,7 @@ export default {
                     "menus": menus,
                     "resources": _resources
                 }
-                Api.addRole(param).then(value => {
+                addRole(param).then(value => {
                     if (value.code === 0) {
                         message.success(value.msg);
                         this.addRoleDradwrvisible = false;
@@ -427,7 +425,7 @@ export default {
                 "menus": menus,
                 "resources": _resources
             }
-            Api.editRole(param).then(value => {
+            editRole(param).then(value => {
                 if (value.code === 0) {
                     this.onDrawerClose('reset')
                     message.success(value.msg)
@@ -445,7 +443,7 @@ export default {
                 title: '删除角色',
                 content: content,
                 onOk() {
-                    return Api.delRole(data.id).then(value => {
+                    return delRole(data.id).then(value => {
                         if (value.code === 0) {
                             message.success(value.msg)
                             that.getRoleData();
@@ -468,7 +466,7 @@ export default {
                 "sort": this.sortName,
                 "direction": this.orderType,
             }
-            Api.getRoleList(params).then(value => {
+            getRoleList(params).then(value => {
                 this.loading = false;
                 if (value.code === 0) {
                     const pagination = {...this.pagination};
@@ -493,7 +491,7 @@ export default {
                 title: '修改角色',
                 content: content,
                 onOk() {
-                    return Api.changeRoleStatus({'id': data.id}).then(value => {
+                    return changeRoleStatus({'id': data.id}).then(value => {
                         if (value.code === 0) {
                             message.success(value.msg)
                             that.getRoleData();
@@ -554,9 +552,6 @@ export default {
                 case 'open':
                     this.changeRoleStatus(text);
                     break;
-                case 'menuResource':
-
-                    break;
                 default :
                     message.error("无效操作")
                     return false;
@@ -604,7 +599,8 @@ export default {
                 "sort": 'sort',
                 "direction ": 'asc',
             }
-            Api.getMenuList(params).then(value => {
+            //TODO 【分配菜单部分数据获取】  by Janloong_Doo
+            getMenuList(params).then(value => {
                 if (value.code === 0) {
                     // this.menuDrawerData.menuTreeData = DataUtils.initTreeData(value.data.content);
                     this.menuDrawerData.menuTreeData = value.data.content;

@@ -114,9 +114,10 @@
     </div>
 </template>
 
-<script>
-import Api from '../../assets/api/api'
+<script lang="ts">
 import {CloseOutlined, DownOutlined, EditOutlined, PlusOutlined} from "@ant-design/icons-vue";
+import {addResource, changeResourceStatus, delResource, editResource, getResourceList} from "/@/api/Resource";
+import {getDicListByCode} from "/@/api/Dictionary";
 
 export default {
     name: "ResourceManager",
@@ -320,7 +321,7 @@ export default {
                     "sort": this.addParamData.sort,
                     "origion": this.addParamData.origion
                 }
-                Api.addResource(param).then(value => {
+                addResource(param).then(value => {
                     if (value.code === 0) {
                         console.log("新增成功")
                         this.$refs.addMenuForm.resetFields();
@@ -356,7 +357,7 @@ export default {
                     "sort": this.addParamData.sort,
                     "origion": this.addParamData.origion
                 }
-                Api.editResource(param).then(value => {
+                editResource(param).then(value => {
                     if (value.code === 0) {
                         console.log("修改成功")
                         this.$refs.addMenuForm.resetFields();
@@ -410,7 +411,7 @@ export default {
                 title: '删除角色',
                 content: content,
                 onOk() {
-                    return Api.delResource(selectedRows.id).then(value => {
+                    return delResource(selectedRows.id).then(value => {
                         if (value.code === 0) {
                             console.log("删除成功")
                             that.getMenuData();
@@ -436,7 +437,7 @@ export default {
                 "direction ": this.orderType,
             }
             console.log(params);
-            Api.getResourceList(params).then(value => {
+            getResourceList(params).then(value => {
                 console.log(value);
                 this.loading = false;
                 if (value.code === 0) {
@@ -514,7 +515,7 @@ export default {
                 title: '修改资源',
                 content: content,
                 onOk() {
-                    return Api.changeResourceStatus({'id': selectedRows.id}).then(value => {
+                    return changeResourceStatus({'id': selectedRows.id}).then(value => {
                         if (value.code === 0) {
                             console.log(value.msg)
                             that.getMenuData();
@@ -560,7 +561,7 @@ export default {
         },
 
         getResourceTypeData() {
-            Api.getDicListByCode({"code": "resourceType"}).then(value => {
+            getDicListByCode({"code": "resourceType"}).then(value => {
                 console.log(value);
                 if (value.code === 0) {
                     this.selectData = value.data;

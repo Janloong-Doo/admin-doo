@@ -5,6 +5,8 @@ import Component from '/@/components/types';
 export interface RouteMeta {
     // title
     title: string;
+    // engTitle
+    engTitle: string;
     // Whether to ignore permissions
     ignoreAuth?: boolean;
     // role info

@@ -1,5 +1,6 @@
 import { getI18n } from '/@/setup/i18n';
 import projectSetting from '/@/settings/projectSetting';
+import {Locale} from "ant-design-vue/es/locale-provider";
 
 export function useI18n(namespace?: string) {
 

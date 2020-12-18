@@ -180,13 +180,16 @@
     </div>
 </template>
 
-<script>
-import Api from '../../assets/api/api'
+<script lang="ts">
 import {createVNode, reactive} from 'vue';
 import {useForm} from '@ant-design-vue/use';
 import {message, Modal, TreeSelect} from 'ant-design-vue';
 import {CloseOutlined, DownOutlined, EditOutlined, ExclamationCircleOutlined, PlusOutlined, RollbackOutlined} from '@ant-design/icons-vue';
 import DataUtils from "../../assets/js/DataUtils";
+import {addUserManager, disableUserManager,delUserManager, editUserManagerList, getUserManagerList, resetUserManagerPassword} from "/@/api/User";
+import {delDic} from "/@/api/Dictionary";
+import {getDepartMentList} from "/@/api/department";
+import {getRoleList} from "/@/api/Role";
 
 let messageKey = "UserManagerKey";
 export default {
@@ -395,7 +398,7 @@ export default {
             sourceData: [],
             data: [],
             addMenuDradwrvisible: false,
-
+            // departmentData: [],
             addParamData: {
                 id: '',
                 //base
@@ -440,7 +443,7 @@ export default {
                     "organize": {"id": this.modelRef.addData.organize.id},
                     "roles": roles
                 }
-                Api.addUserManager(param).then(value => {
+                addUserManager(param).then(value => {
                     if (value.code === 0) {
                         console.log("新增成功")
                         this.resetFields();
@@ -475,7 +478,7 @@ export default {
                     },
                     "roles": roles
                 }
-                Api.editUserManagerList(param).then(value => {
+                editUserManagerList(param).then(value => {
                     if (value.code === 0) {
                         console.log("修改成功")
                         this.resetFields();
@@ -538,7 +541,7 @@ export default {
                 title: '删除角色',
                 content: content,
                 onOk() {
-                    return Api.delDic(selectedRows.id).then(value => {
+                    return delUserManager(selectedRows.id).then(value => {
                         if (value.code === 0) {
                             console.log("删除成功")
                             that.getMenuData();
@@ -564,7 +567,7 @@ export default {
                 "direction ": this.orderType,
             }
             console.log(params);
-            Api.getUserManagerList(params).then(value => {
+            getUserManagerList(params).then(value => {
                 console.log(value);
                 this.loading = false;
                 if (value.code === 0) {
@@ -630,7 +633,7 @@ export default {
                 title: '修改用户',
                 content: content,
                 onOk() {
-                    return Api.disableUserManager({'id': data.id}).then(value => {
+                    return disableUserManager({'id': data.id}).then(value => {
                         if (value.code === 0) {
                             console.log(value.msg)
                             that.getMenuData();
@@ -685,7 +688,7 @@ export default {
                 cancelText: "取消",
                 onOk() {
                     message.loading({content: "重置中"}, messageKey)
-                    return Api.resetUserManagerPassword({'id': data.id}).then(value => {
+                    return resetUserManagerPassword({'id': data.id}).then(value => {
                         if (value.code === 0) {
                             message.success({content: value.msg, messageKey})
                         } else {
@@ -702,12 +705,12 @@ export default {
             });
         },
         getDepartment() {
-            Api.getDepartMentList().then(value => {
+            // let that = this;
+            getDepartMentList().then(value => {
                 this.resultData = value.data;
-                if (value.code === 0) {
                     // 数据组装
-                    this.departmentData = DataUtils.initTreeData(value.data.content);
-                }
+                this.departmentData = DataUtils.initTreeData(value.content);
+                    console.log("departmentData",departmentData)
             })
         },
         getRoleData() {
@@ -718,7 +721,7 @@ export default {
                 "sortName": "sort",
                 "orderType": "asc",
             }
-            Api.getRoleList(params).then(value => {
+            getRoleList(params).then(value => {
                 if (value.code === 0) {
                     this.roleData = value.data.content;
                 } else {

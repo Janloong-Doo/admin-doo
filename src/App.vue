@@ -32,4 +32,22 @@ export default {
 </script>
 <style lang="stylus">
 @import "./assets/css/common.styl"
+//全局样式覆盖
+.ant-table-body {
+    &::-webkit-scrollbar {
+        height: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+        background: #f1f1f1;
+    }
+
+    &::-webkit-scrollbar-track {
+        -webkit-box-shadow: 0;
+        border-radius: 0;
+        background: #fffff;
+    }
+}
 </style>

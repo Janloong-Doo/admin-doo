@@ -4,7 +4,6 @@ import type {GetUserInfoByUserIdParams, UserBaseInfo, UserLoginParams,} from '/@
 import {CacheTypeEnum, ROLES_KEY, SCOPE_KEY, TOKEN_KEY, USER_INFO_KEY} from '/@/enums/cacheEnum';
 import {clearLocal, clearSession, getLocal, getSession, setLocal} from "/@/utils/helper/persistent";
 import {hotModuleUnregisterModule} from "/@/utils/helper/vuexHelper";
-import {appStore} from "/@/store/modules/app";
 import router, {resetRouter} from '/@/router';
 import {PageEnum} from "/@/enums/pageEnum";
 import {loginApi} from "/@/api/User";
@@ -12,7 +11,6 @@ import {useMessage} from "/@/hooks/web/useMessage";
 import {RoleEnum} from "/@/enums/roleEnum";
 import {useProjectSetting} from "/@/hooks/setting";
 import {useI18n} from "/@/hooks/web/useI18n.ts";
-import {getI18n} from '/@/setup/i18n';
 // app全局类
 const NAME = 'user';
 
@@ -113,7 +111,7 @@ class User extends VuexModule {
         try {
             // const data = await loginApi(params);
             const data = await loginApi(params);
-            const {token, id, username, authorities, scope} = data;
+            const {token, tokenType, id, username, authorities, scope} = data;
             const roles = authorities as RoleEnum[]
             // get user info
             // const userInfo = await this.getUserInfoAction({id});
@@ -125,16 +123,20 @@ class User extends VuexModule {
             this.commitRoleListState(roles);
             this.commitScopeListState(scope);
             // save token
-            this.commitTokenState(token);
+            this.commitTokenState(tokenType + " " + token);
 
             // const name = FULL_PAGE_NOT_FOUND_ROUTE.name;
             // name && router.removeRoute(name);
+            //TODO 【登录刷新】 取消使用router by Janloong_Doo
             goHome &&
-            (await router.push(PageEnum.BASE_HOME).then(() => {
-                setTimeout(() => {
-                    appStore.commitPageLoadingState(false);
-                }, 30);
-            }));
+            location.replace(PageEnum.BASE_HOME)
+            // await router.push(PageEnum.BASE_HOME).then(() => {
+            //     // (await router.replace(PageEnum.BASE_HOME).then(() => {
+            //     setTimeout(() => {
+            //         appStore.commitPageLoadingState(false);
+            //         // location.reload()
+            //     }, 30);
+            // });
             return userBaseInfo;
         } catch (error) {
             return null;

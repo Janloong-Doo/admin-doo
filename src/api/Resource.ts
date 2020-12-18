@@ -1,29 +1,13 @@
 import {defAxios} from "/@/utils/http/index.ts"
-
-import {getMenuListByUserParams, getMenuListByUserParamsResultModel} from '/@/api/model/menuModel';
 import {ServiceEnum} from "/@/enums/httpEnum";
 
 enum Api {
-    GetRouteInfoByUser = '/menu/routeInfo',
-    getMenuList = '/menu/list',
-    getMenuListByUser = '/menu/listByUser',
-    addMenu = '/menu/add',
-    editMenu = '/menu/editMenu',
-    delMenu = '/menu/delMenu/',
-    changeMenuStatus = '/menu/changeMenuStatus',
-}
-
-/**
- * @description: Get user routeinfo based on id
- */
-export function GetRouteInfoByUser(params: getMenuListByUserParams) {
-    return defAxios.post<getMenuListByUserParamsResultModel>({
-            url: Api.GetRouteInfoByUser,
-            params,
-        }, {
-            serviceName: ServiceEnum.HAP,
-        }
-    );
+    getResourceList = '/resource/list',
+    getResourceGroupByType = '/resource/getResourceGroupByType',
+    addResource = '/resource/add',
+    editResource = '/resource/edit',
+    delResource = '/resource/del/',
+    changeResourceStatus = '/resource/changeResourceStatus',
 }
 
 /**
@@ -31,9 +15,9 @@ export function GetRouteInfoByUser(params: getMenuListByUserParams) {
  * @param params
  * @constructor
  */
-export function getMenuList(params: any) {
+export function getResourceList(params: any) {
     return defAxios.get<any>({
-            url: Api.getMenuList,
+            url: Api.getResourceList,
             params,
         }, {
             serviceName: ServiceEnum.HAP,
@@ -48,9 +32,9 @@ export function getMenuList(params: any) {
  * @param params
  * @constructor
  */
-export function getMenuListByUser(params: any) {
-    return defAxios.post<any>({
-            url: Api.getMenuListByUser,
+export function getResourceGroupByType(params: any) {
+    return defAxios.get<any>({
+            url: Api.getResourceGroupByType,
             params,
         }, {
             serviceName: ServiceEnum.HAP,
@@ -64,9 +48,9 @@ export function getMenuListByUser(params: any) {
  * @param params
  * @constructor
  */
-export function addMenu(params: any) {
+export function addResource(params: any) {
     return defAxios.postJson<any>({
-            url: Api.addMenu,
+            url: Api.addResource,
             params,
         }, {
             serviceName: ServiceEnum.HAP,
@@ -80,9 +64,9 @@ export function addMenu(params: any) {
  * @param params
  * @constructor
  */
-export function editMenu(params: any) {
+export function editResource(params: any) {
     return defAxios.postJson<any>({
-            url: Api.editMenu,
+            url: Api.editResource,
             params,
         }, {
             serviceName: ServiceEnum.HAP,
@@ -96,9 +80,9 @@ export function editMenu(params: any) {
  * @param params
  * @constructor
  */
-export function delMenu(params: any) {
+export function delResource(params: any) {
     return defAxios.delete<any>({
-            url: Api.delMenu + params,
+            url: Api.delResource + params,
         }, {
             serviceName: ServiceEnum.HAP,
             isTransformRequestResult: false
@@ -111,9 +95,9 @@ export function delMenu(params: any) {
  * @param params
  * @constructor
  */
-export function changeMenuStatus(params: any) {
+export function changeResourceStatus(params: any) {
     return defAxios.post<any>({
-            url: Api.changeMenuStatus,
+            url: Api.changeResourceStatus,
             params,
         }, {
             serviceName: ServiceEnum.HAP,

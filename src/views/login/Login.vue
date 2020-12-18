@@ -88,7 +88,6 @@ export default {
             // async function onSubmit() {
             validate()
                 .then(() => {
-                    console.log(toRaw(formData));
                     const userInfo = userStore.login({
                             username: formData.username,
                             password: formData.password

@@ -11,6 +11,8 @@ import {setTitle} from '/@/utils/browser';
 import {AxiosCanceler} from '/@/utils/http/axiosCancel';
 import {useI18n} from '/@/hooks/web/useI18n';
 import {REDIRECT_NAME} from '/@/router/constant';
+import {useLocale} from "/@/hooks/web/useLocale";
+import {PageEnum} from "/@/enums/pageEnum";
 
 const {closeMessageOnSwitch, removeAllHttpPending} = useProjectSetting();
 const globSetting = useGlobSetting();
@@ -56,16 +58,16 @@ export function createGuard(router: Router) {
     });
 
     //后置导航卫士
-    router.afterEach((to) => {
+    router.afterEach((to,from) => {
         // scroll top
         isHash((to as RouteLocationNormalized & { href: string })?.href) && body.scrollTo(0, 0);
 
         loadedPageMap.set(to.path, true);
-
-        const {t} = useI18n();
-
-        //改变html标题
-        to.name !== REDIRECT_NAME && setTitle(t(to.meta.title), globSetting.title);
+        const {getLang} = useLocale();
+        let b = getLang.value === 'en';
+        let title = b ? to.meta.engTitle : to.meta.title;
+            //改变html标题
+        to.name !== REDIRECT_NAME && setTitle(title, globSetting.title);
     });
     //页面加载状态
     createPageLoadingGuard(router);

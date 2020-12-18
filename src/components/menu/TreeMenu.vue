@@ -37,6 +37,7 @@ export default defineComponent({
         SubMenu,
     },
     setup() {
+
         const iconSize = ref(16);
         //获取菜单信息
         let backMenuListState = permissionStore.getBackMenuListState;
