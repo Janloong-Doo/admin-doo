@@ -24,7 +24,7 @@ export abstract class AxiosTransform {
     /**
      * @description: 请求之前的拦截器
      */
-    requestInterceptors?: (config: AxiosRequestConfig) => AxiosRequestConfig;
+    requestInterceptors?: (config: AxiosRequestConfig,options?: RequestOptions) => AxiosRequestConfig;
 
     /**
      * @description: 请求之后的拦截器
@@ -39,5 +39,5 @@ export abstract class AxiosTransform {
     /**
      * @description: 请求之后的拦截器错误处理
      */
-    responseInterceptorsCatch?: (error: Error) => void;
+    responseInterceptorsCatch?: (error: Error,options?: RequestOptions) => void;
 }

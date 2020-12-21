@@ -19,6 +19,10 @@ export interface RequestOptions {
     errorMessageMode?: ErrorMessageMode;
     //模块服务路径
     serviceName?: string;
+    //是否携带token
+    takeToken?: boolean;
+    //处理结果校验
+    checkResultStatus?: boolean;
 }
 
 export interface CreateAxiosOptions extends AxiosRequestConfig {

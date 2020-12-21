@@ -146,10 +146,10 @@ const transform: AxiosTransform = {
     /**
      * @description: 请求拦截器处理
      */
-    requestInterceptors: (config: AxiosRequestConfig) => {
+    requestInterceptors: (config: AxiosRequestConfig, options?: RequestOptions) => {
         // 请求之前处理config
         const token = getToken();
-        if (token) {
+        if (options?.takeToken && token) {
             // jwt token
             config.headers.Authorization = token;
         }
@@ -159,7 +159,7 @@ const transform: AxiosTransform = {
     /**
      * @description: 响应错误处理
      */
-    responseInterceptorsCatch: (error: any) => {
+    responseInterceptorsCatch: (error: any, options?: RequestOptions) => {
         errorStore.setupErrorHandle(error);
         const {response, code, message} = error || {};
         const msg: string =
@@ -179,7 +179,9 @@ const transform: AxiosTransform = {
             throw new Error(error);
         }
         //TODO 【简化】 http状态码处理 by Janloong_Doo
-        checkStatus(error.response && error.response.status, msg);
+
+        let checkResultStatus = options?.checkResultStatus;
+        checkResultStatus && checkStatus(error.response && error.response.status, msg);
         return Promise.reject(error);
     },
 };
@@ -210,6 +212,8 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
                     errorMessageMode: 'message',
                     // 接口地址
                     apiUrl: globSetting.apiUrl,
+                    takeToken: true,
+                    checkResultStatus: true
                 },
             },
             opt || {}
@@ -220,8 +224,9 @@ function createAxios(opt?: Partial<CreateAxiosOptions>) {
 export const defAxios = createAxios();
 
 // other api url
-// export const otherHttp = createAxios({
-//   requestOptions: {
-//     apiUrl: 'xxx',
-//   },
-// });
+export const otherHttp = createAxios({
+    requestOptions: {
+        takeToken: false,
+        checkResultStatus: false
+    },
+});

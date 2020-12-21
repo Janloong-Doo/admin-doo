@@ -44,7 +44,7 @@
                     <a-form-item label="菜单信息:" v-bind="validateInfos.menuInfo">
                         <color-tag v-model:value="modelRef.menuInfo" :tag-list="menTagList">
                             <template #name="item">
-                                {{item.scope.title}}
+                                {{ item.scope.title }}
                             </template>
                         </color-tag>
                     </a-form-item>
@@ -109,7 +109,7 @@
                 <template #menus="{text, record, index}">
                     <color-tag :tag-list="text">
                         <template #name="item">
-                            {{item.scope.title}}
+                            {{ item.scope.title }}
                         </template>
                     </color-tag>
                 </template>
@@ -164,13 +164,14 @@ export default {
     props: [],
     components: {ResourceDetail, ResourceDetail2, ColorTag, DownOutlined, PlusOutlined, EditOutlined, CloseOutlined, CustomTreeTransfer},
     setup() {
-        const columnsDefines = [{
-            title: '角色名称',
-            dataIndex: 'roleName',
-            sorter: true,
-            fixed: 'left',
-            align: 'center'
-        },
+        const columnsDefines = [
+            {
+                title: '角色名称',
+                dataIndex: 'roleName',
+                sorter: true,
+                fixed: 'left',
+                align: 'center'
+            },
             {
                 title: '角色值',
                 dataIndex: 'roleValue',

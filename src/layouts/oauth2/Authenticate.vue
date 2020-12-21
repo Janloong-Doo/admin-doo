@@ -12,7 +12,7 @@
 </template>
 
 <script>
-  import Api from "../../../assets/api/api.ts";
+  import Api from "../../assets/api/api.ts";
   import {
     mapState,
     mapMutations
