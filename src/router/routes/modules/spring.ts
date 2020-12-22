@@ -17,7 +17,7 @@ const spring: AppRouteModule = {
             path: "oauth2",
             // props: true,
             component: () =>
-                import(/* webpackChunkName: "about" */ "/@/views/spring/Oauth2.vue"),
+                import(/* webpackChunkName: "about" */ "/@/layouts/spring/Oauth2.vue"),
             meta: {
                 // title: t('routes.dashboard.welcome'),
                 title: 'oauth2认证',
@@ -29,7 +29,7 @@ const spring: AppRouteModule = {
             name: "Activiti",
             path: "activiti",
             component: () =>
-                import(/* webpackChunkName: "about" */ "/@/views/spring/Activiti.vue"),
+                import(/* webpackChunkName: "about" */ "/@/layouts/spring/Activiti.vue"),
             meta: {
                 // title: t('routes.dashboard.welcome'),
                 title: 'oauth2认证',

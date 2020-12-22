@@ -10,7 +10,7 @@
                 <a-input placeholder="请输入用户名" v-model:value="ruleForm.username"></a-input>
             </a-form-item>
             <a-form-item label="密码:" v-bind="validateInfos.password">
-                <a-input placeholder="请输入密码" v-model:value="ruleForm.password"></a-input>
+                <a-input-password placeholder="请输入密码" v-model:value="ruleForm.password"></a-input-password>
             </a-form-item>
             <a-space>
                 <a-button @click="resetFields">
@@ -21,9 +21,13 @@
                 </a-button>
             </a-space>
         </a-form>
-        <a-descriptions title="返回信息">
-            <template :key="item.key" v-for="item in userBaseInfo.entries">
-                <a-descriptions :lable="item.key">{{ item.value }}</a-descriptions>
+        <a-descriptions title="返回信息" bordered :column="1" >
+            <template :key="key" v-for="key in (Object.keys(userBaseInfo))" >
+                <a-descriptions-item
+                    :label="key"
+                    span="1"
+                >{{ userBaseInfo[key] }}
+                </a-descriptions-item >
             </template>
         </a-descriptions>
 
@@ -31,21 +35,22 @@
 </template>
 
 <script lang="ts">
-import {reactive, ref} from "vue";
+import {defineComponent, reactive, ref} from "vue";
 import {useForm} from "@ant-design-vue/use";
 import {oauth2Store} from "/@/store/modules/Oauth2.ts";
 import {deepMerge} from "/@/utils";
 import {UserBaseInfo} from "/@/api/model/UserModel";
 
-export default {
+
+export default defineComponent({
     name: "Login",
     setup() {
         const imageSrc = ref('http://localhost:9001/validate/imageCode');
         const requestUrl = ref('http://localhost:9001');
         const userBaseInfo = reactive({} as UserBaseInfo);
         const ruleForm = reactive({
-            username: "doo",
-            password: "doo",
+            username: "janloongdoo",
+            password: "janloong",
             validateCode: "1111",
         });
         const rules = reactive({
@@ -75,19 +80,14 @@ export default {
                     // , client_id: 'fooClientIdPassword'
                     // , client_secret: 'doo'
                     console.log(222)
-                    let userBaseInfoResult = oauth2Store.customLogin({username: username, password: password}) as UserBaseInfo;
-                    console.log(333)
-                    console.log(userBaseInfoResult)
-                    deepMerge(userBaseInfo, userBaseInfoResult)
-                    console.log(userBaseInfo)
+                    oauth2Store.customLogin({username: username, password: password}).then(value => {
+                        deepMerge(userBaseInfo, value)
+                    });
                 })
                 .catch(err => {
                     console.log("校验失败")
                 });
         }
-        // onMounted(async () => {
-        //
-        // })
 
 
         return {
@@ -103,10 +103,10 @@ export default {
     },
 
     methods: {}
-};
+});
 </script>
 
 <style lang="stylus" scoped>
 #login
-    width 30%
+    width 100%
 </style>
