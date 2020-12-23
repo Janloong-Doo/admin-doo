@@ -6,7 +6,7 @@ import {clearLocal, clearSession, getLocal, getSession, setLocal} from "/@/utils
 import {hotModuleUnregisterModule} from "/@/utils/helper/vuexHelper";
 import router, {resetRouter} from '/@/router';
 import {PageEnum} from "/@/enums/pageEnum";
-import {loginApi} from "/@/api/User";
+import {loginApi, logoutApi} from "/@/api/User";
 import {useMessage} from "/@/hooks/web/useMessage";
 import {RoleEnum} from "/@/enums/roleEnum";
 import {useProjectSetting} from "/@/hooks/setting";
@@ -129,14 +129,14 @@ class User extends VuexModule {
             // name && router.removeRoute(name);
             //TODO 【登录刷新】 取消使用router by Janloong_Doo
             goHome &&
-            location.replace(PageEnum.BASE_HOME)
-            // await router.push(PageEnum.BASE_HOME).then(() => {
-            //     // (await router.replace(PageEnum.BASE_HOME).then(() => {
-            //     setTimeout(() => {
-            //         appStore.commitPageLoadingState(false);
-            //         // location.reload()
-            //     }, 30);
-            // });
+            // location.replace(PageEnum.BASE_HOME)
+            await router.push(PageEnum.BASE_HOME).then(() => {
+                // (await router.replace(PageEnum.BASE_HOME).then(() => {
+                setTimeout(() => {
+                    // appStore.commitPageLoadingState(false);
+                    // location.reload()
+                }, 30);
+            });
             return userBaseInfo;
         } catch (error) {
             return null;
@@ -148,6 +148,8 @@ class User extends VuexModule {
      */
     @Action
     async loginOut(goLogin = false) {
+        let loginResultModel = await logoutApi();
+        console.log("注销登录",loginResultModel)
         goLogin && router.push(PageEnum.BASE_LOGIN);
     }
 

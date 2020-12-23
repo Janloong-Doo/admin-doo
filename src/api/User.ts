@@ -6,8 +6,9 @@ import {ErrorMessageMode} from "/@/utils/http/types";
 
 enum Api {
     Login = '/login',
-    GetPermCodeByUserId = '/getPermCodeByUserId',
+    Logout = '/logout',
     GetUserInfoById = '/user/',
+    GetUserCurrent = '/user/current',
     GetUserDetailInfoById = '/user/detail/',
     getUserManagerList = '/userManager/listAll',
     addUserManager = '/userManager/addUser',
@@ -34,6 +35,21 @@ export function loginApi(params: UserLoginParams, mode: ErrorMessageMode = 'moda
     );
 }
 
+/**
+ * 登出接口
+ */
+// export function logoutApi(params: UserLoginParams, mode: ErrorMessageMode = 'modal') {
+export function logoutApi( mode: ErrorMessageMode = 'modal') {
+    return defAxios.post<any>(
+        {
+            url: Api.Logout,
+        },
+        {
+            serviceName: ServiceEnum.AUTH,
+            errorMessageMode: mode,
+        }
+    );
+}
 
 /**
  * @description: getUserInfoById
@@ -129,6 +145,20 @@ export function disableUserManager(params: any) {
 export function resetUserManagerPassword(params: any) {
     return defAxios.post<any>({
         url: Api.resetUserManagerPassword,
+        params
+    }, {
+        serviceName: ServiceEnum.HAP,
+        isTransformRequestResult: false
+    })
+}
+
+
+/**
+ * @description: 获取用户管理界面 重置用户密码
+ */
+export function GetUserCurrent(params: any) {
+    return defAxios.get<any>({
+        url: Api.GetUserCurrent,
         params
     }, {
         serviceName: ServiceEnum.HAP,

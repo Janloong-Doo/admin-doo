@@ -14,11 +14,12 @@
 <script lang="ts">
 import Login from '/@/layouts/spring/oauth2/Login.vue'
 import Index from '/@/layouts/spring/oauth2/Index.vue'
+import Current from '/@/layouts/spring/oauth2/Current.vue'
 import {ref} from "vue";
 
 export default {
     name: "Oauth2",
-    components: {Login,Index},
+    components: {Login,Index,Current},
 
     setup() {
         let returnTabResult = [
@@ -29,6 +30,9 @@ export default {
             {
                 'key': 2,
                 'tab': 'Index'
+            }, {
+                'key': 3,
+                'tab': 'Current'
             },
         ]
         const tabComponent = ref("Login");

@@ -60,8 +60,10 @@ export default {
         });
         let {t} = useI18n();
         const formData = reactive({
-            username: '',
-            password: ''
+            username: 'janloongdoo',
+            password: 'janloong'
+            // username: '',
+            // password: ''
         })
         const formState = reactive({
             loading: false

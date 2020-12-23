@@ -1,11 +1,11 @@
-import {otherHttp} from "/@/utils/http/index.ts"
+import {defAxios, otherHttp} from "/@/utils/http/index.ts"
 import {ServiceEnum} from "/@/enums/httpEnum";
 
 enum Api {
     customLogin = '/login',
     userCurrent = '/user/current',
     getToken = '/oauth/token',
-    checkoutToken = '/oauth/token',
+    checkoutToken = '/oauth/check_token',
     logout = '/logout',
 }
 
@@ -30,12 +30,12 @@ export function customLogin(params: any) {
  * @param params
  * @constructor
  */
-export function userCurrent(params: any) {
-    return otherHttp.get<any>({
+export function userCurrent() {
+    return defAxios.get<any>({
             url: Api.userCurrent,
-            params,
         }, {
-            serviceName: ServiceEnum.AUTH,
+            serviceName: ServiceEnum.HAP,
+            isTransformRequestResult: false
         }
     );
 }
@@ -61,11 +61,13 @@ export function getToken(params: any) {
  * @constructor
  */
 export function checkoutToken(params: any) {
+    // return defAxios.post<any>({
     return otherHttp.post<any>({
             url: Api.checkoutToken,
             params,
         }, {
             serviceName: ServiceEnum.AUTH,
+            isTransformRequestResult: false
         }
     );
 }
