@@ -161,7 +161,7 @@ export function GetUserCurrent(params: any) {
         url: Api.GetUserCurrent,
         params
     }, {
-        serviceName: ServiceEnum.HAP,
+        serviceName: ServiceEnum.AUTH,
         isTransformRequestResult: false
     })
 }
