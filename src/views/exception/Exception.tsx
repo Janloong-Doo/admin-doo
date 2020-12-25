@@ -13,7 +13,7 @@ import { useRoute } from 'vue-router';
 import { useGo, useRedo } from '/@/hooks/web/usePage';
 import { PageEnum } from '/@/enums/pageEnum';
 
-import './exception.less';
+import './exception.styl';
 interface MapValue {
   title: string;
   subTitle: string;

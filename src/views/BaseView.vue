@@ -2,7 +2,7 @@
     <div id="business">
         <a-layout id="components-layout-demo-custom-trigger">
             <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible>
-                <div class="logo"/>
+                <div class="logo"></div>
                 <tree-menu></tree-menu>
             </a-layout-sider>
 

@@ -1,11 +1,16 @@
 {
   "name": "vue-janloongdoo",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "vue3 vite typescript",
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development vite ",
-    "build": "vite build"
+    "build": "cross-env NODE_ENV=production vite build",
+    "build:dev": "cross-env NODE_ENV=development vite build && esno ./build/script/postBuild.ts",
+    "build:pro": "cross-env NODE_ENV=production vite build && esno ./build/script/postBuild.ts",
+    "build:site": "cross-env SITE=true npm run build ",
+    "preview": "npm run build && esno ./build/script/preview.ts",
+    "preview:dist": "esno ./build/script/preview.ts"
   },
   "dependencies": {
     "@ant-design/colors": "^5.0.0",
@@ -38,6 +43,7 @@
     "@types/mockjs": "^1.0.3",
     "@types/nprogress": "^0.2.0",
     "@types/rollup-plugin-visualizer": "^2.6.0",
+    "@types/yargs": "^15.0.12",
     "@typescript-eslint/eslint-plugin": "^4.8.2",
     "@typescript-eslint/parser": "^4.8.2",
     "@vue/compiler-sfc": "^3.0.3",
@@ -53,16 +59,20 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
     "eslint-plugin-vue": "^7.1.0",
+    "esno": "^0.3.0",
     "globrex": "^0.1.2",
+    "portfinder": "^1.0.28",
     "prettier": "^2.1.2",
     "rollup-plugin-visualizer": "^4.1.2",
     "stylelint-config-prettier": "^8.0.2",
     "stylus": "^0.54.8",
+    "tasksfile": "^5.1.1",
     "ts-node": "^9.0.0",
     "vite": "^1.0.0-rc.13",
     "vite-plugin-html": "^1.0.0-beta.2",
     "vite-plugin-mock": "^1.0.6",
     "vite-plugin-purge-icons": "^0.4.5",
-    "vite-plugin-pwa": "^0.1.5"
+    "vite-plugin-pwa": "^0.1.5",
+    "yargs": "^16.2.0"
   }
 }

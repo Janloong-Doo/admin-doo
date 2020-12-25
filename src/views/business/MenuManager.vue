@@ -549,6 +549,8 @@ export default {
         initEmptyData() {
             this.addMenuData.isEditType = false;
             this.addMenuData.menuName = '';
+            this.addMenuData.engTitle = '';
+            this.addMenuData.iconUrl = '';
             this.addMenuData.menuCode = '';
             this.addMenuData.menuUrl = '';
             this.addMenuData.menupidUrl = '';

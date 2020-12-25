@@ -56,7 +56,7 @@ export function logoutApi( mode: ErrorMessageMode = 'modal') {
  */
 export function getUserInfoById(params: GetUserInfoByUserIdParams) {
     return defAxios.get<UserBaseInfo>({
-        url: Api.GetUserInfoById + params.userId
+        url: Api.GetUserInfoById + params.id
     }, {
         serviceName: ServiceEnum.AUTH
     })
@@ -67,7 +67,7 @@ export function getUserInfoById(params: GetUserInfoByUserIdParams) {
  */
 export function getUserDetailInfo(params: GetUserInfoByUserIdParams) {
     return defAxios.get<UserDetailInfo>({
-        url: Api.GetUserDetailInfoById + params.userId
+        url: Api.GetUserDetailInfoById + params.id
     }, {
         serviceName: ServiceEnum.HAP
     })

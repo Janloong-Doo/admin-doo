@@ -59,7 +59,7 @@ export default {
         }
 
         const getUserCurrentByAuth = () => {
-            GetUserCurrent().then(value => {
+            GetUserCurrent({}).then(value => {
                 displayInfo.data = {};
                 deepMerge(displayInfo.data, value)
             });

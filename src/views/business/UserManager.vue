@@ -469,9 +469,10 @@ export default {
                 });
                 let param = {
                     "id": id,
-                    "username": this.modelRef.addData.aliaName,
+                    // "username": this.modelRef.addData.aliaName,
                     "trueName": this.modelRef.addData.trueName,
                     "sex": this.modelRef.addData.sex,
+                    "aliaName": this.modelRef.addData.aliaName,
                     "tel": this.modelRef.addData.tel,
                     "organize": {
                         "id": this.modelRef.addData.organize.id,

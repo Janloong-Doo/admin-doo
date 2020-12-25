@@ -87,7 +87,7 @@ const viteConfig: UserConfig = {
      * be placed.
      * @default '_assets'
      */
-    assetsDir: '_assets',
+    // assetsDir: '_assets',
     /**
      * Static asset files smaller than this number (in bytes) will be inlined as
      * base64 strings. Default limit is `4096` (4kb). Set to `0` to disable.

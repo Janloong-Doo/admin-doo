@@ -147,7 +147,6 @@
 </template>
 
 <script lang="ts">
-// import Api from '../../assets/api/api'
 import {CloseOutlined, DownOutlined, EditOutlined, PlusOutlined} from "@ant-design/icons-vue";
 import {message} from 'ant-design-vue';
 import {useForm} from "@ant-design-vue/use";
@@ -157,6 +156,7 @@ import ColorTag from "../../components/ColorTag.vue";
 import ResourceDetail from "./components/ResourceDetail.vue";
 import ResourceDetail2 from "./components/ResourceDetail2.vue";
 import {addRole, changeRoleStatus, delRole, editRole, getRoleList} from "/@/api/Role";
+import {getResourceGroupByType} from "/@/api/Resource.ts";
 import {getMenuList} from "/@/api/menu";
 
 export default {
@@ -268,8 +268,8 @@ export default {
             modelRef.menuInfo = ts;
             return ts;
         });
-        const getResourceGroupByType = () => {
-            Api.getResourceGroupByType().then(value => {
+        const getResourceGroupByTypeInfo = () => {
+            getResourceGroupByType().then(value => {
                 if (value.code === 0) {
                     menuDrawerData.resourceDrawerData = value.data;
                 } else {
@@ -291,7 +291,7 @@ export default {
             menuRefData,
             menTagList,
             isMenuType,
-            getResourceGroupByType
+            getResourceGroupByTypeInfo
         }
     },
 
@@ -585,7 +585,7 @@ export default {
                 this.isMenuType = true;
             } else if (type === 'resource') {
                 this.isMenuType = false;
-                this.getResourceGroupByType();
+                this.getResourceGroupByTypeInfo();
             }
             // this.getMenuData()
         },

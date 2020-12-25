@@ -58,5 +58,5 @@ export interface RoleInfo {
  * @description: Get user information
  */
 export interface GetUserInfoByUserIdParams {
-    userId: string | number;
+    id: string ;
 }
