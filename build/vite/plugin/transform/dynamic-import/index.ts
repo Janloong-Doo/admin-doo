@@ -34,7 +34,7 @@ const dynamicImportTransform = function (enableDynamicImport: boolean): Transfor
         export default function (id) {
            switch (id) {
           ${files
-            .map((p) =>
+            .map((p:any) =>
               `   case '${getPath(p)}': return  () => import('${p
                 .replace('src/views', '/@/views')
                 .replace(/\/\//g, '/')}');`.replace('.tsx', '')

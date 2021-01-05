@@ -75,6 +75,8 @@
     "vite-plugin-pwa": "^0.3.0",
     "yargs": "^16.2.0",
     "@types/koa-static": "^4.0.1",
-    "koa-static": "^5.0.0"
+    "koa-static": "^5.0.0",
+    "fs-extra": "^9.0.1",
+    "@types/fs-extra": "^9.0.6"
   }
 }

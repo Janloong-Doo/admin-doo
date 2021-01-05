@@ -132,7 +132,7 @@ export default (mode: 'development' | 'production'): UserConfig => {
         cssPreprocessOptions: {
             stylus: {
                 modifyVars: {
-                    hack: `true; @import (reference) "${resolve('src/design/config.less')}";`,
+                    hack: `true; @import (reference) "${resolve('src/design/config.styl')}";`,
                     ...modifyVars,
                 },
                 javascriptEnabled: true,

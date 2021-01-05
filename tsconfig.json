@@ -40,6 +40,7 @@
       //      "webpack-env",
       //      "chai",
       //      "mocha"
+      "fs-extra",
       "lodash-es",
       "nprogress",
       "koa-static",
