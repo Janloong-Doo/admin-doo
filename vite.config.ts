@@ -78,12 +78,12 @@ export default (mode: 'development' | 'production'): UserConfig => {
          * directory exists, it will be removed before the build.
          * @default 'dist'
          */
-        outDir: 'dist',
+        // outDir: 'dist',
         /**
          * Whether to generate sourcemap
          * @default false
          */
-        sourcemap: false,
+        // sourcemap: false,
         /**
          * Directory relative from `outDir` where the built js/css/image assets will
          * be placed.
@@ -95,16 +95,18 @@ export default (mode: 'development' | 'production'): UserConfig => {
          * base64 strings. Default limit is `4096` (4kb). Set to `0` to disable.
          * @default 4096
          */
-        assetsInlineLimit: 4096,
+        // assetsInlineLimit: 4096,
         /**
          * Transpile target for esbuild.
          * @default 'es2020'
          */
-        esbuildTarget: 'es2020',
+        // esbuildTarget: 'es2020',
+        esbuildTarget: 'es2019',
         /**
          * Whether to log asset info to console
          * @default false
          */
+        // silent: false,
         silent: false,
 
         /**
@@ -141,11 +143,11 @@ export default (mode: 'development' | 'production'): UserConfig => {
         // The package will be recompiled using rollup, and the new package compiled into the esm module specification will be put into node_modules/.vite_opt_cache
         optimizeDeps: {
             include: [
-                'echarts/map/js/china',
                 'ant-design-vue/es/locale/zh_CN',
                 'ant-design-vue/es/locale/en_US',
                 '@ant-design/icons-vue',
-                "@ant-design-vue/use"
+                "@ant-design-vue/use",
+                "qs"
             ],
         },
 

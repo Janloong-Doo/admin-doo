@@ -1,8 +1,9 @@
 import type {AppRouteModule, AppRouteRecordRaw} from '/@/router/types';
 import type {RouteLocationNormalized, RouteRecordNormalized} from 'vue-router';
 
-import {LAYOUT} from '/@/router/constant';
+import {getParentLayout, LAYOUT} from '/@/router/constant';
 import {cloneDeep} from 'lodash-es';
+import dynamicImport from "/@/router/helper/dynamicImport";
 
 // 动态引入
 function asyncImportRoute(routes: AppRouteRecordRaw[] | undefined) {
@@ -10,14 +11,19 @@ function asyncImportRoute(routes: AppRouteRecordRaw[] | undefined) {
     routes.forEach((item) => {
         const {component, name} = item;
         const {children} = item;
-        // if (component) {
-        //   item.component = dynamicImport(component);
-        // } else if (name) {
-        //   item.component = getParentLayout(name);
-        // }
+        if (component) {
+            item.component = dynamicImport(component);
+            // console.log("component",component,item.component)
+            // item.component = () => import('/@/views'+`${component}`)
+        // item.component = () => import(/* @vite-ignore */`/@/views${component}`)
+        } else if (name) {
+            item.component = getParentLayout(name);
+            // console.log("name",name,item.component)
+        }
         //TODO 【疑惑】 动态导入如何写 by Janloong_Doo
-        let component1 = item.component;
-        item.component = () => import(`${component1}`)
+        // let component1 = item.component;
+        // item.component = () => import(`${component1}`)
+
         children && asyncImportRoute(children);
     });
 }

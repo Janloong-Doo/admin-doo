@@ -92,7 +92,7 @@ class User extends VuexModule {
     }
 
     @Action
-    async getUserInfoAction({userId}: GetUserInfoByUserIdParams) {
+    async getUserInfoAction({id}: GetUserInfoByUserIdParams) {
         // const userInfo = await getUserInfoById({userId});
         //TODO 【简化】 角色部分处理  by Janloong_Doo
         // const { role } = userInfo;

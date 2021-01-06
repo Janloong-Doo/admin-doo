@@ -65,7 +65,7 @@
                             v-model:value="modelRef.addData.organize.id"
                             style="width: 100%"
                             :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
-                            :tree-data="departmentData"
+                            :tree-data="departmentData.value"
                             placeholder="请选择组织"
                             :replaceFields="replaceFields"
                             allow-clear
@@ -181,7 +181,7 @@
 </template>
 
 <script lang="ts">
-import {createVNode, reactive} from 'vue';
+import {createVNode, reactive,ref} from 'vue';
 import {useForm} from '@ant-design-vue/use';
 import {message, Modal, TreeSelect} from 'ant-design-vue';
 import {CloseOutlined, DownOutlined, EditOutlined, ExclamationCircleOutlined, PlusOutlined, RollbackOutlined} from '@ant-design/icons-vue';
@@ -197,7 +197,7 @@ export default {
     components: {DownOutlined, PlusOutlined, EditOutlined, CloseOutlined, RollbackOutlined, ExclamationCircleOutlined},
     props: [],
     setup() {
-        const departmentData = [];
+        const departmentData = ref([]);
         const roleData = [];
         const replaceFields = {
             title: "organizeName",
@@ -529,17 +529,17 @@ export default {
         },
 
         delMenu(data) {
+            console.log("asdasd",data)
             let that = this;
             let selectedRows = data;
             if (!selectedRows) {
                 console.log("请选择一条数据")
                 return false;
             }
-            let content = "确认删除'" + selectedRows.name + "'吗？";
-            console.log(content);
+            let content = "确认删除'" + selectedRows.username + "'吗？";
 
             this.$confirm({
-                title: '删除角色',
+                title: '删除用户',
                 content: content,
                 onOk() {
                     return delUserManager(selectedRows.id).then(value => {
@@ -710,8 +710,8 @@ export default {
             getDepartMentList().then(value => {
                 this.resultData = value.data;
                     // 数据组装
-                this.departmentData = DataUtils.initTreeData(value.content);
-                    console.log("departmentData",departmentData)
+                this.departmentData.value = DataUtils.initTreeData(value.content);
+                    console.log("departmentData",this.departmentData.value)
             })
         },
         getRoleData() {

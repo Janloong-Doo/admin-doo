@@ -17,7 +17,7 @@
         <span style="margin: 5px ;padding: 20px">
 <!--        <span >-->
             <a-space>
-            <a-avatar src="/@/assets/img/1.ico" size="midem"/>
+            <a-avatar :src="logo" size="midem"/>
             <span style="font-size: medium">{{ userDetailInfo.aliaName }}</span>
             </a-space>
         </span>
@@ -52,6 +52,7 @@ import {getUserDetailInfo} from "/@/api/User.ts"
 import {deepMerge} from "/@/utils";
 import {UserDetailInfo} from "/@/api/model/UserModel";
 import ColorTag from "/@/components/ColorTag.vue";
+import logo from '/@/assets/img/1.ico';
 
 export default {
     name: "UserHeader",
@@ -82,6 +83,7 @@ export default {
             })
         })
         return {
+            logo,
             userInfoDrawerVisible,
             userDetailInfo,
             handleMenuClick,

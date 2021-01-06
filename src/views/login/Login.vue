@@ -47,6 +47,7 @@ import {useForm} from "@ant-design-vue/use";
 import {userStore} from '/@/store/modules/User.ts';
 import LocalMenu from "/@/components/header/LocalMenu.vue";
 import {useI18n} from "/@/hooks/web/useI18n.ts";
+import logo from '/@/assets/img/1.ico';
 
 export default {
     name: "Login",
@@ -60,8 +61,8 @@ export default {
         });
         let {t} = useI18n();
         const formData = reactive({
-            username: 'janloongdoo',
-            password: 'janloong'
+            username: 'doo',
+            password: 'doo'
             // username: '',
             // password: ''
         })
@@ -109,7 +110,7 @@ export default {
             resetFields,
             onSubmit,
             formState,
-            logo: '/@/assets/img/1.ico'
+            logo
         }
     }
 }

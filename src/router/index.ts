@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory, RouteRecordRaw} from "vue-router";
+import {createRouter, createWebHashHistory, createWebHistory, RouteRecordRaw} from "vue-router";
 import {App} from "vue";
 import {basicRoutes} from "/@/router/routes";
 import {createGuard} from '/@/router/guard/index.ts';
@@ -6,7 +6,8 @@ import {createGuard} from '/@/router/guard/index.ts';
 let baseView = import("../views/BaseView.vue");
 
 const router = createRouter({
-    history: createWebHistory(),
+    // history: createWebHistory(),
+    history: createWebHashHistory(),
     routes: basicRoutes as RouteRecordRaw[],
     // routes: _router,
     strict: true,

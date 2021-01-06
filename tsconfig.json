@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     // 编译输出目标 ES 版本
-    "target": "esnext",
+//    "target": "esnext",
+    "target": "es2016",
     // 采用的模块系统
     "module": "esnext",
     // 以严格模式解析
@@ -35,7 +36,7 @@
     //    "pretty": true,
     // 解析非相对模块名的基准目录
     "baseUrl": ".",
-    "rootDir": ".",
+//    "rootDir": ".",
     "types": [
       //      "webpack-env",
       //      "chai",
@@ -88,5 +89,10 @@
     "node_modules",
     "dist",
     "**/*.js"
+  ],
+  "plugins": [
+    {
+      "name": "@vuedx/typescript-plugin-vue"
+    }
   ]
 }

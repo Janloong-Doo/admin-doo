@@ -17,7 +17,7 @@ const study: AppRouteModule = {
             path: "base",
             // props: true,
             component: () =>
-                import(/* webpackChunkName: "about" */ "/@/layouts/study/Study.vue"),
+                import(/* webpackChunkName: "about" */ "/@/views/study/Study.vue"),
             meta: {
                 // title: t('routes.dashboard.welcome'),
                 title: 'oauth2认证',

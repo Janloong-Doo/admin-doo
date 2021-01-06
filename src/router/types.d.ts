@@ -6,7 +6,7 @@ export interface RouteMeta {
     // title
     title: string;
     // engTitle
-    engTitle: string;
+    engTitle?: string;
     // Whether to ignore permissions
     ignoreAuth?: boolean;
     // role info

@@ -1,5 +1,5 @@
 import type { AppRouteRecordRaw } from '/@/router/types';
-// import ParentLayout from '/@/layouts/page/ParentView.vue';
+import ParentLayout from '/@/views/BaseView.vue';
 
 const EXCEPTION_COMPONENT = () => import('/@/views/exception/Exception.tsx');
 
@@ -16,7 +16,7 @@ export const getParentLayout = (name: string) => {
   return () =>
     new Promise((resolve) => {
       resolve({
-        // ...ParentLayout,
+        ...ParentLayout,
         name,
       });
     });
