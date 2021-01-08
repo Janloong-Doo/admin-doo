@@ -128,13 +128,15 @@ class User extends VuexModule {
             // const name = FULL_PAGE_NOT_FOUND_ROUTE.name;
             // name && router.removeRoute(name);
             //TODO 【登录刷新】 取消使用router by Janloong_Doo
-            goHome &&
+            // location.replace("#/home")
+            // router.forward()
             // location.replace(PageEnum.BASE_HOME)
+            // await router.replace(PageEnum.BASE_HOME)
+            goHome &&
             await router.push(PageEnum.BASE_HOME).then(() => {
-                // (await router.replace(PageEnum.BASE_HOME).then(() => {
                 setTimeout(() => {
                     // appStore.commitPageLoadingState(false);
-                    // location.reload()
+                    location.reload()
                 }, 30);
             });
             return userBaseInfo;
@@ -149,7 +151,7 @@ class User extends VuexModule {
     @Action
     async loginOut(goLogin = false) {
         let loginResultModel = await logoutApi();
-        console.log("注销登录",loginResultModel)
+        console.log("注销登录", loginResultModel)
         goLogin && router.push(PageEnum.BASE_LOGIN);
     }
 

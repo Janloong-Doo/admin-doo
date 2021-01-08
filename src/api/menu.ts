@@ -17,7 +17,7 @@ enum Api {
  * @description: Get user routeinfo based on id
  */
 export function GetRouteInfoByUser(params: getMenuListByUserParams) {
-    return defAxios.post<getMenuListByUserParamsResultModel>({
+    return defAxios.get<getMenuListByUserParamsResultModel>({
             url: Api.GetRouteInfoByUser,
             params,
         }, {

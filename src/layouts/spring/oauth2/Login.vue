@@ -49,8 +49,8 @@ export default defineComponent({
         const requestUrl = ref('http://localhost:9001');
         const userBaseInfo = reactive({} as UserBaseInfo);
         const ruleForm = reactive({
-            username: "janloongdoo",
-            password: "janloong",
+            username: "doo",
+            password: "doo",
             validateCode: "1111",
         });
         const rules = reactive({
