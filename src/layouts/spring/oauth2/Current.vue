@@ -32,7 +32,7 @@ import {checkoutToken, userCurrent} from "/@/api/Oauth2.ts";
 import {GetUserCurrent} from "/@/api/User.ts";
 
 export default {
-    name: "Index",
+    name: "Current",
     props: {
         'signStatus': {
             type: String,
