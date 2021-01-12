@@ -1,5 +1,5 @@
 <template>
-  <div id="Oauth2">
+  <div id="Tools">
     <a-tabs type="card" @change="callback">
       <template v-for="item in tabResult" :key="item.key">
         <a-tab-pane :tab="item.tab">
@@ -12,32 +12,30 @@
   </div>
 </template>
 <script lang="ts">
-import Login from '/@/layouts/spring/oauth2/Login.vue'
-import Index from '/@/layouts/spring/oauth2/Index.vue'
-import Current from '/@/layouts/spring/oauth2/Current.vue'
+import Display from '/@/layouts/markdown/Display.vue'
+import Editor from '/@/layouts/markdown/Editor.vue'
 import {ref} from "vue";
 
+
 export default {
-  name: "Oauth2",
-  components: {Login, Index, Current},
+  name: "Markdown",
+  components: {Display,Editor},
 
   setup() {
     let returnTabResult = [
       {
         'key': 1,
-        'tab': 'Login'
-      },
-      {
+        'value': "Display",
+        'tab': '渲染'
+      },   {
         'key': 2,
-        'tab': 'Index'
-      }, {
-        'key': 3,
-        'tab': 'Current'
+        'value': "Editor",
+        'tab': '编辑器'
       }
     ]
-    const tabComponent = ref("Login");
+    const tabComponent = ref("Display");
     const callback = (key: number) => {
-      tabComponent.value = returnTabResult.filter(value => value.key === key)[0].tab;
+      tabComponent.value = returnTabResult.filter(value => value.key === key)[0].value;
     };
     return {
       tabResult: returnTabResult,

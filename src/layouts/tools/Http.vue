@@ -15,17 +15,8 @@
     </a-input-search>
     <br/>
     <a-textarea v-model:value="baseData.params" :placeholder="commonData.paramsTip" :rows="4"/>
-
-    <a-descriptions title="返回信息" bordered :column="1">
-      <template :key="key" v-for="key in (Object.keys(displayInfo.data))">
-        <a-descriptions-item
-            :label="key"
-            span="1"
-        >{{ displayInfo.data[key] }}
-        </a-descriptions-item>
-      </template>
-    </a-descriptions>
-
+    <br/>
+    <vue-json-pretty :path="'res'" :data="displayInfo.data" :deep="3" :showLength="true"> </vue-json-pretty>
   </div>
 </template>
 
@@ -33,16 +24,14 @@
 
 import {reactive} from "vue";
 import {deepMerge} from "/@/utils";
-import {defAxios} from "/@/utils/http/index.ts"
-import {ServiceEnum} from "/@/enums/httpEnum";
+import {defAxios} from "/@/utils/http"
+import VueJsonPretty from 'vue-json-pretty';
+import 'vue-json-pretty/lib/styles.css';
 
 export default {
-  name: "Tools",
+  name: "Http",
+  components: {VueJsonPretty},
   props: {
-    'signStatus': {
-      type: String,
-      default: 'index'
-    }
   },
   setup() {
     const commonData = {
@@ -52,7 +41,7 @@ export default {
     //基础输入数据
     const baseData = reactive({
       requestType: 'GET',
-      urlInput: '',
+      urlInput: 'http://localhost:8901/hap/app/allUrl',
       params: ''
     })
 
@@ -61,9 +50,10 @@ export default {
 
     const executeRequest = () => {
       displayInfo.data = {};
-      defAxios.get<any>({
+      defAxios.request<any>({
         url: baseData.urlInput,
         params:baseData.params,
+        method:baseData.requestType
       }, {
         isTransformRequestResult: false
       }).then(value => {
