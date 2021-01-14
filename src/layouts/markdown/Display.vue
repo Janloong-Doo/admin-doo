@@ -10,6 +10,8 @@
 import {onMounted, reactive} from "vue";
 import MarkdownIt from "markdown-it";
 import 'github-markdown-css/github-markdown.css' // 然后添加样式markdown-body
+import {getMdFileByUrl} from "/@/api/Md"
+
 export default {
   name: "Display",
   setup() {
@@ -192,7 +194,12 @@ export default {
       console.log("blog.targetContent", blog.targetContent)
     };
     onMounted(() => {
-      initMarkDown(blog.sourceContent);
+      // initMarkDown(blog.sourceContent);
+      // initMarkDown(blog.sourceContent);
+        getMdFileByUrl("/mdfile/d7973221-9476-4f1d-82e0-f5386fb53fb2.md").then(value => {
+            console.log(JSON.parse(value.data));
+            console.log("md文件",value.data)
+        })
     });
     return {
       blog
