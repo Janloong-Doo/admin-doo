@@ -2,46 +2,44 @@
   <span>首页展示</span>
   <br>
   <br>
-  <a-descriptions>
-    <a-descriptions-item>一个demo练习实战项目</a-descriptions-item>
-  </a-descriptions>
-  <br>
-<!--  <a-row justify="space-arround">-->
-<!--      <a-col >-->
-        <a-descriptions title="前端技术框架" bordered :column="1" >
-          <template :key="key" v-for="key in (Object.keys(displayInfo.data))">
-            <a-descriptions-item
-                :label="key"
-                :span="8"
-            >{{ displayInfo.data[key] }}
-            </a-descriptions-item>
-          </template>
-        </a-descriptions>
-  <br/>
-<!--      </a-col>-->
-<!--      <a-col :span="18">-->
-<!--      <a-col :offset="5">-->
-<!--        <a-descriptions title="后端技术框架" bordered colon="2" :column="3" >-->
-        <a-descriptions title="后端技术框架" bordered  >
-          <template :key="key" v-for="key in (Object.keys(displayInfo.back))">
-            <a-descriptions-item
-                :label="key"
-                :span="24"
-            > {{ displayInfo.back[key] }}
-            </a-descriptions-item>
-          </template>
-        </a-descriptions>
-<!--      </a-col>-->
-<!--  </a-row>-->
+
+  <md :content="content.data"></md>
+
+  <!--  <a-descriptions>-->
+  <!--    <a-descriptions-item>一个demo练习实战项目</a-descriptions-item>-->
+  <!--  </a-descriptions>-->
+  <!--  <br>-->
+
+  <!--  <a-descriptions title="前端技术框架" bordered :column="1">-->
+  <!--    <template :key="key" v-for="key in (Object.keys(displayInfo.data))">-->
+  <!--      <a-descriptions-item-->
+  <!--          :label="key"-->
+  <!--          :span="8"-->
+  <!--      >{{ displayInfo.data[key] }}-->
+  <!--      </a-descriptions-item>-->
+  <!--    </template>-->
+  <!--  </a-descriptions>-->
+  <!--  <br/>-->
+  <!--  <a-descriptions title="后端技术框架" bordered>-->
+  <!--    <template :key="key" v-for="key in (Object.keys(displayInfo.back))">-->
+  <!--      <a-descriptions-item-->
+  <!--          :label="key"-->
+  <!--          :span="24"-->
+  <!--      > {{ displayInfo.back[key] }}-->
+  <!--      </a-descriptions-item>-->
+  <!--    </template>-->
+  <!--  </a-descriptions>-->
+
 </template>
 
 <script lang="ts">
-
-import {reactive} from "vue";
+import Md from '/@/components/md/Md.vue'
+import {onMounted, reactive} from "vue";
+import {getMdFileByUrl} from "/@/api/Md";
 
 export default {
   name: "Home",
-
+  components: {Md},
   setup() {
     const data = {
       "vue": "^3.0.3",
@@ -64,8 +62,18 @@ export default {
       "docker": "19.03.11",
       "nginx": "1.19.1",
     }
-    const displayInfo = reactive({data: data,back:back});
+    const displayInfo = reactive({data: data, back: back});
+
+    const content = reactive({data: ""});
+    onMounted(() => {
+      getMdFileByUrl("/mdfile/d7973221-9476-4f1d-82e0-f5386fb53fb2.md").then(value => {
+        new Blob([value]).text().then(value1 => {
+          content.data = value1;
+        });
+      })
+    });
     return {
+      content,
       displayInfo
     }
   }
