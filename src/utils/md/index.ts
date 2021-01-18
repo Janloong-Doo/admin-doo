@@ -15,6 +15,22 @@ function getMarkdownit() {
         html: false,
         xhtmlOut: true,
         typographer: true
+        //highlight 过滤GitHub markdown css 的背景色失败
+        // highlight:function (str, lang) {
+        //     // 添加这两行才能正确显示 <>
+        //     str = str.replace(/&lt;/g, "<");
+        //     str = str.replace(/&gt;/g, ">");
+        //     console.log("mmmmmmmmmm",str,lang)
+        //     if (lang && highlightjs.getLanguage(lang)) {
+        //         try {
+        //             return '<pre class="hljs"><code>' +
+        //                 highlightjs.highlight(lang, str, true).value +
+        //                 '</code></pre>';
+        //         } catch (__) {}
+        //     }
+        //
+        //     return '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
+        // }
     });
     markdownIt
         .use(MarkdownItSub)

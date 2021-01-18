@@ -135,7 +135,7 @@
 }
 
 .markdown-body a {
-  color: #0366d6;
+  color: #6CC0B7;
   text-decoration: none;
 }
 
@@ -649,9 +649,12 @@
 }
 
 .markdown-body blockquote {
-  padding: 0 1em;
+  padding: 1em 1em;
+  /*color: #6a737d;*/
   color: #6a737d;
-  border-left: .25em solid #dfe2e5;
+  /*color: #42b983;*/
+  background-color: #ecf8f2;
+  border-left: .25em solid #42b983;
 }
 
 .markdown-body blockquote>:first-child {
@@ -804,7 +807,7 @@
   font-size: 100%;
   word-break: normal;
   white-space: pre;
-  /*background: transparent;*/
+  background: transparent;
   border: 0;
 }
 
@@ -824,6 +827,7 @@
   font-size: 85%;
   line-height: 1.45;
   /*background-color: #f6f8fa;*/
+  background-color: #322931;
   border-radius: 3px;
 }
 

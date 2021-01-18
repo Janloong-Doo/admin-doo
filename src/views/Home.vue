@@ -1,9 +1,9 @@
 <template>
-  <span>首页展示</span>
-  <br>
-  <br>
+<!--  <span>首页展示</span>-->
+<!--  <br>-->
+<!--  <br>-->
 
-  <md :content="content.data"></md>
+  <md class="custom-md" :content="content.data"></md>
 
   <!--  <a-descriptions>-->
   <!--    <a-descriptions-item>一个demo练习实战项目</a-descriptions-item>-->
@@ -81,5 +81,8 @@ export default {
 </script>
 
 <style scoped>
-
+.custom-md{
+    /*position: center;*/
+    /*left: 30%;*/
+}
 </style>

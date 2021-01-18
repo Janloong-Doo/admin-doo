@@ -1,21 +1,25 @@
 <template>
-    <div id="business">
+    <div>
+        <!--                <a-layout id="components-layout-demo-fixed-sider">-->
         <a-layout id="components-layout-demo-custom-trigger">
-            <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible>
+
+            <!--            <a-layout-sider class="custom-layout-sider" v-model:collapsed="collapsed" :trigger="null" collapsible >-->
+<!--            <a-layout-sider class="custom-layout-sider" v-model:collapsed="collapsed" :trigger="null" collapsible>-->
+            <a-layout-sider class="custom-layout-sider" v-model:collapsed="collapsed" >
                 <div class="logo"></div>
                 <tree-menu></tree-menu>
             </a-layout-sider>
 
-            <a-layout>
-                <a-layout-header class="layoutheader">
+            <a-layout class="custom-layout-right">
+                <a-layout-header class="custom-layout-header">
                     <a-row type="flex" justify="start" align="middle">
                         <a-col :span="1">
-                            <MenuUnfoldOutlined
-                                v-if="collapsed"
-                                class="trigger"
-                                @click="() => (collapsed = !collapsed)"
-                            />
-                            <MenuFoldOutlined v-else class="trigger" @click="() => (collapsed = !collapsed)"/>
+<!--                            <MenuUnfoldOutlined-->
+<!--                                v-if="collapsed"-->
+<!--                                class="trigger"-->
+<!--                                @click="() => (collapsed = !collapsed)"-->
+<!--                            />-->
+<!--                            <MenuFoldOutlined v-else class="trigger" @click="() => (collapsed = !collapsed)"/>-->
                         </a-col>
                         <a-col :span="4" offset="19">
                             <user-header></user-header>
@@ -24,16 +28,16 @@
                     </a-row>
                 </a-layout-header>
 
-                <a-layout-content class="layoutcontent"
+                <a-layout-content class="custom-layout-content"
                 >
-<!--                    <suspense>-->
-<!--                        <template #default>-->
-                            <router-view/>
-<!--                        </template>-->
-<!--                        <template #fallback>-->
-<!--                            <h1>Loading</h1>-->
-<!--                        </template>-->
-<!--                    </suspense>-->
+                    <!--                    <suspense>-->
+                    <!--                        <template #default>-->
+                    <router-view/>
+                    <!--                        </template>-->
+                    <!--                        <template #fallback>-->
+                    <!--                            <h1>Loading</h1>-->
+                    <!--                        </template>-->
+                    <!--                    </suspense>-->
                 </a-layout-content>
 
                 <a-layout-footer style="textAlign: center">
@@ -79,7 +83,7 @@ export default {
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 #components-layout-demo-custom-trigger {
     height 100%
     //line-height: 64px;
@@ -106,21 +110,47 @@ export default {
     margin: 16px;
 }
 
-#components-layout-demo-custom-trigger .layoutheader {
+#components-layout-demo-custom-trigger .custom-layout-header {
     background #fff
     padding 0
 }
 
+.custom-layout-sider {
+    overflow auto
+    height 100vh
+    position fixed
+    left 0
+    //width 20%
+}
 
-.layoutcontent {
+.custom-layout-right {
+    margin-left 200px
+    //margin-left 120px
+
+}
+
+.custom-layout-header {
+    position fixed
+    overflow initial
+    width 100%
+    z-index 1
+}
+
+.custom-layout-content {
     //margin 2px
     //padding 24px
     //background #fff
     //margin 24px 16px
-    margin 20px 12px 0px
-    padding 24px
+    //margin 78px 14px 14px 14px
+    margin 65px 0px 14px
+    padding 30px 35px
     background #fff
-    minHeight 280px
+    //minHeight 80%
+    //width 100%
+
+    overflow initial
+    //position fixed
+    //zIndex 1
 }
 
 
