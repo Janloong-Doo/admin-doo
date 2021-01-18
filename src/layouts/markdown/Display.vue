@@ -19,7 +19,7 @@ export default {
   setup() {
     const content = reactive({data: ""});
     onMounted(() => {
-      getMdFileByUrl("/mdfile/d7973221-9476-4f1d-82e0-f5386fb53fb2.md").then(value => {
+      getMdFileByUrl("/mdfile/c1090af7-2e05-49f3-9eb3-1adf6d58ef7f.md").then(value => {
         new Blob([value]).text().then(value1 => {
           content.data = value1;
         });

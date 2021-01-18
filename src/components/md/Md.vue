@@ -4,8 +4,14 @@
 
 <script lang="ts">
 import {computed} from "vue"
-import 'github-markdown-css/github-markdown.css' // 然后添加样式markdown-body
-import MarkdownIt from "markdown-it";
+// import 'highlight.js/default.css'
+// import 'highlight.js/styles/a11y-dark.css'
+// import 'highlight.js/styles/default.css'
+// import 'highlight.js/styles/darcula.css'
+import 'highlight.js/styles/lioshi.css'
+// import 'github-markdown-css/github-markdown.css' // 然后添加样式markdown-body
+import '/@/assets/css/markdown.css'
+import {md} from "/@/utils/md";
 import {splitMdHeader} from "/@/utils";
 
 export default {
@@ -18,7 +24,6 @@ export default {
   setup(props: any, context: any) {
 
     const display = computed(() => {
-      const md = new MarkdownIt();
       let contentInfo = splitMdHeader(props.content);
       return md.render(contentInfo);
     });
@@ -30,6 +35,14 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="stylus" scoped>
+//.markdown-body pre code{
+//  background-color #000c17;
+//}
+.markdown-body pre {
+  background #000c17
+}
+.hljs {
+  background-color #000c17
+}
 </style>
