@@ -1,10 +1,10 @@
 <template>
-<!--  <span>首页展示</span>-->
-<!--  <br>-->
-<!--  <br>-->
-
-  <md class="custom-md" :content="content.data"></md>
-
+  <!--  <span>首页展示</span>-->
+  <!--  <br>-->
+  <!--  <br>-->
+  <div id="home">
+    <md class="custom-md" :content="content.data"></md>
+  </div>
   <!--  <a-descriptions>-->
   <!--    <a-descriptions-item>一个demo练习实战项目</a-descriptions-item>-->
   <!--  </a-descriptions>-->
@@ -80,9 +80,14 @@ export default {
 }
 </script>
 
-<style scoped>
-.custom-md{
-    /*position: center;*/
-    /*left: 30%;*/
+<style lang="stylus" scoped>
+.custom-md {
+  /*position: center;*/
+  /*left: 30%;*/
+}
+#home {
+  width 100%
+  display flex
+  justify-content: center;
 }
 </style>

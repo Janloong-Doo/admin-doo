@@ -50,9 +50,10 @@ export default {
     //position inherit
     position relative
     padding 2rem 2.5rem
-    left 35%
-    //width 45%
-    max-width 740px
+    //left 35%
+    width 45%
+    //max-width 740px
+  //text-align center
 }
 .custom-markdown blockquote p{
     background-color #42b983

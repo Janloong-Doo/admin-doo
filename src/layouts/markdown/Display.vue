@@ -1,11 +1,14 @@
 <template>
-  <!--      <div class="content markdown-body" v-html="blog.targetContent"></div>-->
-  <!--  <div class="markdown-body" v-html="blog.targetContent"></div>-->
-  <md :content="content.data"></md>
+  <div id="display">
 
-  <!--  <div class="body" v-html="blog.targetContent"></div>-->
-  <!--  <div class="mark"  v-html="blog.targetContent"></div>-->
-  <!--  <div  v-html="blog.targetContent"></div>-->
+    <!--      <div class="content markdown-body" v-html="blog.targetContent"></div>-->
+    <!--  <div class="markdown-body" v-html="blog.targetContent"></div>-->
+    <md class="markdown-children" :content="content.data"></md>
+
+    <!--  <div class="body" v-html="blog.targetContent"></div>-->
+    <!--  <div class="mark"  v-html="blog.targetContent"></div>-->
+    <!--  <div  v-html="blog.targetContent"></div>-->
+  </div>
 </template>
 
 <script lang="ts">
@@ -32,7 +35,7 @@ export default {
 }
 </script>
 
-<style lang="css" scoped>
+<style lang="stylus" scoped>
 /*@import "../../assets/css/vue.css";*/
 
 /*.mark /deep/ a {*/
@@ -41,6 +44,15 @@ export default {
 /*  padding: 0 2px;*/
 /*  text-decoration: none;*/
 /*}*/
+#display {
+  width 100%
+  display flex
+  justify-content: center;
+}
 
+#display .markdown-children {
+  //position: center;
+  //width
+}
 
 </style>
