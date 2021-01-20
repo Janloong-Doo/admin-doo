@@ -10,7 +10,8 @@
         <tree-menu></tree-menu>
       </a-layout-sider>
 
-      <a-layout class="custom-layout-right">
+<!--            <a-layout class="custom-layout-right">-->
+      <a-layout>
         <a-layout-header class="custom-layout-header">
           <!--                        <a-col :span="1">-->
           <!--                            <MenuUnfoldOutlined-->
@@ -22,10 +23,17 @@
           <!--                        </a-col>-->
           <!--            <a-col :span="4" offset="19">-->
           <!--            <a-col :offset="2" :span="4">-->
-          <!--          <a-row type="flex" justify="start" align="middle">-->
-          <user-header></user-header>
-          <local-menu></local-menu>
-          <!--          </a-row>-->
+          <!--          <a-row type="flex" justify="end" align="middle">-->
+          <a-row type="flex" justify="end" align="middle">
+            <!--                      <div id="header-detail">-->
+            <a-col class="custom-col">
+              <user-header></user-header>
+            </a-col>
+            <a-col class="custom-col">
+              <local-menu></local-menu>
+            </a-col>
+          </a-row>
+          <!--          </div>-->
           <!--          <a-divider type="horizontal"></a-divider>-->
         </a-layout-header>
         <a-layout-content class="custom-layout-content"
@@ -121,19 +129,23 @@ export default {
   position fixed
   left 0
   //width 20%
+  z-index 2
 }
 
 .custom-layout-right {
-  margin-left 200px
-  //margin-left 120px
+  //margin-left 200px
+
   display flex
+  flex 1
   flex-direction column
 }
 
 .custom-layout-header {
+  //margin-left 200px
   position fixed
   overflow initial
   z-index 1
+  width 100%
   outline-color #c8c7cc
   outline-width 1px
   outline-style solid
@@ -141,30 +153,32 @@ export default {
   //border-bottom-style solid
   //border-bottom-color #c8c7cc
   //border-width:1px;
-  //padding-right 300px
-  flex-direction row
-  //width calc(100vw)
-  //position: relative;
-  //width 100%
-  justify-content end
+  //flex-direction row
+  //flex-direction column
+  //felx 1 1 auto
+  //display flex
+  //justify-content end
+
+  //display flex
+  //justify-content: center;
+}
+
+#header-detail {
+  height initial
+  width auto
+  //display flex
+  justify-content: center;
 }
 
 .custom-layout-content {
   overflow initial
-  margin 65px 0 14px
+  margin 65px 0 14px 200px
   padding 30px 35px
   background #fff
-  //minHeight 80%
-  //width 100%
-
-  //position fixed
   //zIndex 1
 }
-
-
-.routeviewcontent {
-  //height 800px
-  //height 500px
-  //height 240px
+.custom-col{
+  //height 64px
+  //background #a59393
 }
 </style>

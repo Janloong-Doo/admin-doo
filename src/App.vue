@@ -50,4 +50,7 @@ export default {
         background: #fffff;
     }
 }
+.c-border{
+  //flex 1
+}
 </style>

@@ -9,7 +9,6 @@ import MarkdownItToc from "markdown-it-toc-done-right";
 import MarkdownItHighlightjs from "markdown-it-highlightjs";
 import highlightjs from "highlight.js";
 
-
 function getMarkdownit() {
     const markdownIt = new MarkdownIt({
         html: false,
@@ -40,10 +39,16 @@ function getMarkdownit() {
         .use(MarkdownItAnchor)
         // .use(MarkdownItToc,{markerPattern:'^\[\[toc\]\]'})
         .use(MarkdownItToc)
+        // .use(MarkdownItToc, {
+        //     format: function (x: any, htmlencode: any) {
+        //         console.log("format", x,htmlencode(x), htmlencode)
+        //         return `<span>${htmlencode(x)}</span>`;
+        //     }
+        // })
         // .use(MarkdownItToc)
-        .use(MarkdownItTaskLists ,{enabled:false,label:true,labelAfter:true})
-        .use(MarkdownItHighlightjs,{inline:true,hljs:highlightjs,auto:true})
-        // .use(MarkdownItHighlightjs,{inline:true,auto:true})
+        .use(MarkdownItTaskLists, {enabled: false, label: true, labelAfter: true})
+        .use(MarkdownItHighlightjs, {inline: true, hljs: highlightjs, auto: true})
+    // .use(MarkdownItHighlightjs,{inline:true,auto:true})
     ;
     return markdownIt;
 }

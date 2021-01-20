@@ -6,8 +6,8 @@ import {createGuard} from '/@/router/guard/index.ts';
 let baseView = import("../views/BaseView.vue");
 
 const router = createRouter({
-    // history: createWebHistory(),
-    history: createWebHashHistory(),
+    history: createWebHistory(),
+    // history: createWebHashHistory(),
     routes: basicRoutes as RouteRecordRaw[],
     // routes: _router,
     strict: true,
