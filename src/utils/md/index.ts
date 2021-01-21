@@ -4,8 +4,7 @@ import MarkdownItSup from "markdown-it-sup";
 import MarkdownItEmoji from "markdown-it-emoji";
 import MarkdownItAnchor from "markdown-it-anchor";
 import MarkdownItTaskLists from "markdown-it-task-lists";
-// import MarkdownItToc from "markdown-it-table-of-contents";
-import MarkdownItToc from "markdown-it-toc-done-right";
+import MarkdownItToc from "markdown-it-table-of-contents";
 import MarkdownItHighlightjs from "markdown-it-highlightjs";
 import highlightjs from "highlight.js";
 
@@ -37,9 +36,10 @@ function getMarkdownit() {
         .use(MarkdownItEmoji)
         // .use(MarkdownItAnchor, {permalink: true, permalinkBefore: true})
         .use(MarkdownItAnchor)
-        // .use(MarkdownItToc,{markerPattern:'^\[\[toc\]\]'})
-        .use(MarkdownItToc)
-        // .use(MarkdownItToc, {
+        // .use(MarkdownItToc,{markerPattern:/^\[toc\]/im})
+        .use(MarkdownItToc, {markerPattern: /(\{toc\}|\[\[?_?toc_?\]?\]|\$\<toc(\{[^}]*\})\>)/im})
+        // .use(MarkdownItToc)
+        // .use(MarkdownItToc, {level:2,
         //     format: function (x: any, htmlencode: any) {
         //         console.log("format", x,htmlencode(x), htmlencode)
         //         return `<span>${htmlencode(x)}</span>`;

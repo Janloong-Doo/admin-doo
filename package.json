@@ -36,7 +36,6 @@
     "markdown-it-sup": "^1.0.0",
     "markdown-it-table-of-contents": "^0.5.1",
     "markdown-it-task-lists": "^2.1.1",
-    "markdown-it-toc-done-right": "^4.2.0",
     "mockjs": "^1.1.0",
     "nprogress": "^0.2.0",
     "qs": "^6.9.4",

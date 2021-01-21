@@ -58,4 +58,8 @@ export default {
 .custom-markdown blockquote p{
     background-color #42b983
 }
+ul li::marker{
+  color: red;
+
+}
 </style>

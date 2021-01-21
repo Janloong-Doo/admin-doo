@@ -51,6 +51,6 @@ export default {
     }
 }
 .c-border{
-  //flex 1
+  flex 1
 }
 </style>
