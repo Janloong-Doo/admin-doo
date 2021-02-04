@@ -1,33 +1,67 @@
-// var messageHandler = (data: any) => {
-// };
-const initWebSocket = (url: string, callBack: any) => {
-    if ("WebSocket" in window) {
-        // messageHandler = callBack
-        console.log("您的浏览器支持WebSocket并初始化");
-        const ws = new WebSocket("ws://localhost:8902/hap/ws/msg/doo");
-        ws.onopen = wsonopen;
-        ws.onclose = wsonclose;
-        ws.onmessage = (e)=>{
-            wsonmessage(e,callBack)
-        }
-        ws.onerror = wsonerror;
-        return ws;
-    } else {
-        console.log("您的浏览器不支持WebSocket");
+class customWs {
+    private ws: WebSocket | null;
+
+    constructor(url: string, msgHander: (data: any) => any) {
+        // this.ws = new WebSocket();
+        this.ws = this.createWebSocket(url, msgHander);
     }
-}
-const wsonopen = (e: any) => {
-    console.log("onopen:", e);
-}
-const wsonclose = (e: any) => {
-    console.log("onclose:", e);
-}
-const wsonmessage = (e: any,callBack:any) => {
-    console.log("onmessage:", e);
-    callBack(e.data)
-}
-const wsonerror = (e: any) => {
-    console.log("onerror:", e);
+
+    createWebSocket(url: string, msgHander: (data: any) => any): WebSocket | null {
+        if ("WebSocket" in window) {
+            // messageHandler = callBack
+            console.log("您的浏览器支持WebSocket并初始化");
+            // const ws = new WebSocket("ws://localhost:8902/hap/ws/msg/doo");
+            const ws = new WebSocket(url);
+            ws.onopen = (e) => {
+                this.onOpenEvent(e)
+            };
+
+            ws.onclose = (e) => {
+                this.onCloseEvent(e);
+            };
+
+            ws.onmessage = (e) => {
+                this.onMessageEvent(e, msgHander)
+            }
+            ws.onerror = (e) => {
+                this.onErrorEvent(e)
+            };
+            return ws;
+        } else {
+            console.log("您的浏览器不支持WebSocket");
+            return null;
+        }
+    }
+
+    onOpenEvent(e: any) {
+        console.log("onopen:", e);
+    }
+
+    onCloseEvent(e: any) {
+        console.log("onclose:", e);
+    }
+
+    onMessageEvent(e: any, msgHander: (data: any) => any) {
+        console.log("onmessage:", e);
+        try {
+            let parse = JSON.parse(e.data);
+            msgHander(parse)
+        } catch (error) {
+            console.log("非json:", error)
+            msgHander({"data": e.data})
+        }
+    }
+
+    onErrorEvent(e: any) {
+        console.log("onerror:", e);
+    }
+
+    sendMsg(data: any) {
+        this.ws?.send(data);
+    }
+
 }
 
-export {initWebSocket};
+export const initWebSocket = (url: string, msgHandler: (data: any) => any) => {
+    return new customWs(url, msgHandler);
+}

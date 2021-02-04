@@ -34,8 +34,11 @@ export default {
       urlInput: 'ws://localhost:8902/hap/ws/msg/doo',
       params: ''
     })
-    const ws: WebSocket = ref(null);
-
+    const messageHandler = (data:any) => {
+      deepMerge(displayInfo.data, data)
+      console.log("收到数据:", data);
+    }
+    let customWs = initWebSocket("ws://localhost:8902/hap/ws/msg/doo", messageHandler);
     onMounted(() => {
     })
     //展示信息
@@ -43,14 +46,10 @@ export default {
 
     const sendWsMsg = () => {
       displayInfo.data = {};
-      ws.send(baseData.params)
-    }
-    const messageHandler = (data) => {
-      deepMerge(displayInfo.data, value)
-      console.log("收到数据:", data);
+      customWs.sendMsg(baseData.params)
     }
     return {
-      ws,
+      customWs,
       commonData,
       messageHandler,
       baseData,
@@ -60,7 +59,7 @@ export default {
   },
   created() {
     // ws = initWebSocket("ws://localhost:8902/hap/ws/msg/doo", this.messageHandler);
-    this.ws.value = initWebSocket("ws://localhost:8902/hap/ws/msg/doo", this.messageHandler);
+    // this.ws.value = initWebSocket("ws://localhost:8902/hap/ws/msg/doo", this.messageHandler);
   }
 }
 </script>
