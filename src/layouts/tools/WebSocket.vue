@@ -38,7 +38,7 @@ export default {
       deepMerge(displayInfo.data, data)
       console.log("收到数据:", data);
     }
-    let customWs = initWebSocket("ws://localhost:8902/hap/ws/msg/doo", messageHandler);
+    let customWs = initWebSocket("ws://api.janloong.com/hap/ws/msg/doo", messageHandler);
     onMounted(() => {
     })
     //展示信息
