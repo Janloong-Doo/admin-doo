@@ -1,4 +1,4 @@
-class customWs {
+export class CustomWs {
     private ws: WebSocket | null;
 
     constructor(url: string, msgHander: (data: any) => any) {
@@ -63,5 +63,5 @@ class customWs {
 }
 
 export const initWebSocket = (url: string, msgHandler: (data: any) => any) => {
-    return new customWs(url, msgHandler);
+    return new CustomWs(url, msgHandler);
 }

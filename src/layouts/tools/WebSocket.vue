@@ -5,7 +5,7 @@
     <a-textarea v-model:value="baseData.params" :placeholder="commonData.paramsTip" :rows="4"/>
     <br/>
     <br/>
-    <a-button type="primary" @click="sendWsMsg">发送</a-button>
+    <a-button type="primary" @click="sendWsMsg(customWs)">发送</a-button>
     <br/>
     <vue-json-pretty :path="'res'" :data="displayInfo.data" :deep="3" :showLength="true"></vue-json-pretty>
   </div>
@@ -17,7 +17,7 @@ import {onMounted, reactive,ref} from "vue";
 import {deepMerge} from "/@/utils";
 import VueJsonPretty from 'vue-json-pretty';
 import 'vue-json-pretty/lib/styles.css';
-import {initWebSocket} from "/@/utils/ws/index.ts"
+import {CustomWs, initWebSocket} from "/@/utils/ws/index.ts"
 
 export default {
   name: "WebSocket",
@@ -38,15 +38,16 @@ export default {
       deepMerge(displayInfo.data, data)
       console.log("收到数据:", data);
     }
-    let customWs = initWebSocket("ws://api.janloong.com/hap/ws/msg/doo", messageHandler);
+    // let customWs = initWebSocket("wss://api.janloong.com/hap/ws/msg/doo", messageHandler);
+    let customWs = initWebSocket("ws://localhost:8902/hap/ws/msg/doo", messageHandler);
     onMounted(() => {
     })
     //展示信息
     const displayInfo = reactive({data: {}})
 
-    const sendWsMsg = () => {
+    const sendWsMsg = (ws:CustomWs) => {
       displayInfo.data = {};
-      customWs.sendMsg(baseData.params)
+      ws.sendMsg(baseData.params)
     }
     return {
       customWs,
